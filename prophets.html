@@ -397,7 +397,7 @@
 
         <!-- Hero Section -->
         <section class="hero-section">
-            <div class="hero-badge">✨ المحطة الأولى 2027 | كورس قصص الأنبياء (سن 6 إلى 9 سنوات)</div>
+            <div class="hero-badge">المحطة الأولى 2027 | كورس قصص الأنبياء (سن 6 إلى 9 سنوات)</div>
             
             <h1 class="hero-title">
                 رحلة إيمانية ترجع بأولادنا <span>إلى زمان الأنبياء</span>
@@ -422,18 +422,46 @@
             <div class="countdown-bar">
                 <div class="countdown-title">⏳ متبقي على انطلاق الدفعة الجديدة (10 سبتمبر 2026)</div>
                 <div class="timer-boxes">
-                    <div class="t-box"><div class="t-num" id="d">00</div><div class="t-lbl">يوم</div></div>
-                    <div class="t-box"><div class="t-num" id="h">00</div><div class="t-lbl">ساعة</div></div>
-                    <div class="t-box"><div class="t-num" id="m">00</div><div class="t-lbl">دقيقة</div></div>
-                    <div class="t-box"><div class="t-num" id="s">00</div><div class="t-lbl">ثانية</div></div>
+                    <div class="t-box"><div class="t-num" id="d">31</div><div class="t-lbl">يوم</div></div>
+                    <div class="t-box"><div class="t-num" id="h">02</div><div class="t-lbl">ساعة</div></div>
+                    <div class="t-box"><div class="t-num" id="m">15</div><div class="t-lbl">دقيقة</div></div>
+                    <div class="t-box"><div class="t-num" id="s">45</div><div class="t-lbl">ثانية</div></div>
                 </div>
             </div>
-        </section>
+
+        <script>
+            (function runTimerNow() {
+                var target = new Date("September 10, 2026 00:00:00").getTime();
+                function tick() {
+                    var now = new Date().getTime();
+                    var diff = target - now;
+                    if (diff > 0) {
+                        var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                        var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        var mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                        var secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+                        var elD = document.getElementById('d');
+                        var elH = document.getElementById('h');
+                        var elM = document.getElementById('m');
+                        var elS = document.getElementById('s');
+
+                        if (elD) elD.innerHTML = days < 10 ? '0' + days : days;
+                        if (elH) elH.innerHTML = hours < 10 ? '0' + hours : hours;
+                        if (elM) elM.innerHTML = mins < 10 ? '0' + mins : mins;
+                        if (elS) elS.innerHTML = secs < 10 ? '0' + secs : secs;
+                    }
+                }
+                tick();
+                setInterval(tick, 1000);
+            })();
+        </script>
+                </section>
 
         <!-- Values Journey Section -->
         <section class="journey-section">
             <div class="section-header">
-                <h2>✨ القيم التفاعلية الخمس في كورس الأنبياء</h2>
+                <h2>القيم التفاعلية الخمس في كورس الأنبياء</h2>
                 <p>تطبيق عملي وتربوي لحياة الطفل يومياً من أنوار قصص الأنبياء</p>
             </div>
 
@@ -478,7 +506,35 @@
                     <span class="prophet-light-tag">💡 أنوار الشكر والحكمة</span>
                 </div>
             </div>
-        </section>
+
+        <script>
+            (function runTimerNow() {
+                var target = new Date("September 10, 2026 00:00:00").getTime();
+                function tick() {
+                    var now = new Date().getTime();
+                    var diff = target - now;
+                    if (diff > 0) {
+                        var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                        var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        var mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                        var secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+                        var elD = document.getElementById('d');
+                        var elH = document.getElementById('h');
+                        var elM = document.getElementById('m');
+                        var elS = document.getElementById('s');
+
+                        if (elD) elD.innerHTML = days < 10 ? '0' + days : days;
+                        if (elH) elH.innerHTML = hours < 10 ? '0' + hours : hours;
+                        if (elM) elM.innerHTML = mins < 10 ? '0' + mins : mins;
+                        if (elS) elS.innerHTML = secs < 10 ? '0' + secs : secs;
+                    }
+                }
+                tick();
+                setInterval(tick, 1000);
+            })();
+        </script>
+                </section>
 
         <!-- Features & Proof Section -->
         <section class="features-section">
@@ -499,7 +555,35 @@
                     <p>تقرير تربوي لولي الأمر لمتابعة تطور سلوك وقيم الطفل.</p>
                 </div>
             </div>
-        </section>
+
+        <script>
+            (function runTimerNow() {
+                var target = new Date("September 10, 2026 00:00:00").getTime();
+                function tick() {
+                    var now = new Date().getTime();
+                    var diff = target - now;
+                    if (diff > 0) {
+                        var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                        var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                        var mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                        var secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+                        var elD = document.getElementById('d');
+                        var elH = document.getElementById('h');
+                        var elM = document.getElementById('m');
+                        var elS = document.getElementById('s');
+
+                        if (elD) elD.innerHTML = days < 10 ? '0' + days : days;
+                        if (elH) elH.innerHTML = hours < 10 ? '0' + hours : hours;
+                        if (elM) elM.innerHTML = mins < 10 ? '0' + mins : mins;
+                        if (elS) elS.innerHTML = secs < 10 ? '0' + secs : secs;
+                    }
+                }
+                tick();
+                setInterval(tick, 1000);
+            })();
+        </script>
+                </section>
 
         <!-- Footer CTA -->
         <section class="footer-cta">
