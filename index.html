@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Launch Checklist | أكاديمية منير 2027</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #354696;
+            --brand-blue-dark: #1e2b69;
+            --brand-mint: #0d9488;
+            --brand-mint-light: #14b8a6;
+            --brand-gold: #d97706;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --card-border: #e2e8f0;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            padding: 1.5rem 1rem;
+            line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header & Logo */
+        .header {
+            text-align: center;
+            padding: 2.2rem 1.5rem;
+            background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-blue-dark) 100%);
+            border-radius: 24px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(53, 70, 150, 0.2);
+            box-shadow: 0 10px 25px rgba(53, 70, 150, 0.15);
+            color: #ffffff;
+        }
+
+        .logo-container {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 1.2rem auto;
+            border-radius: 50%;
+            background: #ffffff;
+            padding: 6px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        .header h1 {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 900;
+            color: #fbbf24;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            color: #ccfbf1;
+            font-weight: 700;
+        }
+
+        /* Countdown Timer Section */
+        .countdown-section {
+            background: #ffffff;
+            border: 2px solid var(--brand-mint);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(13, 148, 136, 0.08);
+        }
+
+        .countdown-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--brand-blue);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .timer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.8rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .timer-box {
+            background: #f0fdf4;
+            border: 1.5px solid #99f6e4;
+            border-radius: 14px;
+            padding: 1rem 0.5rem;
+            text-align: center;
+        }
+
+        .timer-number {
+            font-size: clamp(1.8rem, 5vw, 2.7rem);
+            font-weight: 900;
+            color: var(--brand-mint);
+            line-height: 1;
+            margin-bottom: 0.3rem;
+        }
+
+        .timer-label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 800;
+        }
+
+        /* KPI Cards */
+        .kpi-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .kpi-card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 18px;
+            border: 1px solid var(--card-border);
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .kpi-card::after {
+            content: '';
+            position: absolute;
+            bottom: 0; right: 0; left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--brand-mint), var(--brand-blue));
+            border-radius: 0 0 18px 18px;
+        }
+
+        .kpi-card h3 {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+            font-weight: 700;
+        }
+
+        .kpi-card .number {
+            font-size: clamp(2.2rem, 4vw, 3rem);
+            font-weight: 900;
+            color: var(--brand-blue);
+        }
+
+        .kpi-card .subtext {
+            font-size: 0.88rem;
+            color: var(--brand-mint);
+            font-weight: 800;
+        }
+
+        /* Team Section & Cards */
+        .section-title {
+            font-size: clamp(1.3rem, 3vw, 1.7rem);
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            color: var(--brand-blue);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .team-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            padding: 1.5rem;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+        }
+
+        .team-card.dina-card {
+            border: 2px solid var(--brand-gold);
+            background: #fffbeb;
+        }
+
+        .member-header {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--brand-blue), var(--brand-mint));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(53, 70, 150, 0.2);
+        }
+
+        .member-info h4 {
+            font-size: 1.25rem;
+            font-weight: 900;
+            color: var(--text-dark);
+        }
+
+        .member-info p {
+            font-size: 0.88rem;
+            color: var(--brand-mint);
+            font-weight: 800;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.8rem;
+            margin-bottom: 1.1rem;
+            font-size: 0.96rem;
+            color: #334155;
+        }
+
+        .task-item input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            accent-color: var(--brand-mint);
+            margin-top: 0.15rem;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .task-item.completed label {
+            text-decoration: line-through;
+            color: #94a3b8;
+        }
+
+        .date-badge {
+            background: #e0f2fe;
+            color: #0284c7;
+            padding: 0.2rem 0.59rem;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 800;
+            display: inline-block;
+            margin-left: 0.3rem;
+        }
+
+        .footer-banner {
+            text-align: center;
+            padding: 1.8rem;
+            background: #f0fdf4;
+            border: 2px solid var(--brand-mint);
+            border-radius: 20px;
+            color: var(--brand-mint);
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            font-weight: 900;
+            margin-top: 1rem;
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 480px) {
+            body {
+                padding: 0.6rem;
+            }
+            .header {
+                padding: 1.5rem 1rem;
+            }
+            .timer-grid {
+                gap: 0.4rem;
+            }
+            .timer-box {
+                padding: 0.7rem 0.2rem;
+            }
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Logo & Header -->
+        <div class="header">
+            <div class="logo-container">
+                <img src="mounir_logo.jpg" alt="لوجو أكاديمية منير" onerror="this.src='https://via.placeholder.com/100?text=Mounir'">
+            </div>
+            <h1>الخطة التنفيذية | المحطة الأولى 2027</h1>
+            <p>دليل المتابعة الخاص بـ أستاذة دينا (مدير العمليات) وفريق العمل - أكاديمية منير</p>
+        </div>
+
+        <!-- Live Countdown Timer -->
+        <div class="countdown-section">
+            <div class="countdown-title">
+                ⏳ العداد التنازلي المباشر لانطلاق الدراسة (10 سبتمبر 2026)
+            </div>
+            <div class="timer-grid">
+                <div class="timer-box">
+                    <div class="timer-number" id="days">00</div>
+                    <div class="timer-label">يوم</div>
+                </div>
+                <div class="timer-box">
+                    <div class="timer-number" id="hours">00</div>
+                    <div class="timer-label">ساعة</div>
+                </div>
+                <div class="timer-box">
+                    <div class="timer-number" id="minutes">00</div>
+                    <div class="timer-label">دقيقة</div>
+                </div>
+                <div class="timer-box">
+                    <div class="timer-number" id="seconds">00</div>
+                    <div class="timer-label">ثانية</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="kpi-cards">
+            <div class="kpi-card">
+                <h3>قصص الأنبياء (6 - 9 سنوات)</h3>
+                <div class="number">500</div>
+                <div class="subtext">طالب مستهدف</div>
+            </div>
+            <div class="kpi-card">
+                <h3>كتالوج الشباب (10 - 18 سنة)</h3>
+                <div class="number">500</div>
+                <div class="subtext">طالب مستهدف</div>
+            </div>
+            <div class="kpi-card">
+                <h3>إجمالي المستهدف (KPI)</h3>
+                <div class="number">1,000</div>
+                <div class="subtext">طالب وطالبة في المحطة الأولى</div>
+            </div>
+            <div class="kpi-card">
+                <h3>موعد الانطلاق المعتمد</h3>
+                <div class="number" style="color: var(--brand-gold); font-size: 2.2rem;">10 سبتمبر</div>
+                <div class="subtext">بداية الدراسة دون أي تأخير</div>
+            </div>
+        </div>
+
+        <!-- Team Tasks Section -->
+        <h2 class="section-title">📋 قائمة المتابعة والمهام حسَب مسئول الفريق</h2>
+
+        <div class="team-grid">
+            <!-- سهيلة -->
+            <div class="team-card">
+                <div class="member-header">
+                    <div class="avatar">س</div>
+                    <div class="member-info">
+                        <h4>سهيلة</h4>
+                        <p>النشر الأورجانيك ومجموعات الفيسبوك</p>
+                    </div>
+                </div>
+                <ul class="task-list">
+                    <li class="task-item"><input type="checkbox" id="t1"><label for="t1"><span class="date-badge">12 أغسطس</span> نشر البوست 1 أورجانيك + شير في 200 جروب.</label></li>
+                    <li class="task-item"><input type="checkbox" id="t2"><label for="t2"><span class="date-badge">14 أغسطس</span> نشر البوست 2 أورجانيك + شير في 200 جروب.</label></li>
+                    <li class="task-item"><input type="checkbox" id="t3"><label for="t3"><span class="date-badge">16 أغسطس</span> نشر البوست 3 أورجانيك + شير في 200 جروب.</label></li>
+                    <li class="task-item"><input type="checkbox" id="t4"><label for="t4"><span class="date-badge">18 أغسطس</span> نشر البوست 4 أورجانيك + شير في 200 جروب.</label></li>
+                    <li class="task-item"><input type="checkbox" id="t5"><label for="t5"><span class="date-badge">20 أغسطس</span> نشر البوست 5 أورجانيك + شير في 200 جروب.</label></li>
+                </ul>
+            </div>
+
+            <!-- أحمد أبو شادي -->
+            <div class="team-card">
+                <div class="member-header">
+                    <div class="avatar" style="background: linear-gradient(135deg, #3b82f6, #06b6d4);">أ</div>
+                    <div class="member-info">
+                        <h4>أحمد أبو شادي</h4>
+                        <p>مطور البرمجيات والـ Performance Marketing</p>
+                    </div>
+                </div>
+                <ul class="task-list">
+                    <li class="task-item"><input type="checkbox" id="t6"><label for="t6">تجهيز صفحة هبوط (Landing Page) سريعة تحول للـ Messenger.</label></li>
+                    <li class="task-item"><input type="checkbox" id="t7"><label for="t7">حملة قصص الأنبياء (6-9) | Adset 1 Messenger + Adset 2 Landing Page.</label></li>
+                    <li class="task-item"><input type="checkbox" id="t8"><label for="t8">حملة كتالوج الشباب (10-18) | Adset 1 Messenger + Adset 2 Landing Page.</label></li>
+                    <li class="task-item"><input type="checkbox" id="t9"><label for="t9">متابعة الـ CPL والميزانية يومياً لضمان تدفق الرسايل بكفاءة.</label></li>
+                </ul>
+            </div>
+
+            <!-- أميرة -->
+            <div class="team-card">
+                <div class="member-header">
+                    <div class="avatar" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">أ</div>
+                    <div class="member-info">
+                        <h4>أميرة</h4>
+                        <p>مسؤولة الاستجابة وإغلاق الاشتراكات</p>
+                    </div>
+                </div>
+                <ul class="task-list">
+                    <li class="task-item"><input type="checkbox" id="t10"><label for="t10">استقبال وتتبع رسايل الماسنجر فوراً بدون أي تأخير.</label></li>
+                    <li class="task-item"><input type="checkbox" id="t11"><label for="t11">التواصل مع العملاء وتقفيل الاشتراكات.</label></li>
+                    <li class="task-item"><input type="checkbox" id="t12"><label for="t12">تحديث العداد اليومي (Live Counter) لـ 500 أنبياء + 500 شباب.</label></li>
+                </ul>
+            </div>
+
+            <!-- منار -->
+            <div class="team-card">
+                <div class="member-header">
+                    <div class="avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706);">م</div>
+                    <div class="member-info">
+                        <h4>منار</h4>
+                        <p>مسؤولة تسكين الطلبة والتأكيد</p>
+                    </div>
+                </div>
+                <ul class="task-list">
+                    <li class="task-item"><input type="checkbox" id="t13"><label for="t13">التواصل مع المشتركين وتأكيد موعد بداية الدراسة (10 سبتمبر).</label></li>
+                    <li class="task-item"><input type="checkbox" id="t14"><label for="t14">تسكين الـ 1,000 طالب في مجموعات دراسية متوازنة أونلاين.</label></li>
+                    <li class="task-item"><input type="checkbox" id="t15"><label for="t15">تسليم شيت المجموعات لأستاذ مرزوق قبل 5 سبتمبر.</label></li>
+                </ul>
+            </div>
+
+            <!-- أستاذ مرزوق -->
+            <div class="team-card">
+                <div class="member-header">
+                    <div class="avatar" style="background: linear-gradient(135deg, #8b5cf6, #c084fc);">م</div>
+                    <div class="member-info">
+                        <h4>أستاذ مرزوق</h4>
+                        <p>مسؤول المحتوى وتسكين المعلمين</p>
+                    </div>
+                </div>
+                <ul class="task-list">
+                    <li class="task-item"><input type="checkbox" id="t16"><label for="t16">استلام شيت المجموعات الدراسية من منار.</label></li>
+                    <li class="task-item"><input type="checkbox" id="t17"><label for="t17">تسكين المعلمين (معلم 1 إلى 10) على المجموعات.</label></li>
+                    <li class="task-item"><input type="checkbox" id="t18"><label for="t18">جاهزية المعلمين والمنصة لانطلاق الدراسة يوم 10 سبتمبر.</label></li>
+                </ul>
+            </div>
+
+            <!-- أستاذة دينا -->
+            <div class="team-card dina-card">
+                <div class="member-header">
+                    <div class="avatar" style="background: linear-gradient(135deg, var(--brand-gold), #b45309);">د</div>
+                    <div class="member-info">
+                        <h4 style="color: var(--brand-gold);">أستاذة دينا (Leader)</h4>
+                        <p>مدير العمليات والمشرف العام</p>
+                    </div>
+                </div>
+                <ul class="task-list">
+                    <li class="task-item"><input type="checkbox" id="t19"><label for="t19">الاجتماع اليومي (Daily Standup) لمتابعة تقدم التشيك ليست.</label></li>
+                    <li class="task-item"><input type="checkbox" id="t20"><label for="t20">متابعة النشر الأورجانيك لسهيلة (12، 14، 16، 18، 20 أغسطس).</label></li>
+                    <li class="task-item"><input type="checkbox" id="t21"><label for="t21">متابعة الحملات الممولة مع أحمد أبو شادي.</label></li>
+                    <li class="task-item"><input type="checkbox" id="t22"><label for="t22">متابعة العداد مع أميرة للوصول للهدف (1,000 طالب).</label></li>
+                    <li class="task-item"><input type="checkbox" id="t23"><label for="t23">متابعة الجاهزية والتسكين مع منار ومرزوق لبداية 10/9.</label></li>
+                </ul>
+            </div>
+        </div>
+
+        
+    </div>
+
+    <!-- Countdown Timer Script -->
+    <script>
+        const targetDate = new Date("2026-09-10T00:00:00+02:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                document.getElementById("days").innerText = "00";
+                document.getElementById("hours").innerText = "00";
+                document.getElementById("minutes").innerText = "00";
+                document.getElementById("seconds").innerText = "00";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days < 10 ? "0" + days : days;
+            document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
+            document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Checkbox strike-through toggling
+        document.querySelectorAll('.task-item input[type="checkbox"]').forEach(box => {
+            box.addEventListener('change', function() {
+                if (this.checked) {
+                    this.parentElement.classList.add('completed');
+                } else {
+                    this.parentElement.classList.remove('completed');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
