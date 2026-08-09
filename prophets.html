@@ -386,7 +386,47 @@
                 padding: 1.5rem;
             }
         }
-    </style>
+    
+        /* Circular Image Frames & 3D Cards Luxury Styling */
+        .card-img-frame {
+            width: 95px;
+            height: 95px;
+            border-radius: 50%;
+            padding: 4px;
+            background: linear-gradient(135deg, var(--gold) 0%, var(--mint) 100%);
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 25px rgba(251, 191, 36, 0.4), 0 0 50px rgba(45, 212, 191, 0.2);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-img-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            transition: transform 0.5s ease;
+        }
+
+        .journey-card:hover .card-img-frame {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 0 35px rgba(251, 191, 36, 0.7), 0 0 60px rgba(45, 212, 191, 0.4);
+        }
+
+        .journey-card:hover .card-img-frame img {
+            transform: scale(1.12);
+        }
+
+        .journey-card {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+
+</style>
 </head>
 <body>
 
@@ -459,6 +499,7 @@
                 </section>
 
         <!-- Values Journey Section -->
+        
         <section class="journey-section">
             <div class="section-header">
                 <h2>القيم التفاعلية الخمس في كورس الأنبياء</h2>
@@ -467,74 +508,57 @@
 
             <div class="journey-grid">
                 <!-- Value 1 -->
-                <div class="journey-card">
-                    <div class="card-icon-glow">✨</div>
+                <div class="journey-card 3d-tilt-card">
+                    <div class="card-img-frame">
+                        <img src="val1.jpg" alt="بر الوالدين" onerror="this.style.display='none'">
+                    </div>
                     <h3>1. بر الوالدين وتوطيد المحبة</h3>
                     <p>يتعلم الطفل مفهوم الطاعة المحبوبة والرحمة بالوالدين، وكيف يحيي علاقة مليئة بالحب والاحتواء الاقتداء بنور قصة الخليل إبراهيم وإسماعيل عليهما السلام.</p>
                     <span class="prophet-light-tag">💡 أنوار الطاعة والإحسان</span>
                 </div>
 
                 <!-- Value 2 -->
-                <div class="journey-card">
-                    <div class="card-icon-glow">🛡️</div>
+                <div class="journey-card 3d-tilt-card">
+                    <div class="card-img-frame">
+                        <img src="val2.jpg" alt="البعد عن أصدقاء السوء" onerror="this.style.display='none'">
+                    </div>
                     <h3>2. البعد عن أصدقاء السوء</h3>
                     <p>بناء مناعة تربوية قوية تجعل الطفل يتمسك بقيمه ولا ينساق وراء أقران السوء، مستلهماً الثبات والنجاة من نور قصة يوسف الصديق عليه السلام.</p>
                     <span class="prophet-light-tag">💡 أنوار العفة والثبات</span>
                 </div>
 
                 <!-- Value 3 -->
-                <div class="journey-card">
-                    <div class="card-icon-glow">🌊</div>
+                <div class="journey-card 3d-tilt-card">
+                    <div class="card-img-frame">
+                        <img src="val3.jpg" alt="الصبر وعدم الغضب" onerror="this.style.display='none'">
+                    </div>
                     <h3>3. الصبر وعدم الغضب</h3>
                     <p>تدريب سلوكي تفاعلي للتحكم في المشاعر وتجنب نوبات الغضب والجزع، والتعلم كيف يفرج الله الكرب بالصبر والتسبيح كأنوار يونس وأيوب عليهما السلام.</p>
                     <span class="prophet-light-tag">💡 أنوار الصبر والتسبيح</span>
                 </div>
 
                 <!-- Value 4 -->
-                <div class="journey-card">
-                    <div class="card-icon-glow">💎</div>
+                <div class="journey-card 3d-tilt-card">
+                    <div class="card-img-frame">
+                        <img src="val4.jpg" alt="الصدق وتجنب الكذب" onerror="this.style.display='none'">
+                    </div>
                     <h3>4. الصدق وتجنب الكذب</h3>
                     <p>غرس الصدق كقيمة أساسية وشعار دائم للطفل في أقواله وأفعاله، والاقتداء بالنور الخاتم سيدنا محمد ﷺ الصادق الأمين.</p>
                     <span class="prophet-light-tag">💡 أنوار الصادق الأمين</span>
                 </div>
 
                 <!-- Value 5 -->
-                <div class="journey-card">
-                    <div class="card-icon-glow">👑</div>
+                <div class="journey-card 3d-tilt-card">
+                    <div class="card-img-frame">
+                        <img src="val5.jpg" alt="شكر النعمة والرضا" onerror="this.style.display='none'">
+                    </div>
                     <h3>5. شكر النعمة والرضا</h3>
                     <p>تربية وجدانية لتقدير نعم الله والرضا بها واستعمالها في الخير والحكمة، من أنوار حكمة سليمان وداوود عليهما السلام.</p>
                     <span class="prophet-light-tag">💡 أنوار الشكر والحكمة</span>
                 </div>
             </div>
+        </section>
 
-        <script>
-            (function runTimerNow() {
-                var target = new Date("September 10, 2026 00:00:00").getTime();
-                function tick() {
-                    var now = new Date().getTime();
-                    var diff = target - now;
-                    if (diff > 0) {
-                        var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                        var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                        var mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                        var secs = Math.floor((diff % (1000 * 60)) / 1000);
-
-                        var elD = document.getElementById('d');
-                        var elH = document.getElementById('h');
-                        var elM = document.getElementById('m');
-                        var elS = document.getElementById('s');
-
-                        if (elD) elD.innerHTML = days < 10 ? '0' + days : days;
-                        if (elH) elH.innerHTML = hours < 10 ? '0' + hours : hours;
-                        if (elM) elM.innerHTML = mins < 10 ? '0' + mins : mins;
-                        if (elS) elS.innerHTML = secs < 10 ? '0' + secs : secs;
-                    }
-                }
-                tick();
-                setInterval(tick, 1000);
-            })();
-        </script>
-                </section>
 
         <!-- Features & Proof Section -->
         <section class="features-section">
@@ -583,130 +607,4 @@
                 setInterval(tick, 1000);
             })();
         </script>
-                </section>
-
-        <!-- Footer CTA -->
-        <section class="footer-cta">
-            <h2>استثمر في بناء عقيدة وقيم ابنك اليوم</h2>
-            <p>المقاعد محدودة للدفعة الجديدة المنطلقة في 10 سبتمبر 2026. انضم لأكاديمية منير واجعل ابنك يعيش تجربة تربوية فريدة.</p>
-            <a href="https://m.me/mouniracademy" target="_blank" class="cta-btn">
-                احجز الآن
-            </a>
-        </section>
-
-    </div>
-
-    <!-- 3D Three.js Background & Interactions -->
-    <script>
-        // 1. Three.js Celestial Starfield & Glowing Light Particles
-        const canvas = document.getElementById('webgl-canvas');
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-
-        // Create Star Particles
-        const particlesCount = 700;
-        const positions = new Float32Array(particlesCount * 3);
-        const colors = new Float32Array(particlesCount * 3);
-
-        const goldColor = new THREE.Color(0xfbbf24);
-        const mintColor = new THREE.Color(0x2dd4bf);
-        const whiteColor = new THREE.Color(0xffffff);
-
-        for (let i = 0; i < particlesCount * 3; i += 3) {
-            positions[i] = (Math.random() - 0.5) * 20;
-            positions[i + 1] = (Math.random() - 0.5) * 20;
-            positions[i + 2] = (Math.random() - 0.5) * 20;
-
-            const rand = Math.random();
-            let c = rand > 0.6 ? goldColor : (rand > 0.3 ? mintColor : whiteColor);
-            colors[i] = c.r;
-            colors[i + 1] = c.g;
-            colors[i + 2] = c.b;
-        }
-
-        const geometry = new THREE.BufferGeometry();
-        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-        const material = new THREE.PointsMaterial({
-            size: 0.04,
-            vertexColors: true,
-            transparent: true,
-            opacity: 0.85
-        });
-
-        const particleSystem = new THREE.Points(geometry, material);
-        scene.add(particleSystem);
-
-        camera.position.z = 5;
-
-        // Mouse Parallax Effect
-        let mouseX = 0, mouseY = 0;
-        window.addEventListener('mousemove', (e) => {
-            mouseX = (e.clientX / window.innerWidth - 0.5) * 0.5;
-            mouseY = (e.clientY / window.innerHeight - 0.5) * 0.5;
-        });
-
-        // Animation Loop
-        function animate() {
-            requestAnimationFrame(animate);
-
-            particleSystem.rotation.y += 0.0012;
-            particleSystem.rotation.x += 0.0006;
-
-            camera.position.x += (mouseX - camera.position.x) * 0.05;
-            camera.position.y += (-mouseY - camera.position.y) * 0.05;
-            camera.lookAt(scene.position);
-
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        // Responsive Resize
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        
-    <script>
-        // Bulletproof Countdown Timer to 10 September 2026 00:00:00
-        const targetDate = new Date(2026, 8, 10, 0, 0, 0).getTime();
-
-        function updateTimer() {
-            const now = new Date().getTime();
-            const diff = targetDate - now;
-
-            if (diff > 0) {
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-                const elemD = document.getElementById('d');
-                const elemH = document.getElementById('h');
-                const elemM = document.getElementById('m');
-                const elemS = document.getElementById('s');
-
-                if (elemD) elemD.innerText = String(days).padStart(2, '0');
-                if (elemH) elemH.innerText = String(hours).padStart(2, '0');
-                if (elemM) elemM.innerText = String(minutes).padStart(2, '0');
-                if (elemS) elemS.innerText = String(seconds).padStart(2, '0');
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", function() {
-            updateTimer();
-            setInterval(updateTimer, 1000);
-        });
-        updateTimer();
-        setInterval(updateTimer, 1000);
-    </script>
-
-</body>
-</html>
+                
