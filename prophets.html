@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رحلة في زمان الأنبياء | كورس قصص الأنبياء - أكاديمية منير</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --gold: #fbbf24;
+            --gold-glow: #f59e0b;
+            --mint: #2dd4bf;
+            --mint-dark: #0d9488;
+            --bg-night: #030712;
+            --card-bg: rgba(15, 23, 42, 0.75);
+            --card-border: rgba(251, 191, 36, 0.3);
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-night);
+            color: var(--text-light);
+            overflow-x: hidden;
+            line-height: 1.7;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* WebGL Background Canvas */
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .content-layer {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 4rem 1.5rem 2rem 1.5rem;
+            background: linear-gradient(180deg, rgba(3, 7, 18, 0.3) 0%, rgba(3, 7, 18, 0.85) 100%),
+                        url('prophets_light_desert.jpg') center/cover no-repeat;
+            position: relative;
+        }
+
+        .hero-badge {
+            background: rgba(251, 191, 36, 0.15);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+            backdrop-filter: blur(10px);
+            animation: pulse-glow 2.5s infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 15px rgba(251, 191, 36, 0.3); }
+            100% { box-shadow: 0 0 35px rgba(251, 191, 36, 0.7); }
+        }
+
+        .hero-title {
+            font-family: 'Amiri', serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(251, 191, 36, 0.5);
+        }
+
+        .hero-title span {
+            color: var(--gold);
+            display: inline-block;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+            color: #e2e8f0;
+            max-width: 800px;
+            margin: 0 auto 2rem auto;
+            font-weight: 500;
+        }
+
+        /* Divine Light Beam Symbolism */
+        .light-symbol-container {
+            position: relative;
+            margin: 1.5rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .divine-light-orb {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ffffff 0%, #fbbf24 40%, rgba(251, 191, 36, 0) 70%);
+            box-shadow: 0 0 50px #ffffff, 0 0 100px #fbbf24, 0 0 150px #f59e0b;
+            animation: orb-float 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes orb-float {
+            0% { transform: translateY(0) scale(0.95); opacity: 0.85; }
+            100% { transform: translateY(-15px) scale(1.1); opacity: 1; }
+        }
+
+        .light-label {
+            font-family: 'Amiri', serif;
+            font-size: 1.4rem;
+            color: var(--gold);
+            margin-top: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* Action Buttons */
+        .cta-btn {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-glow) 100%);
+            color: #000000;
+            font-size: 1.3rem;
+            font-weight: 900;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(251, 191, 36, 0.4);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 15px 40px rgba(251, 191, 36, 0.7);
+        }
+
+        /* Countdown Bar */
+        .countdown-bar {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            max-width: 700px;
+            width: 90%;
+            margin: 3rem auto 0 auto;
+            backdrop-filter: blur(15px);
+            text-align: center;
+        }
+
+        .countdown-title {
+            color: var(--mint);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .timer-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .t-box {
+            background: rgba(3, 7, 18, 0.8);
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            border-radius: 12px;
+            padding: 0.6rem 1rem;
+            min-width: 75px;
+        }
+
+        .t-num {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--gold);
+            line-height: 1;
+        }
+
+        .t-lbl {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Interactive 3D Journey Section */
+        .journey-section {
+            padding: 6rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Amiri', serif;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: var(--mint);
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .journey-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .journey-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 2.2rem;
+            backdrop-filter: blur(15px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .journey-card::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold), var(--mint));
+        }
+
+        .journey-card:hover {
+            transform: translateY(-10px) rotateX(4deg);
+            box-shadow: 0 20px 40px rgba(251, 191, 36, 0.2);
+            border-color: var(--gold);
+        }
+
+        .card-icon-glow {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(251, 191, 36, 0.3) 0%, rgba(15, 23, 42, 0.5) 70%);
+            border: 1px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+        }
+
+        .journey-card h3 {
+            font-family: 'Amiri', serif;
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin-bottom: 0.8rem;
+        }
+
+        .journey-card p {
+            color: #cbd5e1;
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .prophet-light-tag {
+            display: inline-block;
+            margin-top: 1.2rem;
+            background: rgba(45, 212, 191, 0.15);
+            border: 1px solid var(--mint);
+            color: var(--mint);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        /* Course Features & Interactive Details */
+        .features-section {
+            background: rgba(15, 23, 42, 0.6);
+            border-top: 1px solid var(--card-border);
+            border-bottom: 1px solid var(--card-border);
+            padding: 5rem 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .features-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-box {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(3, 7, 18, 0.6);
+            border-radius: 20px;
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+
+        .feature-box .num {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--gold);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-box h4 {
+            font-size: 1.3rem;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-box p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Footer Call to Action */
+        .footer-cta {
+            padding: 6rem 1.5rem;
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(53, 70, 150, 0.4) 0%, rgba(3, 7, 18, 0.9) 70%);
+        }
+
+        .footer-cta h2 {
+            font-family: 'Amiri', serif;
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .footer-cta p {
+            font-size: 1.2rem;
+            color: #e2e8f0;
+            max-width: 700px;
+            margin: 0 auto 2rem auto;
+        }
+
+        /* Responsive Fixes */
+        @media (max-width: 600px) {
+            .timer-boxes {
+                gap: 0.5rem;
+            }
+            .t-box {
+                min-width: 60px;
+                padding: 0.5rem 0.4rem;
+            }
+            .t-num {
+                font-size: 1.4rem;
+            }
+            .journey-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- WebGL Particle Canvas -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <div class="content-layer">
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-badge">✨ المحطة الأولى 2027 | كورس قصص الأنبياء (سن 6 إلى 9 سنوات)</div>
+            
+            <h1 class="hero-title">
+                رحلة إيمانية ترجع بأولادنا <span>إلى زمان الأنبياء</span>
+            </h1>
+
+            <p class="hero-subtitle">
+                نأخذ طفلك في رحلة تفاعلية مبهرة يتعلم فيها قيم الحق، الصدق، وبر الوالدين، من خلال الاقتداء بأنوار الأنبياء والاهتداء بهديهم المبارك.
+            </p>
+
+            <!-- Pure Sacred Light Symbolism -->
+            <div class="light-symbol-container">
+                <div class="divine-light-orb"></div>
+                <div class="light-label">﴿ أُولَٰئِكَ الَّذِينَ هَدَى اللَّهُ ۖ فَبِهُدَاهُمُ اقْتَدِهْ ﴾</div>
+            </div>
+
+            <!-- Main CTA Button -->
+            <a href="https://m.me/mouniracademy" target="_blank" class="cta-btn">
+                💬 احجز مكان ابنك الآن عبر الماسنجر
+            </a>
+
+            <!-- Countdown Bar -->
+            <div class="countdown-bar">
+                <div class="countdown-title">⏳ متبقي على انطلاق الدفعة الجديدة (10 سبتمبر 2026)</div>
+                <div class="timer-boxes">
+                    <div class="t-box"><div class="t-num" id="d">00</div><div class="t-lbl">يوم</div></div>
+                    <div class="t-box"><div class="t-num" id="h">00</div><div class="t-lbl">ساعة</div></div>
+                    <div class="t-box"><div class="t-num" id="m">00</div><div class="t-lbl">دقيقة</div></div>
+                    <div class="t-box"><div class="t-num" id="s">00</div><div class="t-lbl">ثانية</div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Values Journey Section -->
+        <section class="journey-section">
+            <div class="section-header">
+                <h2>✨ القيم التفاعلية الخمس في كورس الأنبياء</h2>
+                <p>تطبيق عملي وتربوي لحياة الطفل يومياً من أنوار قصص الأنبياء</p>
+            </div>
+
+            <div class="journey-grid">
+                <!-- Value 1 -->
+                <div class="journey-card">
+                    <div class="card-icon-glow">✨</div>
+                    <h3>1. بر الوالدين وتوطيد المحبة</h3>
+                    <p>يتعلم الطفل مفهوم الطاعة المحبوبة والرحمة بالوالدين، وكيف يحيي علاقة مليئة بالحب والاحتواء الاقتداء بنور قصة الخليل إبراهيم وإسماعيل عليهما السلام.</p>
+                    <span class="prophet-light-tag">💡 أنوار الطاعة والإحسان</span>
+                </div>
+
+                <!-- Value 2 -->
+                <div class="journey-card">
+                    <div class="card-icon-glow">🛡️</div>
+                    <h3>2. البعد عن أصدقاء السوء</h3>
+                    <p>بناء مناعة تربوية قوية تجعل الطفل يتمسك بقيمه ولا ينساق وراء أقران السوء، مستلهماً الثبات والنجاة من نور قصة يوسف الصديق عليه السلام.</p>
+                    <span class="prophet-light-tag">💡 أنوار العفة والثبات</span>
+                </div>
+
+                <!-- Value 3 -->
+                <div class="journey-card">
+                    <div class="card-icon-glow">🌊</div>
+                    <h3>3. الصبر وعدم الغضب</h3>
+                    <p>تدريب سلوكي تفاعلي للتحكم في المشاعر وتجنب نوبات الغضب والجزع، والتعلم كيف يفرج الله الكرب بالصبر والتسبيح كأنوار يونس وأيوب عليهما السلام.</p>
+                    <span class="prophet-light-tag">💡 أنوار الصبر والتسبيح</span>
+                </div>
+
+                <!-- Value 4 -->
+                <div class="journey-card">
+                    <div class="card-icon-glow">💎</div>
+                    <h3>4. الصدق وتجنب الكذب</h3>
+                    <p>غرس الصدق كقيمة أساسية وشعار دائم للطفل في أقواله وأفعاله، والاقتداء بالنور الخاتم سيدنا محمد ﷺ الصادق الأمين.</p>
+                    <span class="prophet-light-tag">💡 أنوار الصادق الأمين</span>
+                </div>
+
+                <!-- Value 5 -->
+                <div class="journey-card">
+                    <div class="card-icon-glow">👑</div>
+                    <h3>5. شكر النعمة والرضا</h3>
+                    <p>تربية وجدانية لتقدير نعم الله والرضا بها واستعمالها في الخير والحكمة، من أنوار حكمة سليمان وداوود عليهما السلام.</p>
+                    <span class="prophet-light-tag">💡 أنوار الشكر والحكمة</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features & Proof Section -->
+        <section class="features-section">
+            <div class="features-grid">
+                <div class="feature-box">
+                    <div class="num">6-9</div>
+                    <h4>الفئة العمرية</h4>
+                    <p>مخصص للأطفال من سن 6 حتى 9 سنوات بأسلوب مبسط وممتع.</p>
+                </div>
+                <div class="feature-box">
+                    <div class="num">LIVE</div>
+                    <h4>حلقات تفاعلية أونلاين</h4>
+                    <p>مجموعات صغيرة عبر زوم لضمان المشاركة والتطبيق الفردي.</p>
+                </div>
+                <div class="feature-box">
+                    <div class="num">📜</div>
+                    <h4>شهادة ومتابعة أسبوعية</h4>
+                    <p>تقرير تربوي لولي الأمر لمتابعة تطور سلوك وقيم الطفل.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer CTA -->
+        <section class="footer-cta">
+            <h2>استثمر في بناء عقيدة وقيم ابنك اليوم</h2>
+            <p>المقاعد محدودة للدفعة الجديدة المنطلقة في 10 سبتمبر 2026. انضم لأكاديمية منير واجعل ابنك يعيش تجربة تربوية فريدة.</p>
+            <a href="https://m.me/mouniracademy" target="_blank" class="cta-btn">
+                💬 احجز الآن عبر الماسنجر
+            </a>
+        </section>
+
+    </div>
+
+    <!-- 3D Three.js Background & Interactions -->
+    <script>
+        // 1. Three.js Celestial Starfield & Glowing Light Particles
+        const canvas = document.getElementById('webgl-canvas');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+        // Create Star Particles
+        const particlesCount = 700;
+        const positions = new Float32Array(particlesCount * 3);
+        const colors = new Float32Array(particlesCount * 3);
+
+        const goldColor = new THREE.Color(0xfbbf24);
+        const mintColor = new THREE.Color(0x2dd4bf);
+        const whiteColor = new THREE.Color(0xffffff);
+
+        for (let i = 0; i < particlesCount * 3; i += 3) {
+            positions[i] = (Math.random() - 0.5) * 20;
+            positions[i + 1] = (Math.random() - 0.5) * 20;
+            positions[i + 2] = (Math.random() - 0.5) * 20;
+
+            const rand = Math.random();
+            let c = rand > 0.6 ? goldColor : (rand > 0.3 ? mintColor : whiteColor);
+            colors[i] = c.r;
+            colors[i + 1] = c.g;
+            colors[i + 2] = c.b;
+        }
+
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+        const material = new THREE.PointsMaterial({
+            size: 0.04,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.85
+        });
+
+        const particleSystem = new THREE.Points(geometry, material);
+        scene.add(particleSystem);
+
+        camera.position.z = 5;
+
+        // Mouse Parallax Effect
+        let mouseX = 0, mouseY = 0;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 0.5;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 0.5;
+        });
+
+        // Animation Loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            particleSystem.rotation.y += 0.0012;
+            particleSystem.rotation.x += 0.0006;
+
+            camera.position.x += (mouseX - camera.position.x) * 0.05;
+            camera.position.y += (-mouseY - camera.position.y) * 0.05;
+            camera.lookAt(scene.position);
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Responsive Resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // 2. Countdown Timer
+        const targetDate = new Date("2026-09-10T00:00:00+02:00").getTime();
+        function updateTimer() {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+
+            if (diff > 0) {
+                document.getElementById('d').innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+                document.getElementById('h').innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById('m').innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById('s').innerText = Math.floor((diff % (1000 * 60)) / 1000);
+            }
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+    </script>
+</body>
+</html>
