@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تقرير أداء إعلانات ميتا | أكاديمية منير (1 - 10 أغسطس)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #354696;
+            --secondary: #57BA9E;
+            --accent: #FBBF24;
+            --bg-light: #F8FAFC;
+            --card-bg: #FFFFFF;
+            --text-dark: #1E293B;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
+        body { background-color: var(--bg-light); color: var(--text-dark); padding: 2rem 1rem; line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { background: var(--card-bg); padding: 2rem; border-radius: 16px; border: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .header-title h1 { color: var(--primary); font-size: 1.8rem; font-weight: 800; }
+        .header-title p { color: var(--text-muted); font-weight: 500; margin-top: 0.3rem; }
+        .logo-img { height: 60px; border-radius: 8px; }
+        
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
+        .kpi-card { background: var(--card-bg); padding: 1.5rem; border-radius: 14px; border: 1px solid var(--border-color); box-shadow: 0 2px 10px rgba(0,0,0,0.03); transition: transform 0.2s ease; }
+        .kpi-card:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(53, 70, 150, 0.1); }
+        .kpi-label { font-size: 0.95rem; color: var(--text-muted); font-weight: 700; }
+        .kpi-val { font-size: 1.9rem; font-weight: 900; color: var(--primary); margin: 0.4rem 0; }
+        .kpi-sub { font-size: 0.85rem; color: var(--secondary); font-weight: 700; }
+        
+        .section-card { background: var(--card-bg); border-radius: 16px; border: 1px solid var(--border-color); box-shadow: 0 4px 15px rgba(0,0,0,0.05); padding: 1.8rem; margin-bottom: 2rem; }
+        .section-card h2 { color: var(--primary); font-size: 1.4rem; font-weight: 800; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; font-size: 0.95rem; }
+        th { background: #F1F5F9; color: var(--primary); padding: 0.9rem 1rem; text-align: right; font-weight: 800; border-bottom: 2px solid var(--border-color); }
+        td { padding: 0.8rem 1rem; border-bottom: 1px solid var(--border-color); color: var(--text-dark); font-weight: 500; }
+        tr:hover { background-color: #F8FAFC; }
+        
+        .alert-box { background: #EFF6FF; border-right: 4px solid var(--primary); padding: 1.2rem; border-radius: 10px; margin-bottom: 1rem; }
+        .alert-box h3 { font-size: 1.1rem; color: var(--primary); margin-bottom: 0.3rem; }
+        .alert-box p { font-size: 0.95rem; color: var(--text-dark); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-title">
+                <h1>📊 تقرير أداء إعلانات ميتا (Meta Ads)</h1>
+                <p>الفترة: من 1 أغسطس 2026 إلى 10 أغسطس 2026 | أكاديمية منير</p>
+            </div>
+            <img src="mounir_logo.jpg" alt="Mounir Academy Logo" class="logo-img" onerror="this.style.display='none'">
+        </div>
+
+        <!-- KPI Cards Grid -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-label">إجمالي الإنفاق (Total Spend)</div>
+                <div class="kpi-val">5,878.26 EGP</div>
+                <div class="kpi-sub">الميزانية المستهلكة في 10 أيام</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">محادثات الماسنجر (Messaging)</div>
+                <div class="kpi-val">1,242</div>
+                <div class="kpi-sub">محادثة/عميل محتمل جديد</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">تكلفة الرسالة (Cost Per Message)</div>
+                <div class="kpi-val">4.73 EGP</div>
+                <div class="kpi-sub">أداء عالي الكفاءة في التحويل</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">نسبة النقر للظهور (CTR)</div>
+                <div class="kpi-val">5.95%</div>
+                <div class="kpi-sub">جودة تفاعل الجمهور مع الإعلانات</div>
+            </div>
+        </div>
+
+        <!-- Daily Breakdown Section -->
+        <div class="section-card">
+            <h2>📅 التحليل اليومي المفصل (من 1 إلى 10 أغسطس)</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>التاريخ</th>
+                            <th>الإنفاق (EGP)</th>
+                            <th>مرات الظهور</th>
+                            <th>النقرات</th>
+                            <th>CTR %</th>
+                            <th>محادثات الماسنجر</th>
+                            <th>تكلفة الرسالة (EGP)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td><strong>2026-08-01</strong></td>
+                            <td>936.37</td>
+                            <td>34,623</td>
+                            <td>1,860</td>
+                            <td>5.37%</td>
+                            <td><strong style="color: var(--secondary);">152</strong></td>
+                            <td><strong style="color: var(--primary);">6.16</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>2026-08-02</strong></td>
+                            <td>688.52</td>
+                            <td>34,356</td>
+                            <td>1,628</td>
+                            <td>4.74%</td>
+                            <td><strong style="color: var(--secondary);">116</strong></td>
+                            <td><strong style="color: var(--primary);">5.94</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>2026-08-03</strong></td>
+                            <td>776.83</td>
+                            <td>50,199</td>
+                            <td>2,698</td>
+                            <td>5.37%</td>
+                            <td><strong style="color: var(--secondary);">133</strong></td>
+                            <td><strong style="color: var(--primary);">5.84</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>2026-08-04</strong></td>
+                            <td>571.02</td>
+                            <td>31,064</td>
+                            <td>1,841</td>
+                            <td>5.93%</td>
+                            <td><strong style="color: var(--secondary);">127</strong></td>
+                            <td><strong style="color: var(--primary);">4.50</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>2026-08-05</strong></td>
+                            <td>445.61</td>
+                            <td>21,182</td>
+                            <td>1,374</td>
+                            <td>6.49%</td>
+                            <td><strong style="color: var(--secondary);">107</strong></td>
+                            <td><strong style="color: var(--primary);">4.16</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>2026-08-06</strong></td>
+                            <td>461.28</td>
+                            <td>22,391</td>
+                            <td>1,243</td>
+                            <td>5.55%</td>
+                            <td><strong style="color: var(--secondary);">104</strong></td>
+                            <td><strong style="color: var(--primary);">4.44</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>2026-08-07</strong></td>
+                            <td>466.89</td>
+                            <td>16,014</td>
+                            <td>1,026</td>
+                            <td>6.41%</td>
+                            <td><strong style="color: var(--secondary);">116</strong></td>
+                            <td><strong style="color: var(--primary);">4.02</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>2026-08-08</strong></td>
+                            <td>465.03</td>
+                            <td>16,606</td>
+                            <td>1,194</td>
+                            <td>7.19%</td>
+                            <td><strong style="color: var(--secondary);">123</strong></td>
+                            <td><strong style="color: var(--primary);">3.78</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>2026-08-09</strong></td>
+                            <td>534.68</td>
+                            <td>26,323</td>
+                            <td>1,883</td>
+                            <td>7.15%</td>
+                            <td><strong style="color: var(--secondary);">126</strong></td>
+                            <td><strong style="color: var(--primary);">4.24</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>2026-08-10</strong></td>
+                            <td>532.03</td>
+                            <td>25,315</td>
+                            <td>1,798</td>
+                            <td>7.10%</td>
+                            <td><strong style="color: var(--secondary);">138</strong></td>
+                            <td><strong style="color: var(--primary);">3.86</strong></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Campaign Performance Section -->
+        <div class="section-card">
+            <h2>🚀 أداء الحملات الإعلانية (Campaign Breakdown)</h2>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>اسم الحملة الإعلانية</th>
+                            <th>الإنفاق (EGP)</th>
+                            <th>الظهور</th>
+                            <th>النقرات</th>
+                            <th>CTR %</th>
+                            <th>الرسائل المحققة</th>
+                            <th>تكلفة الرسالة (EGP)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td><strong>حملة إعلانية جديدة بهدف التفاعل</strong></td>
+                            <td>752.32</td>
+                            <td>12,641</td>
+                            <td>306</td>
+                            <td>2.42%</td>
+                            <td><strong>32</strong></td>
+                            <td><strong>23.51</strong></td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>new Aug</strong></td>
+                            <td>5,125.94</td>
+                            <td>265,432</td>
+                            <td>16,239</td>
+                            <td>6.12%</td>
+                            <td><strong>1,210</strong></td>
+                            <td><strong>4.24</strong></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Actionable Insights -->
+        <div class="section-card">
+            <h2>💡 التوصيات والخطوات التنفيذية للمرحلة القادمة</h2>
+            <div class="alert-box">
+                <h3>1. زيادة ميزانية الحملات (أحمد أبو شادي)</h3>
+                <p>معدل تكلفة الرسالة منخفض وممتاز جداً. يُوصى برفع الميزانية التدريجي بمعدل 20% يومياً للاستحواذ على أكبر عدد من الـ 1,000 طالب قبل انطلاق 10 سبتمبر.</p>
+            </div>
+            <div class="alert-box" style="border-color: var(--secondary); background: #F0FDF4;">
+                <h3>2. النشر الأورجانيك الفيروسي (سهيلة)</h3>
+                <p>استغلال أفضل الكرياتيفز الإعلانية والنشر في الـ 200 جروب يوم 12، 14، 16، 18، 20 أغسطس لرفع حجم التفاعل المجاني.</p>
+            </div>
+            <div class="alert-box" style="border-color: var(--accent); background: #FFFBEB;">
+                <h3>3. متابعة إغلاق الاشتراكات (دينا وأميرة)</h3>
+                <p>تتبع كافة المحادثات الواردة وإدخالها فوراً في نظام أودو الموحد لضمان تحويل الاستفسارات إلى اشتراكات مؤكدة.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
