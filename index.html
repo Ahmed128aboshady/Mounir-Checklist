@@ -3,24 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المحطة الأولى 2026/2027 | أكاديمية منير — كتالوج الشباب • وعي وأمان • قصص الأنبياء</title>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <title>أكاديمية منير — المحطة الأولى 2026 / 2027 | الرحلة التعليمية التربوية لبناء الشخصية</title>
+    <meta name="description" content="أكاديمية منير — رحلة تعليمية تفاعلية سينمائية للأطفال والمراهقين من 6 إلى 18 سنة. مسارات البنين والبنات وقصص الأنبياء.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- GSAP (UMD — must load before ES modules) -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+    <!-- ES Module Import Map -->
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.167.1/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/",
+        "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.mjs"
+      }
+    }
+    </script>
+
     <style>
+        /* ═══════════════════════════════════════════════════════════════════ */
+        /* DESIGN TOKENS                                                        */
+        /* ═══════════════════════════════════════════════════════════════════ */
         :root {
+            --gold-light: #fef08a;
             --gold: #fbbf24;
-            --gold-glow: #f59e0b;
+            --gold-dark: #d97706;
+            --gold-bronze: #b45309;
             --cyan: #06b6d4;
             --pink: #ec4899;
             --blue: #3b82f6;
             --emerald: #10b981;
-            --bg-night: #030712;
-            --card-bg: rgba(15, 23, 42, 0.78);
-            --card-border: rgba(251, 191, 36, 0.3);
+            --purple: #8b5cf6;
+            --bg-dark: #090d16;
+            --card-bg: rgba(17, 24, 39, 0.88);
+            --card-border: rgba(251, 191, 36, 0.22);
             --text-light: #f8fafc;
             --text-muted: #94a3b8;
+            --canvas-z: 0;
+            --content-z: 10;
         }
 
         * {
@@ -30,198 +54,629 @@
             font-family: 'Tajawal', sans-serif;
         }
 
-        body {
-            background-color: var(--bg-night);
-            color: var(--text-light);
-            overflow-x: hidden;
-            line-height: 1.7;
-            -webkit-tap-highlight-color: transparent;
+        html {
+            scroll-behavior: auto; /* Lenis handles smoothing */
         }
 
-        /* 4K WebGL Canvas */
-        #webgl-canvas {
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════ */
+        /* FIXED THREE.JS CANVAS                                               */
+        /* ═══════════════════════════════════════════════════════════════════ */
+        #experience-canvas {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 1;
-            pointer-events: none;
+            width: 100%;
+            height: 100%;
+            z-index: var(--canvas-z);
+            pointer-events: none; /* Stations section will re-enable */
+            display: block;
         }
 
-        .content-layer {
+        /* ═══════════════════════════════════════════════════════════════════ */
+        /* SCROLL CONTENT LAYER                                                */
+        /* ═══════════════════════════════════════════════════════════════════ */
+        #scroll-content {
             position: relative;
-            z-index: 2;
+            z-index: var(--content-z);
         }
 
-        /* Top Announcement Strip */
+        /* ═══════════════════════════════════════════════════════════════════ */
+        /* LOADING SCREEN                                                       */
+        /* ═══════════════════════════════════════════════════════════════════ */
+        #loading-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: #090d16;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .loading-logo {
+            font-family: 'Amiri', serif;
+            font-size: 2.5rem;
+            color: var(--gold);
+            text-shadow: 0 0 30px rgba(251,191,36,0.5);
+        }
+
+        .loading-train {
+            font-size: 2rem;
+            animation: train-slide 1.5s ease-in-out infinite alternate;
+            filter: drop-shadow(0 0 8px rgba(251,191,36,0.6));
+        }
+
+        @keyframes train-slide {
+            from { transform: translateX(-20px); }
+            to   { transform: translateX(20px); }
+        }
+
+        .loading-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            animation: pulse-text 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-text {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        .loading-bar-track {
+            width: 200px;
+            height: 2px;
+            background: rgba(251,191,36,0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .loading-bar-fill {
+            height: 100%;
+            background: var(--gold);
+            border-radius: 2px;
+            animation: loading-fill 1.5s ease-in-out infinite;
+        }
+
+        @keyframes loading-fill {
+            0% { width: 0%; }
+            70% { width: 85%; }
+            100% { width: 100%; }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════ */
+        /* TOP ANNOUNCEMENT STRIP                                              */
+        /* ═══════════════════════════════════════════════════════════════════ */
         .top-strip {
             background: linear-gradient(90deg, #1e1b4b, #0f172a, #064e3b);
             border-bottom: 1px solid var(--card-border);
             color: #ffffff;
             text-align: center;
-            padding: 0.6rem 1rem;
-            font-weight: 800;
+            padding: 0.75rem 1rem;
+            font-weight: 700;
             font-size: 0.95rem;
             box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            position: relative;
+            z-index: 20;
         }
 
-        .top-strip span {
-            color: var(--gold);
-        }
+        .top-strip span { color: var(--gold); font-weight: 800; }
 
-        /* 4K Cinematic Hero Section */
-        .hero-section {
-            min-height: 95vh;
+        /* ═══════════════════════════════════════════════════════════════════ */
+        /* HERO SECTION — Three.js canvas shows through                        */
+        /* ═══════════════════════════════════════════════════════════════════ */
+        #hero-section {
+            position: relative;
+            min-height: 100vh;
+            width: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
+            overflow: hidden;
+            /* Fallback background before Three.js loads */
+            background: url('hero_desktop.png') center center / cover no-repeat;
+        }
+
+        #hero-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to left,
+                rgba(9, 13, 22, 0.92) 0%,
+                rgba(9, 13, 22, 0.72) 45%,
+                rgba(9, 13, 22, 0.20) 75%,
+                transparent 100%);
+            z-index: 1;
+        }
+
+        /* Once Three.js loads, fade out the background image */
+        body.threejs-ready #hero-section {
+            background-image: none;
+        }
+
+        .hero-body-content {
+            position: relative;
+            z-index: 5;
+            width: 100%;
+            max-width: 1350px;
+            margin: 0 auto;
+            padding: 3.5rem 2rem 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        /* Top Train Badge */
+        .hero-top-badge {
+            background: rgba(18, 14, 11, 0.75);
+            border: 1px solid rgba(251, 191, 36, 0.4);
+            border-radius: 50px;
+            color: var(--gold-light);
+            font-size: 0.98rem;
+            font-weight: 800;
+            padding: 0.55rem 1.4rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            backdrop-filter: blur(12px);
+            margin-bottom: 1.8rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .hero-top-badge svg { color: var(--gold); }
+
+        /* Dual Line Title */
+        .hero-main-title {
+            margin-bottom: 1rem;
+            line-height: 1.15;
+            text-align: right;
+        }
+
+        .title-dark {
+            display: block;
+            font-family: 'Amiri', serif;
+            font-size: clamp(3.2rem, 6.5vw, 5.5rem);
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow: 0 4px 25px rgba(0, 0, 0, 0.9);
+            letter-spacing: -1px;
+        }
+
+        .title-gold {
+            display: block;
+            font-family: 'Amiri', serif;
+            font-size: clamp(3.6rem, 7vw, 6rem);
+            font-weight: 900;
+            background: linear-gradient(180deg, #fef08a 0%, #fbbf24 45%, #d97706 80%, #92400e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.9));
+            margin-top: -0.4rem;
+        }
+
+        .hero-tagline {
+            font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+            color: var(--gold-light);
+            font-weight: 800;
+            margin-bottom: 2.2rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+        }
+
+        /* 4 Feature Columns Row */
+        .hero-features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            width: 100%;
+            max-width: 780px;
+            margin-bottom: 2.5rem;
+            background: rgba(15, 23, 42, 0.65);
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            border-radius: 20px;
+            padding: 1.2rem 1.4rem;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .h-feature-item {
+            display: flex;
+            flex-direction: column;
             align-items: center;
             text-align: center;
-            padding: 4rem 1.5rem 2rem 1.5rem;
-            background: radial-gradient(circle at 50% 30%, rgba(30, 41, 59, 0.6) 0%, rgba(3, 7, 18, 0.95) 75%),
-                        url('prophets_light_desert.jpg') center/cover no-repeat;
             position: relative;
+            padding: 0.4rem 0.5rem;
         }
 
-        .hero-badge {
-            background: rgba(251, 191, 36, 0.15);
-            border: 1px solid var(--gold);
+        .h-feature-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 15%;
+            height: 70%;
+            width: 1px;
+            background: rgba(251, 191, 36, 0.2);
+        }
+
+        .h-feat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(251, 191, 36, 0.12);
+            border: 1px solid rgba(251, 191, 36, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: var(--gold);
-            padding: 0.6rem 1.8rem;
-            border-radius: 50px;
-            font-size: 1.15rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .h-feat-text strong {
+            display: block;
+            font-size: 0.98rem;
             font-weight: 800;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 0 25px rgba(251, 191, 36, 0.35);
-            backdrop-filter: blur(12px);
-            animation: pulse-glow 2.5s infinite alternate;
-        }
-
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 0 15px rgba(251, 191, 36, 0.3); }
-            100% { box-shadow: 0 0 40px rgba(251, 191, 36, 0.8); }
-        }
-
-        .hero-title {
-            font-family: 'Amiri', serif;
-            font-size: clamp(2.5rem, 6vw, 4.8rem);
-            font-weight: 700;
             color: #ffffff;
-            line-height: 1.25;
-            margin-bottom: 1.2rem;
-            text-shadow: 0 0 35px rgba(251, 191, 36, 0.5);
+            margin-bottom: 0.15rem;
         }
 
-        .hero-title span {
-            color: var(--gold);
-            display: inline-block;
-        }
-
-        .hero-subtitle {
-            font-size: clamp(1.15rem, 2.5vw, 1.45rem);
-            color: #e2e8f0;
-            max-width: 900px;
-            margin: 0 auto 2rem auto;
+        .h-feat-text span {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
             font-weight: 500;
         }
 
-        /* Tracks Badges Row */
-        .hero-tracks-pill {
+        /* Action Row */
+        .hero-action-row {
             display: flex;
+            align-items: center;
+            gap: 1.8rem;
             flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
             margin-bottom: 2rem;
         }
 
-        .track-pill-item {
-            padding: 0.5rem 1.2rem;
-            border-radius: 30px;
-            font-weight: 800;
-            font-size: 0.95rem;
-            backdrop-filter: blur(10px);
-        }
-
-        .pill-boys { background: rgba(59, 130, 246, 0.2); border: 1px solid var(--blue); color: #93c5fd; }
-        .pill-girls { background: rgba(236, 72, 153, 0.2); border: 1px solid var(--pink); color: #fbcfe8; }
-        .pill-prophets { background: rgba(16, 185, 129, 0.2); border: 1px solid var(--emerald); color: #a7f3d0; }
-
-        /* Direct Messenger CTA Button */
-        .cta-btn-messenger {
-            background: linear-gradient(135deg, #0084ff 0%, #00c6ff 100%);
-            color: #ffffff;
-            font-size: 1.35rem;
+        .hero-cta-btn {
+            background: linear-gradient(135deg, #fbbf24 0%, #d97706 60%, #b45309 100%);
+            color: #0c0a09;
+            font-size: 1.25rem;
             font-weight: 900;
-            padding: 1.1rem 3.5rem;
+            padding: 1.1rem 2.8rem;
             border-radius: 50px;
             border: none;
             cursor: pointer;
             text-decoration: none;
-            box-shadow: 0 10px 35px rgba(0, 132, 255, 0.45);
+            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.45);
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 0.9rem;
-            margin-top: 1rem;
+            gap: 0.8rem;
         }
 
-        .cta-btn-messenger:hover {
-            transform: translateY(-4px) scale(1.03);
-            box-shadow: 0 15px 45px rgba(0, 132, 255, 0.75);
+        .hero-cta-btn svg { transition: transform 0.3s ease; }
+
+        .hero-cta-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(245, 158, 11, 0.65);
         }
 
-        /* Countdown Bar */
-        .countdown-bar {
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            padding: 1.5rem;
-            max-width: 750px;
-            width: 90%;
-            margin: 2.5rem auto 0 auto;
-            backdrop-filter: blur(15px);
-            text-align: center;
+        .hero-cta-btn:hover svg { transform: translateX(-5px); }
+
+        /* Social Proof */
+        .hero-social-proof { display: flex; align-items: center; gap: 0.8rem; }
+
+        .avatar-group { display: flex; align-items: center; }
+
+        .avatar-img {
+            width: 38px; height: 38px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            object-fit: cover;
+            margin-right: -10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
         }
 
-        .countdown-title {
-            color: var(--cyan);
-            font-weight: 800;
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
+        .avatar-img:first-child { margin-right: 0; }
+
+        .social-proof-text {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: #e2e8f0;
+            text-shadow: 0 2px 6px rgba(0,0,0,0.8);
         }
 
-        .timer-boxes {
+        /* Stats Bar */
+        .hero-stats-bar-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            padding: 0 2rem 1.8rem 2rem;
+        }
+
+        .hero-stats-bar {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: rgba(15, 23, 42, 0.82);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 24px;
+            padding: 1.2rem 2.5rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
             display: flex;
-            justify-content: center;
-            gap: 1rem;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
         }
 
-        .t-box {
-            background: rgba(3, 7, 18, 0.8);
-            border: 1px solid rgba(45, 212, 191, 0.3);
-            border-radius: 12px;
-            padding: 0.6rem 1rem;
-            min-width: 75px;
-        }
+        .h-stat-card { display: flex; align-items: center; gap: 1rem; }
 
-        .t-num {
-            font-size: 1.8rem;
-            font-weight: 900;
+        .h-stat-icon {
+            width: 52px; height: 52px;
+            border-radius: 16px;
+            background: rgba(251, 191, 36, 0.12);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            display: flex; align-items: center; justify-content: center;
             color: var(--gold);
-            line-height: 1;
         }
 
-        .t-lbl {
-            font-size: 0.8rem;
-            color: var(--text-muted);
+        .h-stat-content { display: flex; flex-direction: column; text-align: right; }
+        .h-stat-number { font-size: 1.8rem; font-weight: 900; color: #ffffff; line-height: 1.1; }
+        .h-stat-label { font-size: 0.9rem; color: var(--text-muted); font-weight: 700; }
+
+        /* ═══════════════════════════════════════════════════════════════════ */
+        /* JOURNEY SECTIONS — Transparent, Three.js canvas shows through       */
+        /* ═══════════════════════════════════════════════════════════════════ */
+        .journey-section {
+            position: relative;
+            min-height: 120vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            overflow: hidden;
         }
 
-        /* 3 Main Tracks Section */
-        .tracks-section {
+        /* ── Journey Station Sections ──────────────────────────────────── */
+        .journey-station-section {
+            position: relative;
+            min-height: 110vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: transparent;
+            overflow: hidden;
+            gap: 1rem;
+            padding: 6rem 2rem;
+        }
+        .jss-bg-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Amiri', serif;
+            font-size: clamp(5rem, 15vw, 12rem);
+            font-weight: 900;
+            color: rgba(255,255,255,0.025);
+            pointer-events: none;
+            user-select: none;
+            white-space: nowrap;
+        }
+        .jss-chapter-pill {
+            position: relative;
+            z-index: 2;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 50px;
+            padding: 0.4rem 1.2rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: rgba(255,255,255,0.5);
+            letter-spacing: 1px;
+            backdrop-filter: blur(10px);
+        }
+        .jss-heading {
+            position: relative;
+            z-index: 2;
+            font-family: 'Amiri', serif;
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            color: #fff;
+            margin: 0;
+            line-height: 1.2;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.5);
+        }
+        .jss-subtext {
+            position: relative;
+            z-index: 2;
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            color: rgba(255,255,255,0.45);
+            max-width: 420px;
+        }
+        .jss-scroll-hint {
+            position: relative;
+            z-index: 2;
+            margin-top: 1.5rem;
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.25);
+            letter-spacing: 2px;
+            animation: jss-hint-float 2.2s ease-in-out infinite;
+        }
+        @keyframes jss-hint-float {
+            0%, 100% { transform: translateY(0); opacity: 0.3; }
+            50%       { transform: translateY(-6px); opacity: 0.6; }
+        }
+
+        /* Text overlays for each chapter */
+        .journey-chapter-overlay {
+            position: absolute;
+            z-index: 2;
+            text-align: center;
+            padding: 2rem;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            pointer-events: none;
+        }
+
+        .journey-chapter-overlay.active {
+            opacity: 1;
+        }
+
+        .chapter-eyebrow {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .chapter-title {
+            font-family: 'Amiri', serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            color: #ffffff;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.9),
+                         0 0 60px rgba(251,191,36,0.2);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .chapter-subtitle {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: rgba(255,255,255,0.7);
+            max-width: 500px;
+            margin: 0 auto;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        }
+
+        /* Tunnel section: extra dark overlay */
+        #tunnel-section {
+            background: rgba(0, 0, 0, 0.0);
+        }
+
+        #tunnel-section .journey-chapter-overlay {
+            /* Tunnel light effect */
+        }
+
+        /* World Reveal: the big moment */
+        #world-reveal-section {
+            min-height: 150vh;
+        }
+
+        #world-reveal-section .chapter-title {
+            font-size: clamp(3rem, 6vw, 6rem);
+            background: linear-gradient(180deg, #ffffff 0%, #fbbf24 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════ */
+        /* STATION MAP SECTION                                                  */
+        /* ═══════════════════════════════════════════════════════════════════ */
+        #station-map-section {
+            position: relative;
+            min-height: 120vh;
+            background: transparent;
+        }
+
+        .station-map-header {
+            position: absolute;
+            top: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 5;
+            width: 90%;
+        }
+
+        .station-map-header h2 {
+            font-family: 'Amiri', serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            color: var(--gold);
+            text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+            margin-bottom: 0.8rem;
+        }
+
+        .station-map-header p {
+            color: rgba(255,255,255,0.65);
+            font-size: 1.1rem;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+        }
+
+        /* Station Cards (HTML layer above Three.js stations) */
+        .station-cards-row {
+            position: absolute;
+            bottom: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.8rem;
+            z-index: 5;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 90%;
+            max-width: 900px;
+        }
+
+        .station-card-mini {
+            background: rgba(9, 13, 22, 0.75);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 0.8rem 1.2rem;
+            backdrop-filter: blur(15px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-width: 130px;
+        }
+
+        .station-card-mini:hover {
+            transform: translateY(-4px);
+            border-color: var(--gold);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        }
+
+        .scm-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            margin: 0 auto 0.5rem auto;
+        }
+
+        .scm-name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #e2e8f0;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════ */
+        /* TRACKS SECTION (Existing Programs — solid background)               */
+        /* ═══════════════════════════════════════════════════════════════════ */
+        #tracks-section {
             padding: 6rem 1.5rem;
             max-width: 1250px;
             margin: 0 auto;
+            position: relative;
+            z-index: 15; /* Above canvas */
+        }
+
+        /* Add background to sections that need to cover the canvas */
+        .solid-section {
+            background: var(--bg-dark);
+            position: relative;
+            z-index: 15;
         }
 
         .section-header {
@@ -231,15 +686,17 @@
 
         .section-header h2 {
             font-family: 'Amiri', serif;
-            font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
             color: var(--gold);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
         }
 
         .section-header p {
             color: var(--cyan);
-            font-size: 1.25rem;
-            font-weight: 700;
+            font-size: 1.2rem;
+            font-weight: 600;
+            max-width: 750px;
+            margin: 0 auto;
         }
 
         .tracks-grid {
@@ -252,9 +709,9 @@
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: 24px;
-            padding: 2.2rem;
+            padding: 2.4rem 2rem;
             backdrop-filter: blur(15px);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
             display: flex;
@@ -262,73 +719,126 @@
             justify-content: space-between;
         }
 
-        .track-card.boys::before {
-            content: ''; position: absolute; top:0; right:0; left:0; height: 5px;
-            background: linear-gradient(90deg, #3b82f6, #06b6d4);
-        }
-        .track-card.girls::before {
-            content: ''; position: absolute; top:0; right:0; left:0; height: 5px;
-            background: linear-gradient(90deg, #ec4899, #f43f5e);
-        }
-        .track-card.prophets::before {
-            content: ''; position: absolute; top:0; right:0; left:0; height: 5px;
-            background: linear-gradient(90deg, #10b981, #fbbf24);
-        }
+        .track-card.boys::before   { content:''; position:absolute; top:0; right:0; left:0; height:5px; background:linear-gradient(90deg,#3b82f6,#06b6d4); }
+        .track-card.girls::before  { content:''; position:absolute; top:0; right:0; left:0; height:5px; background:linear-gradient(90deg,#ec4899,#f43f5e); }
+        .track-card.prophets::before { content:''; position:absolute; top:0; right:0; left:0; height:5px; background:linear-gradient(90deg,#10b981,#fbbf24); }
 
         .track-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(251, 191, 36, 0.25);
+            transform: translateY(-6px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
             border-color: var(--gold);
         }
 
         .track-header-badge {
             display: inline-block;
-            padding: 0.4rem 1rem;
+            padding: 0.4rem 1.1rem;
             border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 800;
+            font-size: 0.88rem;
+            font-weight: 700;
             margin-bottom: 1.2rem;
         }
 
-        .track-card.boys .track-header-badge { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid #3b82f6; }
-        .track-card.girls .track-header-badge { background: rgba(236, 72, 153, 0.2); color: #fbcfe8; border: 1px solid #ec4899; }
-        .track-card.prophets .track-header-badge { background: rgba(16, 185, 129, 0.2); color: #a7f3d0; border: 1px solid #10b981; }
+        .track-card.boys .track-header-badge     { background:rgba(59,130,246,0.15); color:#93c5fd; border:1px solid #3b82f6; }
+        .track-card.girls .track-header-badge    { background:rgba(236,72,153,0.15); color:#fbcfe8; border:1px solid #ec4899; }
+        .track-card.prophets .track-header-badge { background:rgba(16,185,129,0.15); color:#a7f3d0; border:1px solid #10b981; }
 
-        .track-card h3 {
-            font-family: 'Amiri', serif;
-            font-size: 1.9rem;
-            color: #ffffff;
-            margin-bottom: 1rem;
+        .track-card h3 { font-family:'Amiri', serif; font-size:1.85rem; color:#ffffff; margin-bottom:1rem; }
+        .track-card p  { color:#cbd5e1; font-size:1.02rem; line-height:1.8; margin-bottom:1.6rem; }
+
+        .track-features-list { list-style:none; margin-bottom:2.2rem; }
+        .track-features-list li {
+            margin-bottom:0.8rem; font-size:0.98rem;
+            display:flex; align-items:flex-start; gap:0.6rem;
+            color:#e2e8f0; line-height:1.6;
+        }
+        .track-features-list li::before { content:'•'; color:var(--gold); font-size:1.3rem; line-height:1; }
+
+        /* ═══════════════════════════════════════════════════════════════════ */
+        /* ACHIEVEMENT SECTION                                                  */
+        /* ═══════════════════════════════════════════════════════════════════ */
+        #achievement-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
         }
 
-        .track-card p {
-            color: #cbd5e1;
-            font-size: 1.05rem;
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
+        .achievement-overlay {
+            position: relative;
+            z-index: 5;
+            text-align: center;
+            padding: 3rem 2rem;
         }
 
-        .track-features-list {
-            list-style: none;
+        .achievement-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(251,191,36,0.12);
+            border: 1px solid var(--gold);
+            border-radius: 50px;
+            color: var(--gold);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
             margin-bottom: 2rem;
         }
 
-        .track-features-list li {
-            margin-bottom: 0.6rem;
-            font-size: 0.98rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: #e2e8f0;
+        .achievement-title {
+            font-family: 'Amiri', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            color: #ffffff;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+            margin-bottom: 1.5rem;
         }
 
-        /* 3D Circular Value Image Section */
+        .achievement-title span {
+            background: linear-gradient(135deg, var(--gold-light), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .achievement-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+
+        .ach-stat {
+            text-align: center;
+        }
+
+        .ach-stat-num {
+            font-size: 3rem;
+            font-weight: 900;
+            color: var(--gold);
+            display: block;
+            text-shadow: 0 0 30px rgba(251,191,36,0.4);
+            line-height: 1;
+        }
+
+        .ach-stat-label {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.9rem;
+            margin-top: 0.4rem;
+            display: block;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════ */
+        /* VALUES SECTION (Existing)                                            */
+        /* ═══════════════════════════════════════════════════════════════════ */
         .values-section {
-            background: rgba(15, 23, 42, 0.65);
+            background: rgba(15, 23, 42, 0.95);
             border-top: 1px solid var(--card-border);
             border-bottom: 1px solid var(--card-border);
             padding: 6rem 1.5rem;
             backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 15;
         }
 
         .values-grid {
@@ -341,324 +851,724 @@
 
         .val-card {
             background: rgba(3, 7, 18, 0.7);
-            border: 1px solid rgba(251, 191, 36, 0.25);
+            border: 1px solid rgba(251, 191, 36, 0.2);
             border-radius: 20px;
-            padding: 1.8rem 1.2rem;
+            padding: 2rem 1.3rem;
             text-align: center;
-            transition: all 0.4s ease;
+            transition: all 0.3s ease;
         }
 
         .val-card:hover {
-            transform: translateY(-8px);
+            transform: translateY(-6px);
             border-color: var(--gold);
-            box-shadow: 0 15px 30px rgba(251, 191, 36, 0.3);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.4);
         }
 
         .card-img-frame {
-            width: 90px;
-            height: 90px;
+            width: 95px; height: 95px;
             border-radius: 50%;
             padding: 4px;
             background: linear-gradient(135deg, var(--gold) 0%, var(--cyan) 100%);
-            margin: 0 auto 1.2rem auto;
-            box-shadow: 0 0 25px rgba(251, 191, 36, 0.4);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin: 0 auto 1.4rem auto;
+            box-shadow: 0 0 20px rgba(251, 191, 36, 0.25);
+            display: flex; align-items: center; justify-content: center;
             overflow: hidden;
         }
 
-        .card-img-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
+        .card-img-frame img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
+        .val-card h4 { font-family:'Amiri', serif; font-size:1.35rem; color:var(--gold); margin-bottom:0.6rem; }
+        .val-card p  { font-size:0.95rem; color:var(--text-muted); line-height:1.7; }
+
+        /* ═══════════════════════════════════════════════════════════════════ */
+        /* PARENT SECTION                                                       */
+        /* ═══════════════════════════════════════════════════════════════════ */
+        #parent-section {
+            position: relative;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            overflow: hidden;
         }
 
-        .val-card h4 {
-            font-family: 'Amiri', serif;
-            font-size: 1.4rem;
-            color: var(--gold);
-            margin-bottom: 0.5rem;
-        }
-
-        .val-card p {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-        }
-
-        /* Footer CTA Section */
-        .footer-cta {
-            padding: 6rem 1.5rem;
+        .parent-content {
+            position: relative;
+            z-index: 5;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
             text-align: center;
-            background: radial-gradient(circle at center, rgba(53, 70, 150, 0.4) 0%, rgba(3, 7, 18, 0.95) 70%);
         }
 
-        .footer-cta h2 {
+        .parent-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(6,182,212,0.1);
+            border: 1px solid var(--cyan);
+            border-radius: 50px;
+            color: var(--cyan);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+
+        .parent-title {
             font-family: 'Amiri', serif;
-            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            color: #ffffff;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+            margin-bottom: 1.5rem;
+        }
+
+        .parent-desc {
+            font-size: 1.15rem;
+            color: rgba(255,255,255,0.65);
+            max-width: 650px;
+            margin: 0 auto 3rem auto;
+            line-height: 1.9;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+        }
+
+        .parent-trust-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .trust-item {
+            background: rgba(9, 13, 22, 0.75);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+            border-radius: 16px;
+            padding: 1.2rem 1rem;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .trust-item svg { color: var(--gold); margin-bottom: 0.6rem; }
+        .trust-item strong { display:block; font-size:0.95rem; color:#ffffff; margin-bottom:0.2rem; }
+        .trust-item span { font-size:0.82rem; color:var(--text-muted); }
+
+        /* ═══════════════════════════════════════════════════════════════════ */
+        /* FINAL CTA SECTION (Enhanced existing)                               */
+        /* ═══════════════════════════════════════════════════════════════════ */
+        #final-section {
+            padding: 8rem 1.5rem 5rem;
+            text-align: center;
+            background: transparent;
+            position: relative;
+            z-index: 15;
+        }
+
+        .final-train-icon {
+            font-size: 3rem;
+            display: block;
+            margin: 0 auto 1.5rem;
+            filter: drop-shadow(0 0 20px rgba(251,191,36,0.6));
+            animation: final-float 3s ease-in-out infinite;
+        }
+
+        @keyframes final-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        #final-section h2 {
+            font-family: 'Amiri', serif;
+            font-size: clamp(2rem, 4.5vw, 3.4rem);
             color: var(--gold);
-            margin-bottom: 1rem;
+            margin-bottom: 1.2rem;
         }
 
-        .footer-cta p {
-            font-size: 1.25rem;
+        #final-section > p {
+            font-size: 1.18rem;
             color: #e2e8f0;
-            max-width: 750px;
-            margin: 0 auto 2.2rem auto;
+            max-width: 780px;
+            margin: 0 auto 2.4rem auto;
+            line-height: 1.9;
         }
 
-        @media (max-width: 600px) {
-            .t-box { min-width: 55px; padding: 0.5rem 0.3rem; }
-            .t-num { font-size: 1.4rem; }
-            .track-card { padding: 1.6rem; }
-            .cta-btn-messenger { padding: 1rem 2rem; font-size: 1.15rem; }
+        .final-cta-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cta-secondary {
+            padding: 1rem 2.2rem;
+            border: 2px solid rgba(251,191,36,0.4);
+            border-radius: 50px;
+            color: var(--gold);
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-secondary:hover {
+            border-color: var(--gold);
+            background: rgba(251,191,36,0.1);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════ */
+        /* RESPONSIVE                                                           */
+        /* ═══════════════════════════════════════════════════════════════════ */
+        @media (max-width: 992px) {
+            #hero-section {
+                background: url('hero_mobile.png') center top / cover no-repeat;
+                min-height: 100vh;
+            }
+
+            #hero-section::before {
+                background: linear-gradient(180deg,
+                    rgba(9, 13, 22, 0.94) 0%,
+                    rgba(9, 13, 22, 0.8) 55%,
+                    rgba(9, 13, 22, 0.95) 100%);
+            }
+
+            .hero-body-content {
+                align-items: center;
+                text-align: center;
+                padding: 2.5rem 1.2rem 1.5rem 1.2rem;
+            }
+
+            .hero-main-title { text-align: center; }
+
+            .hero-features-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.2rem 0.8rem;
+                padding: 1.2rem 0.8rem;
+            }
+
+            .h-feature-item:nth-child(2)::after { display: none; }
+
+            .hero-action-row {
+                justify-content: center;
+                flex-direction: column;
+                gap: 1.2rem;
+            }
+
+            .hero-cta-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 1rem 2rem;
+            }
+
+            .hero-stats-bar-wrapper { padding: 0 1.2rem 1.5rem 1.2rem; }
+            .hero-stats-bar { padding: 1.2rem 1rem; gap: 1rem; }
+
+            .h-stat-card { flex-direction: column; text-align: center; gap: 0.4rem; }
+            .h-stat-content { text-align: center; }
+
+            .journey-section { min-height: 80vh; }
+
+            .achievement-stats { gap: 1.5rem; }
+
+            .parent-trust-grid { grid-template-columns: repeat(2, 1fr); }
+
+            .station-cards-row { gap: 0.5rem; }
+            .station-card-mini { min-width: 100px; padding: 0.6rem 0.8rem; }
+        }
+
+        @media (max-width: 480px) {
+            .chapter-title { font-size: 2rem; }
+            .hero-features-grid { grid-template-columns: 1fr 1fr; }
+            .tracks-grid { grid-template-columns: 1fr; }
+            .parent-trust-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════ */
+        /* SCROLL PROGRESS INDICATOR (top bar)                                 */
+        /* ═══════════════════════════════════════════════════════════════════ */
+        #scroll-progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light));
+            z-index: 9998;
+            width: 0%;
+            transition: width 0.1s linear;
+            box-shadow: 0 0 10px rgba(251,191,36,0.5);
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════ */
+        /* CANVAS POINTER EVENTS — re-enable during interactive stations        */
+        /* ═══════════════════════════════════════════════════════════════════ */
+        body.stations-interactive #experience-canvas {
+            pointer-events: auto;
+        }
+
+        /* ═══════════════════════════════════════════════════════════════════ */
+        /* STORY SECTION OVERLAYS                                              */
+        /* ═══════════════════════════════════════════════════════════════════ */
+        [id$="-overlay"] {
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
 
-    <div class="top-strip">
-        ✨ <span>المحطة الأولى 2026/2027</span> — التسجيل مفتوح الآن في مسارات البنين، البنات، وقصص الأنبياء ✨
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- LOADING SCREEN                                                       -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <div id="loading-screen">
+        <div class="loading-logo">أكاديمية منير</div>
+        <div class="loading-train">🚂</div>
+        <div class="loading-text">جارٍ تحميل الرحلة</div>
+        <div class="loading-bar-track">
+            <div class="loading-bar-fill"></div>
+        </div>
     </div>
 
-    <!-- WebGL Particle Canvas -->
-    <canvas id="webgl-canvas"></canvas>
+    <!-- Scroll progress bar -->
+    <div id="scroll-progress-bar"></div>
 
-    <div class="content-layer">
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- THREE.JS CANVAS (Fixed background)                                   -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <canvas id="experience-canvas" aria-hidden="true"></canvas>
 
-        <!-- 4K Hero Section -->
-        <section class="hero-section">
-            <div class="hero-badge">🏛️ أكاديمية منير للمراهقين والنشء (سن 6 إلى 18 سنة)</div>
-            
-            <h1 class="hero-title">
-                ثلاثة مسارات تربوية تفاعلية <span>تفك شفرات المراهقة وبناء الشخصية</span>
-            </h1>
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- SCROLL CONTENT                                                       -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- STATION SIGNS LAYER — Fixed floating signs for each station         -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <div id="station-signs-layer" aria-hidden="true"></div>
 
-            <p class="hero-subtitle">
-                رحلة حية بحبكة تحقيقات ومغامرة تحول البيت لمساحة أمان، وتمنح أولادك مهارات القرن الحادي والعشرين، الصلاة، التواضع، وبناء الثقة العميقة بالذات.
-            </p>
+    <div id="scroll-content">
 
-            <div class="hero-tracks-pill">
-                <div class="track-pill-item pill-boys">👦 كتالوج الشباب (للبنين 10-18)</div>
-                <div class="track-pill-item pill-girls">👧 وعي وأمان (للبنات 10-18)</div>
-                <div class="track-pill-item pill-prophets">📜 سر الحاج إسماعيل (للكل 6-18)</div>
+        <!-- Top Announcement Strip -->
+        <div class="top-strip">
+            <span>أكاديمية منير — المحطة الأولى 2026 / 2027</span> | التسجيل مفتوح الآن في مسارات البنين والبنات وقصص الأنبياء
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- HERO SECTION                                                     -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section id="hero-section" aria-label="القسم الرئيسي">
+
+            <div class="hero-body-content">
+
+                <!-- Top Badge -->
+                <div class="hero-top-badge">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="3" width="16" height="16" rx="2"></rect>
+                        <path d="M4 11h16"></path>
+                        <path d="M12 3v8"></path>
+                        <path d="m8 19-2 3"></path>
+                        <path d="m16 19 2 3"></path>
+                        <circle cx="8" cy="15" r="1"></circle>
+                        <circle cx="16" cy="15" r="1"></circle>
+                    </svg>
+                    <span>أول رحلة ... نحو مستقبلهم</span>
+                </div>
+
+                <!-- Main Title -->
+                <h1 class="hero-main-title">
+                    <span class="title-dark">المحطة</span>
+                    <span class="title-gold">الأولى</span>
+                </h1>
+
+                <!-- Subtitle -->
+                <p class="hero-tagline">رحلة تعليمية تفاعلية من 6 إلى 18 سنة</p>
+
+                <!-- 4 Features Row -->
+                <div class="hero-features-grid">
+                    <div class="h-feature-item">
+                        <div class="h-feat-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                        </div>
+                        <div class="h-feat-text">
+                            <strong>مناهج تفاعلية</strong>
+                            <span>تعلم ممتع وشيق</span>
+                        </div>
+                    </div>
+
+                    <div class="h-feature-item">
+                        <div class="h-feat-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                        </div>
+                        <div class="h-feat-text">
+                            <strong>مدربون متخصصون</strong>
+                            <span>متمكنون وذوو خبرة</span>
+                        </div>
+                    </div>
+
+                    <div class="h-feature-item">
+                        <div class="h-feat-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                        <div class="h-feat-text">
+                            <strong>بيئة آمنة ومحفزة</strong>
+                            <span>لبناء القيم والمهارات</span>
+                        </div>
+                    </div>
+
+                    <div class="h-feature-item">
+                        <div class="h-feat-icon">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                        </div>
+                        <div class="h-feat-text">
+                            <strong>مهارات المستقبل</strong>
+                            <span>إعدادهم لحياة ناجحة</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA + Social Proof -->
+                <div class="hero-action-row">
+                    <a href="https://m.me/mouniracademy" target="_blank" class="hero-cta-btn" id="hero-cta">
+                        <span>إبدأ رحلتهم الآن</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg>
+                    </a>
+
+                    <div class="hero-social-proof">
+                        <div class="avatar-group">
+                            <img src="val1.jpg" alt="طالب" class="avatar-img">
+                            <img src="val2.jpg" alt="طالب" class="avatar-img">
+                            <img src="val3.jpg" alt="طالب" class="avatar-img">
+                        </div>
+                        <span class="social-proof-text">انضم لآلاف الأسر التي وثقت بنا</span>
+                    </div>
+                </div>
+
             </div>
 
-            <!-- Direct Messenger CTA Button -->
-            <a href="https://m.me/mouniracademy" target="_blank" class="cta-btn-messenger">
-                💬 احجز مكان ابنك الآن عبر الماسنجر
-            </a>
+            <!-- Floating Bottom Stats Bar -->
+            <div class="hero-stats-bar-wrapper">
+                <div class="hero-stats-bar">
+                    <div class="h-stat-card">
+                        <div class="h-stat-icon">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </div>
+                        <div class="h-stat-content">
+                            <span class="h-stat-number">+8</span>
+                            <span class="h-stat-label">سنوات خبرة</span>
+                        </div>
+                    </div>
 
-            <!-- Countdown Bar -->
-            <div class="countdown-bar">
-                <div class="countdown-title">⏳ متبقي على انطلاق دفعة المحطة الأولى (10 سبتمبر 2026):</div>
-                <div class="timer-boxes">
-                    <div class="t-box"><div class="t-num" id="d">28</div><div class="t-lbl">يوم</div></div>
-                    <div class="t-box"><div class="t-num" id="h">11</div><div class="t-lbl">ساعة</div></div>
-                    <div class="t-box"><div class="t-num" id="m">30</div><div class="t-lbl">دقيقة</div></div>
-                    <div class="t-box"><div class="t-num" id="s">40</div><div class="t-lbl">ثانية</div></div>
+                    <div class="h-stat-card">
+                        <div class="h-stat-icon">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        </div>
+                        <div class="h-stat-content">
+                            <span class="h-stat-number">+50</span>
+                            <span class="h-stat-label">كورس تعليمي</span>
+                        </div>
+                    </div>
+
+                    <div class="h-stat-card">
+                        <div class="h-stat-icon">
+                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                        </div>
+                        <div class="h-stat-content">
+                            <span class="h-stat-number">+15,000</span>
+                            <span class="h-stat-label">طالب سعيد</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- DEPARTURE SECTION — Train leaves the station                     -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section class="journey-section" id="departure-section" aria-label="قسم الانطلاق">
+            <div class="journey-chapter-overlay" id="departure-overlay">
+                <div class="chapter-eyebrow">الرحلة تبدأ</div>
+                <h2 class="chapter-title">القطار ينطلق</h2>
+                <p class="chapter-subtitle">نحو آفاق لا حدود لها من المعرفة والقيم</p>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- BRIDGE SECTION — Crossing the bridge                            -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section class="journey-section" id="bridge-section" aria-label="قسم الجسر">
+            <div class="journey-chapter-overlay" id="bridge-overlay">
+                <div class="chapter-eyebrow">عبور الجسر</div>
+                <h2 class="chapter-title">نحو المجهول الجميل</h2>
+                <p class="chapter-subtitle">كل خطوة في الرحلة تعلّمك شيئاً جديداً</p>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- TUNNEL SECTION — Darkness before the light                      -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section class="journey-section" id="tunnel-section" aria-label="قسم النفق">
+            <div class="journey-chapter-overlay" id="tunnel-overlay">
+                <div class="chapter-eyebrow">النفق</div>
+                <h2 class="chapter-title">لحظة صمت</h2>
+                <p class="chapter-subtitle">قبل كل بداية نور... هناك لحظة من التأمل</p>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- WORLD REVEAL SECTION — The big moment!                          -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section class="journey-section" id="world-reveal-section" aria-label="قسم الكشف عن العالم">
+            <div class="journey-chapter-overlay" id="world-reveal-overlay">
+                <div class="chapter-eyebrow">وصلنا</div>
+                <h2 class="chapter-title">عالم المعرفة</h2>
+                <p class="chapter-subtitle">اكتشف المحطات التعليمية التي تنتظرك</p>
+            </div>
+        </section>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- JOURNEY STATIONS — 5 interactive stops along the train route   -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+
+        <!-- Station 1: محطة المعرفة -->
+        <section class="journey-station-section" id="journey-station-1" aria-label="محطة المعرفة">
+            <div class="jss-bg-text" aria-hidden="true">محطة المعرفة</div>
+            <div class="jss-chapter-pill">🚉 المحطة الأولى</div>
+            <h2 class="jss-heading">محطة <span style="color:#fbbf24">المعرفة</span></h2>
+            <p class="jss-subtext">قصص الأنبياء والقيم الحياتية</p>
+            <div class="jss-scroll-hint">اضغط على اللافتة لمعرفة التفاصيل ↑</div>
+        </section>
+
+        <!-- Station 2: محطة الشباب -->
+        <section class="journey-station-section" id="journey-station-2" aria-label="محطة الشباب">
+            <div class="jss-bg-text" aria-hidden="true">محطة الشباب</div>
+            <div class="jss-chapter-pill">🚉 المحطة الثانية</div>
+            <h2 class="jss-heading">محطة <span style="color:#3b82f6">الشباب</span></h2>
+            <p class="jss-subtext">بناء الهوية والشخصية للبنين</p>
+            <div class="jss-scroll-hint">اضغط على اللافتة لمعرفة التفاصيل ↑</div>
+        </section>
+
+        <!-- Station 3: محطة البنات -->
+        <section class="journey-station-section" id="journey-station-3" aria-label="محطة البنات">
+            <div class="jss-bg-text" aria-hidden="true">محطة البنات</div>
+            <div class="jss-chapter-pill">🚉 المحطة الثالثة</div>
+            <h2 class="jss-heading">محطة <span style="color:#ec4899">البنات</span></h2>
+            <p class="jss-subtext">وعي، أمان، وثقة بالنفس</p>
+            <div class="jss-scroll-hint">اضغط على اللافتة لمعرفة التفاصيل ↑</div>
+        </section>
+
+
+
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- ACHIEVEMENT SECTION — The children celebrate                    -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section id="achievement-section" aria-label="قسم الإنجازات">
+            <div class="achievement-overlay" id="achievement-overlay">
+                <div class="achievement-badge">إنجازات المحطة الأولى</div>
+                <h2 class="achievement-title">
+                    أبطال <span>المحطة الأولى</span>
+                </h2>
+                <p style="font-size:1.1rem; color:rgba(255,255,255,0.6); max-width:550px; margin:0 auto; text-shadow:0 2px 8px rgba(0,0,0,0.6);">
+                    آلاف الأطفال والمراهقين أكملوا رحلتهم وعادوا بأدوات حياة حقيقية
+                </p>
+
+                <div class="achievement-stats">
+                    <div class="ach-stat">
+                        <span class="ach-stat-num">+15,000</span>
+                        <span class="ach-stat-label">طالب أتمّ الرحلة</span>
+                    </div>
+                    <div class="ach-stat">
+                        <span class="ach-stat-num">+95%</span>
+                        <span class="ach-stat-label">نسبة رضا الأهل</span>
+                    </div>
+                    <div class="ach-stat">
+                        <span class="ach-stat-num">+50</span>
+                        <span class="ach-stat-label">برنامجاً تعليمياً</span>
+                    </div>
+                    <div class="ach-stat">
+                        <span class="ach-stat-num">8+</span>
+                        <span class="ach-stat-label">سنوات تميّز</span>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- 3 Main Tracks Section -->
-        <section class="tracks-section">
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- VALUES SECTION (Existing)                                        -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section class="values-section" aria-label="القيم الأخلاقية">
             <div class="section-header">
-                <h2>👑 مسارات المحطة الأولى الثلاثة</h2>
-                <p>اختر المسار التربوي الأنسب لسن ونوع طفلك لتبدأ المغامرة</p>
-            </div>
-
-            <div class="tracks-grid">
-                <!-- Track 1: Boys -->
-                <div class="track-card boys">
-                    <div>
-                        <span class="track-header-badge">👦 تخصيص البنين (10 إلى 18 سنة)</span>
-                        <h3>1. كتالوج الشباب 2.0 (لغز اختفاء عمر)</h3>
-                        <p>أول كورس حركي بوليسي للمراهقين! يتحول فيه الطالب إلى "محقق دولي" يحل 12 ملفاً سرياً لمواجهة إدمان الشاشات، ضغط الأقران، وبر الوالدين.</p>
-                        <ul class="track-features-list">
-                            <li>📁 12 ملف تحقيق تفاعلي حي</li>
-                            <li>🛡️ مواجهة ضغوط الشلة والشاشات</li>
-                            <li>📜 كشكول المحقق + شهادة معتمدة</li>
-                        </ul>
-                    </div>
-                    <a href="https://m.me/mouniracademy" target="_blank" class="cta-btn-messenger" style="font-size:1.05rem; padding:0.8rem 1.8rem;">
-                        💬 حجز مسار البنين
-                    </a>
-                </div>
-
-                <!-- Track 2: Girls -->
-                <div class="track-card girls">
-                    <div>
-                        <span class="track-header-badge">👧 تخصيص البنات (10 إلى 18 سنة)</span>
-                        <h3>2. برنامج وعي وأمان (لغز اختفاء فريدة)</h3>
-                        <p>برنامج تربوي ونفسي تفاعلي للبنات وأمهاتهم لفك شفرات التغيرات النفسية، فلاتر تيك توك، استعادة ثقة البنت بنفسها وبناء الأمان في البيت.</p>
-                        <ul class="track-features-list">
-                            <li>🌸 تفكيك فلاتر ومقارنات السوشيال ميديا</li>
-                            <li>🛡️ بناء خط دفاع عاطفي واحتوائي في البيت</li>
-                            <li>📖 مذكرات فريدة السرية + وسام الأمان</li>
-                        </ul>
-                    </div>
-                    <a href="https://m.me/mouniracademy" target="_blank" class="cta-btn-messenger" style="font-size:1.05rem; padding:0.8rem 1.8rem; background:linear-gradient(135deg,#ec4899,#f43f5e);">
-                        💬 حجز مسار البنات
-                    </a>
-                </div>
-
-                <!-- Track 3: Prophets -->
-                <div class="track-card prophets">
-                    <div>
-                        <span class="track-header-badge">📜 البنين والبنات (6 إلى 18 سنة)</span>
-                        <h3>3. سر الحاج إسماعيل (حكايات أول البشر)</h3>
-                        <p>مغامرة درامية تفاعلية خفيفة الظل يكتشف فيها الطالب دروس قصص الأنبياء من خلال شخصية غامضة تساعد البطل "أسامة" في حل أزمات حياته.</p>
-                        <ul class="track-features-list">
-                            <li>⚡ شفرة آدم: شجاعة الاعتراف والتوبة</li>
-                            <li>🛡️ شفرة نوح: درع الثبات وهزيمة التنمر</li>
-                            <li>🌟 شفرة هود وإبراهيم: التواضع والتفكير النقدي</li>
-                        </ul>
-                    </div>
-                    <a href="https://m.me/mouniracademy" target="_blank" class="cta-btn-messenger" style="font-size:1.05rem; padding:0.8rem 1.8rem; background:linear-gradient(135deg,#10b981,#059669);">
-                        💬 حجز مسار الأنبياء
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Values Section -->
-        <section class="values-section">
-            <div class="section-header">
-                <h2>✨ القيم التفاعلية الخمس في المحطة الأولى</h2>
-                <p>تطبيق عملي وتربوي لحياة الطفل يومياً من أنوار ومبادئ القيمة الإيمانية</p>
+                <h2>القيم الأخلاقية والإيمانية الخمس في المحطة الأولى</h2>
+                <p>ركائز أساسية نعمل على غرسها وتطبيقها عملياً في حياة الأبناء اليومية</p>
             </div>
 
             <div class="values-grid">
                 <div class="val-card">
                     <div class="card-img-frame">
-                        <img src="val1.jpg" alt="بر الوالدين" onerror="this.style.display='none'">
+                        <img src="val1.jpg" alt="بر الوالدين والتواصل الدافئ" onerror="this.style.display='none'">
                     </div>
-                    <h4>1. بر الوالدين والمحبة</h4>
-                    <p>طاعة محبوبة ورحمة بالوالدين وبناء لغة حوار دافئة.</p>
+                    <h4>1. بر الوالدين والتواصل الدافئ</h4>
+                    <p>ترسيخ احترام الوالدين وطاعتهم بمحبة، وبناء جسور حوار قائمة على التفهم والرحمة.</p>
                 </div>
 
                 <div class="val-card">
                     <div class="card-img-frame">
-                        <img src="val2.jpg" alt="البعد عن صحاب السوء" onerror="this.style.display='none'">
+                        <img src="val2.jpg" alt="استقلالية الرأي ومناعة الأقران" onerror="this.style.display='none'">
                     </div>
-                    <h4>2. مناعة الأقران</h4>
-                    <p>تمسك بالقيم وعدم الانسياق وراء صحاب السوء والشاشات.</p>
+                    <h4>2. استقلالية الرأي ومناعة الأقران</h4>
+                    <p>تمكين الطفل من التمسك بمبادئه بثقة، والقدرة على رفض السلوكيات الخاطئة والشاشات.</p>
                 </div>
 
                 <div class="val-card">
                     <div class="card-img-frame">
-                        <img src="val3.jpg" alt="الصبر وعدم الغضب" onerror="this.style.display='none'">
+                        <img src="val3.jpg" alt="التوازن العاطفي وضبط النفس" onerror="this.style.display='none'">
                     </div>
-                    <h4>3. ضبط النفس والهدوء</h4>
-                    <p>التحكم في الانفعالات ونوبات الغضب بحكمة وعقل متزن.</p>
+                    <h4>3. التوازن العاطفي وضبط النفس</h4>
+                    <p>تعليم الأبناء كيفية إدارة الغضب والانفعالات بحكمة وهدوء في المواقف المختلفة.</p>
                 </div>
 
                 <div class="val-card">
                     <div class="card-img-frame">
-                        <img src="val4.jpg" alt="الصدق وتجنب الكذب" onerror="this.style.display='none'">
+                        <img src="val4.jpg" alt="الصدق والمسؤولية" onerror="this.style.display='none'">
                     </div>
-                    <h4>4. الصدق والشفافية</h4>
-                    <p>شجاعة الاعتراف بالخطأ والصدق شعار دائم للطفل.</p>
+                    <h4>4. الصدق والمسؤولية</h4>
+                    <p>تنمية الشجاعة الأخلاقية في الاعتراف بالخطأ والالتزام بالصدق في القول والعمل.</p>
                 </div>
 
                 <div class="val-card">
                     <div class="card-img-frame">
-                        <img src="val5.jpg" alt="شكر النعمة والرضا" onerror="this.style.display='none'">
+                        <img src="val5.jpg" alt="التواضع والتفكير النقدي" onerror="this.style.display='none'">
                     </div>
-                    <h4>5. الرضا والتفكير النقدي</h4>
-                    <p>تقدير نعم الله والرضا بها مع التواضع والتفكير النقدي.</p>
+                    <h4>5. التواضع والتفكير النقدي</h4>
+                    <p>تقدير نعم الله والتعامل مع الحياة بتواضع ورضا، مع بناء العقل الناقد والواعي.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Footer CTA Section -->
-        <section class="footer-cta">
-            <h2>🚀 ابدأ رحلة طفلك مع المحطة الأولى اليوم!</h2>
-            <p>أماكن محدودة جداً لكل مجموعة لضمان المتابعة والتطبيق العملي. اضغط للتواصل المباشر مع مسؤول التسكين عبر الماسنجر.</p>
-            <a href="https://m.me/mouniracademy" target="_blank" class="cta-btn-messenger">
-                💬 تواصل معنا فوراً على الماسنجر
-            </a>
-            <p style="margin-top:2.5rem;color:var(--text-muted);font-size:0.95rem;">© 2026 أكاديمية منير | جميع الحقوق محفوظة</p>
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- PARENT SECTION — Trust and safety                               -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section id="parent-section" aria-label="قسم الأهل">
+            <div class="parent-content" id="parent-overlay">
+                <div class="parent-badge">رسالة إلى الأهل</div>
+                <h2 class="parent-title">ثقتكم هي أساس رحلتنا</h2>
+                <p class="parent-desc">
+                    أكاديمية منير لا تُعلّم فقط. هي بيئة آمنة نُبني فيها إنساناً متكاملاً.
+                    نضمن لكم متابعة مستمرة، ومحتوى تربوياً أصيلاً، ومدربين متخصصين يفهمون أبناءكم.
+                </p>
+
+                <div class="parent-trust-grid">
+                    <div class="trust-item">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        <strong>بيئة آمنة 100%</strong>
+                        <span>محتوى تربوي مراقب</span>
+                    </div>
+                    <div class="trust-item">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
+                        <strong>مدربون متخصصون</strong>
+                        <span>خبرة 8+ سنوات</span>
+                    </div>
+                    <div class="trust-item">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                        <strong>متابعة مستمرة</strong>
+                        <span>تقارير دورية للأهل</span>
+                    </div>
+                    <div class="trust-item">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        <strong>مجموعات صغيرة</strong>
+                        <span>اهتمام فردي لكل طالب</span>
+                    </div>
+                </div>
+            </div>
         </section>
 
-    </div>
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- FINAL CTA — The destination                                      -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <section id="final-section" aria-label="التسجيل النهائي">
+            <span class="final-train-icon">🚉</span>
+            <h2>وصلنا... الآن ابدأ رحلتهم الحقيقية</h2>
+            <p>
+                نحرص على قصر أعداد المجموعات لضمان جودة المتابعة التربوية والتطبيق الفردي مع كل طالب.
+                تواصل معنا لمناقشة البرنامج الأنسب لابنك.
+            </p>
+            <div class="final-cta-group">
+                <a href="https://m.me/mouniracademy" target="_blank" class="hero-cta-btn" id="final-cta">
+                    تواصل معنا عبر الماسنجر
+                </a>
+                <a href="#tracks-section" class="cta-secondary">استكشف البرامج</a>
+            </div>
+            <p style="margin-top:2.5rem; color:var(--text-muted); font-size:0.92rem;">
+                © 2026 أكاديمية منير | جميع الحقوق محفوظة
+            </p>
+        </section>
 
+    </div><!-- end #scroll-content -->
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- INLINE SCROLL HELPERS (before module loads)                         -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
     <script>
-    // Live Countdown Timer Script
-    (function runTimerNow() {
-        var target = new Date("September 10, 2026 00:00:00").getTime();
-        function tick() {
-            var now = new Date().getTime();
-            var diff = target - now;
-            if (diff > 0) {
-                var days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                var mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                var secs = Math.floor((diff % (1000 * 60)) / 1000);
+        // Scroll progress bar
+        window.addEventListener('scroll', () => {
+            const bar = document.getElementById('scroll-progress-bar');
+            if (!bar) return;
+            const total = document.documentElement.scrollHeight - window.innerHeight;
+            const pct = total > 0 ? (window.scrollY / total) * 100 : 0;
+            bar.style.width = pct + '%';
+        }, { passive: true });
 
-                var elD = document.getElementById('d');
-                var elH = document.getElementById('h');
-                var elM = document.getElementById('m');
-                var elS = document.getElementById('s');
-
-                if (elD) elD.innerHTML = days < 10 ? '0' + days : days;
-                if (elH) elH.innerHTML = hours < 10 ? '0' + hours : hours;
-                if (elM) elM.innerHTML = mins < 10 ? '0' + mins : mins;
-                if (elS) elS.innerHTML = secs < 10 ? '0' + secs : secs;
-            }
-        }
-        tick();
-        setInterval(tick, 1000);
-    })();
-
-    // Three.js 4K Cinematic Galaxy Background
-    (function() {
-        if (typeof THREE === 'undefined') return;
-        var canvas = document.getElementById('webgl-canvas');
-        if (!canvas) return;
-        var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(window.innerWidth, window.innerHeight);
-
-        var scene = new THREE.Scene();
-        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 5.5;
-
-        var particleCount = 2000;
-        var positions = new Float32Array(particleCount * 3);
-        var colors = new Float32Array(particleCount * 3);
-        for (var i = 0; i < particleCount; i++) {
-            positions[i * 3]     = (Math.random() - 0.5) * 200;
-            positions[i * 3 + 1] = (Math.random() - 0.5) * 200;
-            positions[i * 3 + 2] = (Math.random() - 0.5) * 200;
-            
-            var t = Math.random();
-            if (t < 0.4) { colors[i*3]=0.98; colors[i*3+1]=0.75; colors[i*3+2]=0.14; } // gold
-            else if (t < 0.7) { colors[i*3]=0.02; colors[i*3+1]=0.71; colors[i*3+2]=0.83; } // cyan
-            else { colors[i*3]=0.92; colors[i*3+1]=0.28; colors[i*3+2]=0.6; } // pink
-        }
-        var geo = new THREE.BufferGeometry();
-        geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-        var mat = new THREE.PointsMaterial({ size: 0.38, vertexColors: true, transparent: true, opacity: 0.8 });
-        scene.add(new THREE.Points(geo, mat));
-
-        function animate() {
-            requestAnimationFrame(animate);
-            scene.rotation.y += 0.0004;
-            scene.rotation.x += 0.0002;
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        window.addEventListener('resize', function() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+        // Station card hover effects + station focus via Three.js
+        document.querySelectorAll('.station-card-mini').forEach(card => {
+            card.addEventListener('click', () => {
+                const key = card.dataset.station;
+                window.dispatchEvent(new CustomEvent('station-card-click', { detail: { key } }));
+            });
         });
-    })();
+
+        // Story state change: toggle canvas pointer events for station interactivity
+        window.addEventListener('story-state-change', (e) => {
+            const { state } = e.detail;
+            if (['station_map', 'station_focus'].includes(state)) {
+                document.body.classList.add('stations-interactive');
+            } else {
+                document.body.classList.remove('stations-interactive');
+            }
+
+            // Show/hide journey overlays
+            const overlayMap = {
+                departure: 'departure-overlay',
+                bridge: 'bridge-overlay',
+                tunnel_approach: 'tunnel-overlay',
+                tunnel_inside: 'tunnel-overlay',
+                world_reveal: 'world-reveal-overlay',
+                station_map: 'station-map-overlay',
+                achievement: 'achievement-overlay',
+                parent: 'parent-overlay',
+            };
+
+            // Hide all overlays first
+            document.querySelectorAll('.journey-chapter-overlay').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // Show current
+            const activeId = overlayMap[state];
+            if (activeId) {
+                const el = document.getElementById(activeId);
+                if (el) el.classList.add('active');
+            }
+        });
+
+        // Announce when Three.js is ready
+        window.addEventListener('threejs-ready', () => {
+            document.body.classList.add('threejs-ready');
+        });
     </script>
+
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <!-- MAIN MODULE                                                          -->
+    <!-- ═══════════════════════════════════════════════════════════════════ -->
+    <script type="module" src="./src/main.js"></script>
+
 </body>
 </html>

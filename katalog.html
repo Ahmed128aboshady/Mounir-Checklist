@@ -3,22 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لغز اختفاء عمر | كورس كتالوج الشباب 2.0 — أكاديمية منير</title>
+    <title>برنامج كتالوج الشباب | أكاديمية منير — لبناء شخصية البنين</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <style>
         :root {
-            --navy-dark: #070d1e;
-            --navy-card: rgba(15, 23, 42, 0.85);
-            --caution-yellow: #f59e0b;
-            --caution-glow: #fbbf24;
-            --crime-red: #ef4444;
-            --electric-cyan: #06b6d4;
+            --navy-dark: #090d16;
+            --navy-card: rgba(17, 24, 39, 0.88);
+            --gold: #fbbf24;
+            --blue-accent: #3b82f6;
+            --cyan: #06b6d4;
             --text-light: #f8fafc;
             --text-muted: #94a3b8;
-            --card-border: rgba(245, 158, 11, 0.25);
+            --card-border: rgba(59, 130, 246, 0.25);
         }
 
         * {
@@ -32,19 +28,10 @@
             background-color: var(--navy-dark);
             color: var(--text-light);
             overflow-x: hidden;
-            line-height: 1.7;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* WebGL Background Canvas */
-        #webgl-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 1;
-            pointer-events: none;
+            line-height: 1.8;
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(30, 58, 138, 0.35) 0%, transparent 45%),
+                radial-gradient(circle at 85% 75%, rgba(15, 23, 42, 0.6) 0%, transparent 45%);
         }
 
         .content-layer {
@@ -52,156 +39,105 @@
             z-index: 2;
         }
 
-        /* Caution Strip Header */
         .caution-strip {
-            background: repeating-linear-gradient(
-                -45deg,
-                #f59e0b,
-                #f59e0b 20px,
-                #1e293b 20px,
-                #1e293b 40px
-            );
-            color: #000;
+            background: linear-gradient(90deg, #1e3a8a, #0f172a, #1d4ed8);
+            color: #ffffff;
             text-align: center;
-            padding: 0.5rem 1rem;
-            font-weight: 900;
+            padding: 0.75rem 1rem;
+            font-weight: 700;
             font-size: 0.95rem;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            position: relative;
-            z-index: 10;
+            border-bottom: 1px solid var(--card-border);
         }
         .caution-strip span {
-            background: #f59e0b;
-            padding: 0.2rem 0.8rem;
-            border-radius: 4px;
+            color: var(--gold);
+            font-weight: 800;
         }
 
-        /* Hero Section */
         .hero-section {
-            min-height: 90vh;
+            min-height: 80vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 4rem 1.5rem 2rem 1.5rem;
-            background: radial-gradient(circle at center, rgba(15, 23, 42, 0.4) 0%, rgba(7, 13, 30, 0.95) 100%);
+            padding: 4rem 1.5rem 3rem 1.5rem;
             position: relative;
         }
 
         .hero-badge {
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid var(--crime-red);
-            color: var(--crime-red);
-            padding: 0.5rem 1.5rem;
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid var(--blue-accent);
+            color: #93c5fd;
+            padding: 0.6rem 1.8rem;
             border-radius: 50px;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 800;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
-            backdrop-filter: blur(10px);
-            animation: pulse-red 2.5s infinite alternate;
-        }
-
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 15px rgba(239, 68, 68, 0.3); }
-            100% { box-shadow: 0 0 35px rgba(239, 68, 68, 0.7); }
+            margin-bottom: 1.8rem;
         }
 
         .hero-title {
             font-family: 'Amiri', serif;
-            font-size: clamp(2.3rem, 5.5vw, 4.2rem);
+            font-size: clamp(2.3rem, 5vw, 4.2rem);
             font-weight: 700;
             color: #ffffff;
             line-height: 1.3;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 30px rgba(245, 158, 11, 0.4);
+            margin-bottom: 1.2rem;
+            max-width: 1000px;
         }
 
         .hero-title span {
-            color: var(--caution-glow);
+            color: var(--gold);
             display: inline-block;
         }
 
         .hero-subtitle {
-            font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+            font-size: clamp(1.1rem, 2.2vw, 1.35rem);
             color: #e2e8f0;
             max-width: 850px;
-            margin: 0 auto 2rem auto;
-            font-weight: 500;
+            margin: 0 auto 2.2rem auto;
+            font-weight: 400;
+            line-height: 1.9;
         }
 
-        /* Detective Scanner Badge */
-        .scanner-container {
-            position: relative;
-            margin: 1.5rem 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .scanner-orb {
-            width: 85px;
-            height: 85px;
-            border-radius: 50%;
-            background: radial-gradient(circle, #06b6d4 0%, #070d1e 70%);
-            border: 2px solid var(--electric-cyan);
-            box-shadow: 0 0 30px var(--electric-cyan);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.2rem;
-            animation: orb-pulse 2s infinite alternate;
-        }
-
-        @keyframes orb-pulse {
-            0% { transform: scale(0.95); box-shadow: 0 0 20px var(--electric-cyan); }
-            100% { transform: scale(1.08); box-shadow: 0 0 45px var(--electric-cyan); }
-        }
-
-        /* Action CTA Button */
         .cta-btn {
-            background: linear-gradient(135deg, var(--caution-yellow) 0%, #d97706 100%);
-            color: #000000;
-            font-size: 1.3rem;
-            font-weight: 900;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: #ffffff;
+            font-size: 1.25rem;
+            font-weight: 800;
             padding: 1.1rem 3.2rem;
             border-radius: 50px;
             border: none;
             cursor: pointer;
             text-decoration: none;
-            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 0.8rem;
-            margin-top: 1rem;
+            justify-content: center;
         }
 
         .cta-btn:hover {
-            transform: translateY(-4px) scale(1.03);
-            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.7);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(37, 99, 235, 0.5);
         }
 
-        /* Countdown Bar */
         .countdown-bar {
-            background: rgba(15, 23, 42, 0.85);
+            background: rgba(15, 23, 42, 0.88);
             border: 1px solid var(--card-border);
             border-radius: 20px;
-            padding: 1.5rem;
+            padding: 1.6rem;
             max-width: 700px;
             width: 90%;
-            margin: 2.5rem auto 0 auto;
+            margin: 2.8rem auto 0 auto;
             backdrop-filter: blur(15px);
             text-align: center;
         }
 
         .countdown-title {
-            color: var(--electric-cyan);
-            font-weight: 800;
+            color: var(--cyan);
+            font-weight: 700;
             margin-bottom: 1rem;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
         }
 
         .timer-boxes {
@@ -212,25 +148,25 @@
 
         .t-box {
             background: rgba(7, 13, 30, 0.8);
-            border: 1px solid rgba(6, 182, 212, 0.3);
+            border: 1px solid rgba(6, 182, 212, 0.25);
             border-radius: 12px;
-            padding: 0.6rem 1rem;
-            min-width: 75px;
+            padding: 0.7rem 1.1rem;
+            min-width: 80px;
         }
 
         .t-num {
             font-size: 1.8rem;
-            font-weight: 900;
-            color: var(--caution-glow);
+            font-weight: 800;
+            color: var(--gold);
             line-height: 1;
         }
 
         .t-lbl {
-            font-size: 0.8rem;
+            font-size: 0.82rem;
             color: var(--text-muted);
+            margin-top: 0.3rem;
         }
 
-        /* Evidence Mystery Section */
         .mystery-section {
             padding: 5rem 1.5rem;
             max-width: 1200px;
@@ -239,23 +175,24 @@
 
         .section-header {
             text-align: center;
-            margin-bottom: 3.5rem;
+            margin-bottom: 4rem;
         }
 
         .section-header h2 {
             font-family: 'Amiri', serif;
-            font-size: clamp(2rem, 4vw, 3.2rem);
-            color: var(--caution-glow);
-            margin-bottom: 0.5rem;
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            color: var(--gold);
+            margin-bottom: 0.8rem;
         }
 
         .section-header p {
-            color: var(--electric-cyan);
-            font-size: 1.2rem;
-            font-weight: 700;
+            color: var(--cyan);
+            font-size: 1.18rem;
+            font-weight: 600;
+            max-width: 750px;
+            margin: 0 auto;
         }
 
-        /* 12 Files Grid */
         .files-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -266,46 +203,31 @@
             background: var(--navy-card);
             border: 1px solid var(--card-border);
             border-radius: 20px;
-            padding: 2rem;
-            backdrop-filter: blur(15px);
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .file-card::before {
-            content: '';
-            position: absolute;
-            top: 0; right: 0; left: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--crime-red), var(--caution-yellow));
+            padding: 2.2rem 1.8rem;
+            transition: all 0.3s ease;
         }
 
         .file-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(245, 158, 11, 0.25);
-            border-color: var(--caution-yellow);
+            transform: translateY(-5px);
+            border-color: var(--blue-accent);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
         }
 
         .file-card-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            margin-bottom: 1rem;
+            align-items: center;
+            margin-bottom: 1.2rem;
         }
 
         .file-tag {
-            background: rgba(239, 68, 68, 0.2);
-            border: 1px solid var(--crime-red);
-            color: #fca5a5;
+            background: rgba(59, 130, 246, 0.15);
+            color: #93c5fd;
+            border: 1px solid var(--blue-accent);
             padding: 0.3rem 0.8rem;
             border-radius: 12px;
-            font-size: 0.8rem;
-            font-weight: 800;
-        }
-
-        .file-icon {
-            font-size: 2rem;
+            font-size: 0.82rem;
+            font-weight: 700;
         }
 
         .file-card h3 {
@@ -317,130 +239,130 @@
 
         .file-card p {
             color: #cbd5e1;
-            font-size: 1.02rem;
-            line-height: 1.7;
+            font-size: 0.98rem;
+            line-height: 1.8;
         }
 
-        /* Transformation Section */
         .transformation-section {
-            background: rgba(15, 23, 42, 0.6);
-            border-top: 1px solid var(--card-border);
-            border-bottom: 1px solid var(--card-border);
             padding: 5rem 1.5rem;
-            backdrop-filter: blur(10px);
+            max-width: 1100px;
+            margin: 0 auto;
         }
 
         .trans-grid {
-            max-width: 1100px;
-            margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 2rem;
+            margin-top: 3rem;
         }
 
         .trans-box {
-            padding: 2rem;
+            background: var(--navy-card);
             border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.1);
+            padding: 2.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .trans-box.before {
-            background: rgba(239, 68, 68, 0.08);
-            border-color: rgba(239, 68, 68, 0.3);
+            border-right: 4px solid #ef4444;
         }
 
         .trans-box.after {
-            background: rgba(6, 182, 212, 0.08);
-            border-color: rgba(6, 182, 212, 0.4);
+            border-right: 4px solid #10b981;
         }
 
         .trans-box h4 {
-            font-size: 1.4rem;
-            margin-bottom: 1.2rem;
+            font-size: 1.3rem;
+            margin-bottom: 1.4rem;
+            font-family: 'Amiri', serif;
         }
 
-        .trans-box.before h4 { color: #fca5a5; }
-        .trans-box.after h4 { color: var(--electric-cyan); }
+        .trans-box.before h4 { color: #f87171; }
+        .trans-box.after h4 { color: #34d399; }
 
         .trans-list {
             list-style: none;
         }
 
         .trans-list li {
-            margin-bottom: 0.8rem;
-            font-size: 1.05rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: #e2e8f0;
+            line-height: 1.7;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 0.6rem;
         }
 
-        /* Footer CTA Section */
+        .trans-box.before .trans-list li::before {
+            content: '—';
+            color: #ef4444;
+            font-weight: bold;
+        }
+
+        .trans-box.after .trans-list li::before {
+            content: '✓';
+            color: #10b981;
+            font-weight: bold;
+        }
+
         .footer-cta {
             padding: 6rem 1.5rem;
             text-align: center;
-            background: radial-gradient(circle at center, rgba(30, 41, 59, 0.8) 0%, rgba(7, 13, 30, 0.95) 70%);
+            background: radial-gradient(circle at center, rgba(30, 58, 138, 0.4) 0%, rgba(9, 13, 22, 0.98) 75%);
         }
 
         .footer-cta h2 {
             font-family: 'Amiri', serif;
-            font-size: clamp(2.2rem, 5vw, 3.5rem);
-            color: var(--caution-glow);
-            margin-bottom: 1rem;
+            font-size: clamp(2rem, 4.5vw, 3.2rem);
+            color: var(--gold);
+            margin-bottom: 1.2rem;
         }
 
         .footer-cta p {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             color: #e2e8f0;
-            max-width: 700px;
-            margin: 0 auto 2rem auto;
+            max-width: 750px;
+            margin: 0 auto 2.4rem auto;
+            line-height: 1.9;
         }
 
-        /* Mobile Fixes */
         @media (max-width: 600px) {
-            .t-box { min-width: 55px; padding: 0.5rem 0.3rem; }
+            .t-box { min-width: 60px; padding: 0.5rem 0.4rem; }
             .t-num { font-size: 1.4rem; }
-            .file-card { padding: 1.5rem; }
+            .file-card { padding: 1.8rem 1.4rem; }
+            .cta-btn { padding: 1rem 2rem; font-size: 1.1rem; }
         }
     </style>
 </head>
 <body>
 
     <div class="caution-strip">
-        🚨 <span>ملف قضية سرية #430: لغز اختفاء عمر</span> — المقاعد محدودة جداً لضمان تفاعل كل محقق 🚨
+        <span>برنامج كتالوج الشباب (دفعة المحطة الأولى)</span> | مخصص للبنين من سن 10 إلى 18 سنة
     </div>
-
-    <!-- WebGL Background Canvas -->
-    <canvas id="webgl-canvas"></canvas>
 
     <div class="content-layer">
 
         <!-- Hero Section -->
         <section class="hero-section">
-            <div class="hero-badge">🕵️‍♂️ أول كورس بوليسي تفاعلي للمراهقين (10 إلى 18 سنة)</div>
+            <div class="hero-badge">برنامج تربوي متكامل للبنين (10 إلى 18 سنة)</div>
             
             <h1 class="hero-title">
-                عمر اختفى الساعة 4:30 الفجر... <span>هل تقدر تساعد فريق المحققين في حل اللغز؟</span>
+                رحلة تربوية مساندة يُعبر فيها الشاب عن ذاته <span>ويكتشف فيها مكامن قوته وانضباطه</span>
             </h1>
 
             <p class="hero-subtitle">
-                تحوّل طفلك من مستمع سلبي إلى <strong>"محقق دولي"</strong> يغوص في 12 ملفاً سرياً ليتعلم مهارات ضبط النفس، التعامل مع السوشيال ميديا، بر الوالدين، وانتظام الصلاة.
+                نصحب ابنك في محطات تفاعلية تساعده على فهم مرحلة المراهقة، وإدارة وقت الشاشات، وبناء المناعة ضد ضغوط الأقران، مع ترسيخ اعتزازه بصلاته وبره بوالديه.
             </p>
-
-            <div class="scanner-container">
-                <div class="scanner-orb">🔍</div>
-                <div style="font-family:'Amiri',serif; font-size:1.3rem; color:var(--caution-glow); margin-top:0.8rem; font-weight:700;">
-                    أكاديمية منير تطلق: كتالوج الشباب 2.0
-                </div>
-            </div>
 
             <!-- Main CTA Button -->
             <a href="https://m.me/mouniracademy" target="_blank" class="cta-btn">
-                انضم لفريق المحققين الآن 🕵️‍♂️
+                حجز المقعد وتفاصيل البرنامج عبر الماسنجر
             </a>
 
             <!-- Countdown Bar -->
             <div class="countdown-bar">
-                <div class="countdown-title">⏳ متبقي على إغلاق باب التسجيل في الدفعة الجديدة:</div>
+                <div class="countdown-title">الوقت المتبقي لغلق باب التسجيل في الدفعة الجديدة:</div>
                 <div class="timer-boxes">
                     <div class="t-box"><div class="t-num" id="d">14</div><div class="t-lbl">يوم</div></div>
                     <div class="t-box"><div class="t-num" id="h">08</div><div class="t-lbl">ساعة</div></div>
@@ -451,72 +373,66 @@
 
         </section>
 
-        <!-- 12 Case Files Section -->
+        <!-- 6 Main Program Modules Section -->
         <section class="mystery-section">
             <div class="section-header">
-                <h2>📁 الملفات الـ 12 السرية لفك شفرة المراهقة</h2>
-                <p>كل جلسة هي "ملف تحقيق حقيقي" يعيشه الطالب بنفسه كمحقق يكتشف الأسباب والحلول</p>
+                <h2>المحاور التربوية الستة لبرنامج كتالوج الشباب</h2>
+                <p>مواقف وتطبيقات عمليّة يعيشها الطالب بنفسه ليكتشف الحلول والسلوك الأنسب</p>
             </div>
 
             <div class="files-grid">
-                <!-- File 1 -->
+                <!-- Module 1 -->
                 <div class="file-card">
                     <div class="file-card-header">
-                        <span class="file-tag">CASE #01</span>
-                        <span class="file-icon">⚡</span>
+                        <span class="file-tag">المحور الأول</span>
                     </div>
-                    <h3>1. ملف زلزال الهرمونات</h3>
-                    <p>فهم التغيرات الجسدية والنفسية السريعة وإزاي يتقبل ذاته ويتعامل مع مشاعره بدون جزع أو خجل.</p>
+                    <h3>1. فهم التغيرات الجسدية والنفسية</h3>
+                    <p>استيعاب طبيعة النمو والتغيرات الهرمونية في مرحلة المراهقة، وتوجيه الشاب لتقبل ذاته والتعامل مع مشاعره بوعي ونضج.</p>
                 </div>
 
-                <!-- File 2 -->
+                <!-- Module 2 -->
                 <div class="file-card">
                     <div class="file-card-header">
-                        <span class="file-tag">CASE #02</span>
-                        <span class="file-icon">📱</span>
+                        <span class="file-tag">المحور الثاني</span>
                     </div>
-                    <h3>2. ملف أسرار خلف الشاشات</h3>
-                    <p>فك شفرة إدمان السوشيال ميديا، حماية العقل من مقارنات الشاشات الزائفة، والمحتوى غير اللائق.</p>
+                    <h3>2. إدارة التعامل مع الشاشات</h3>
+                    <p>الوقاية من الاستهلاك المفرط للسوشيال ميديا والألعاب الإلكترونية، وحماية الفكر من المقارنات والمحتوى غير النافع.</p>
                 </div>
 
-                <!-- File 3 -->
+                <!-- Module 3 -->
                 <div class="file-card">
                     <div class="file-card-header">
-                        <span class="file-tag">CASE #03</span>
-                        <span class="file-icon">👥</span>
+                        <span class="file-tag">المحور الثالث</span>
                     </div>
-                    <h3>3. ملف فخ الشلة وصحاب السوء</h3>
-                    <p>بناء مناعة ضد ضغط الأقران (Peer Pressure) وكيف يمتلك الشجاعة لقول "لا" للحفاظ على قيمه.</p>
+                    <h3>3. مناعة الأقران واختيار الأصدقاء</h3>
+                    <p>تمكين الشاب من اتخاذ قراراته باستقلالية وثقة، وبناء القدرة على قول "لا" للشبهات والمغريات الضارة.</p>
                 </div>
 
-                <!-- File 4 -->
+                <!-- Module 4 -->
                 <div class="file-card">
                     <div class="file-card-header">
-                        <span class="file-tag">CASE #04</span>
-                        <span class="file-icon">🏠</span>
+                        <span class="file-tag">المحور الرابع</span>
                     </div>
-                    <h3>4. ملف شفرة الاتصال بالأهل</h3>
-                    <p>كسر حواجز الصمت والجفاء مع الأبوين وبناء لغة حوار راقية تقوم على الحب والاحتواء والتفاهم.</p>
+                    <h3>4. بر الوالدين ولغة الحوار</h3>
+                    <p>تجاوز الجفاء والعزلة، وبناء جسور التواصل الصادق والداعم بين الشاب ووالديه بمحبة واحترام.</p>
                 </div>
 
-                <!-- File 5 -->
+                <!-- Module 5 -->
                 <div class="file-card">
                     <div class="file-card-header">
-                        <span class="file-tag">CASE #05</span>
-                        <span class="file-icon">🕌</span>
+                        <span class="file-tag">المحور الخامس</span>
                     </div>
-                    <h3>5. ملف السر الأكبر: الصلاة والصلة</h3>
-                    <p>تحويل الصلاة من واجب ثقيل إلى ملاذ وطاقة طمأنينة وربط يومه بالصلة الدائمة مع الله.</p>
+                    <h3>5. المحافظة على الصلاة بانتظام</h3>
+                    <p>غرس قيمة الصلاة كصلة طمأنينة وملجأ روحي، ليقبل عليها الشاب بحب وشغف نابعين من قناعته الشخصية.</p>
                 </div>
 
-                <!-- File 6 -->
+                <!-- Module 6 -->
                 <div class="file-card">
                     <div class="file-card-header">
-                        <span class="file-tag">CASE #06</span>
-                        <span class="file-icon">🧠</span>
+                        <span class="file-tag">المحور السادس</span>
                     </div>
-                    <h3>6. ملف ضبط النفس والتحكم بالانفعال</h3>
-                    <p>تدريب عملي على إدارة الغضب، عصبية المراهقة، وكيف ينظم انفعالاته بوعي وحكمة.</p>
+                    <h3>6. ضبط النفس وإدارة الغضب</h3>
+                    <p>تدريب الشاب على مهارات التوازن العاطفي والتحكم في الانفعالات والعصبية عند مواجهة المواقف الصعبة.</p>
                 </div>
             </div>
         </section>
@@ -524,28 +440,28 @@
         <!-- Transformation Section -->
         <section class="transformation-section">
             <div class="section-header">
-                <h2>🔄 تحول المحقق: قبل وبعد إغلاق الملف</h2>
-                <p>ما الذي يتغير في شخصية وسلوك ابنك بعد رحلة الـ 12 ملفاً؟</p>
+                <h2>الأثر التربوي والسلوكي المتوقع</h2>
+                <p>كيف تتطور شخصية وسلوك ابنك خلال رحلته في البرنامج؟</p>
             </div>
 
             <div class="trans-grid">
                 <div class="trans-box before">
-                    <h4>🔴 قبل فتح ملف التحقيق:</h4>
+                    <h4>قبل الالتحاق بالبرنامج:</h4>
                     <ul class="trans-list">
-                        <li>❌ عزلة وقفل باب الغرفة بالساعات</li>
-                        <li>❌ تشتت وسقوط في فخ الشاشات</li>
-                        <li>❌ تكسيل وعصبية عند التذكير بالصلاة</li>
-                        <li>❌ صعوبة في التعبير عن مشاعره لأهله</li>
+                        <li>العزلة والجلوس الطويل خلف الأجهزة المغلقة</li>
+                        <li>التشتت وضعف التركيز بسبب الاندفاع نحو الشاشات</li>
+                        <li>العصبية أو الانزعاج عند التذكير بالصلاة والواجبات</li>
+                        <li>صعوبة التعبير عن المشاعر والتواصل مع الأبوين</li>
                     </ul>
                 </div>
 
                 <div class="trans-box after">
-                    <h4>🟢 بعد إغلاق الملف وحل اللغز:</h4>
+                    <h4>بعد الاستفادة والتطبيق:</h4>
                     <ul class="trans-list">
-                        <li>✅ شخصية واثقة وقادرة على اتخاذ القرار</li>
-                        <li>✅ وعي عالي وإدارة متوازنة لوقت الشاشة</li>
-                        <li>✅ صلاة منتظمة نابعة من اقتناع داخلي</li>
-                        <li>✅ حوار راقي وقرب دافئ مع الوالدين</li>
+                        <li>شخصية مستقلة وقادرة على اتخاذ القرارات الصحيحة</li>
+                        <li>وعي ذاتي وإدارة متوازنة لأوقات الأجهزة والشاشات</li>
+                        <li>التزام تلقائي بالصلاة عن يقين واقتناع دافيء</li>
+                        <li>حوار راقٍ وعلاقة دافئة قوامها الاحترام مع الوالدين</li>
                     </ul>
                 </div>
             </div>
@@ -553,10 +469,10 @@
 
         <!-- Footer CTA -->
         <section class="footer-cta">
-            <h2>🚨 قضية عمر مفتوحة الآن... سجل ابنك قبل إغلاق الملف!</h2>
-            <p>أماكن المحققين محدودة جداً لضمان المتابعة والتطبيق العملي لكل طالب.</p>
-            <a href="https://m.me/mouniracademy" target="_blank" class="cta-btn">احجز مكان ابنك الآن 🕵️‍♂️</a>
-            <p style="margin-top:2.5rem;color:var(--text-muted);font-size:0.95rem;">© 2026 أكاديمية منير | جميع الحقوق محفوظة</p>
+            <h2>سجل ابنك في الدفعة الجديدة اليوم</h2>
+            <p>نحرص على أن تكون المجموعات صغيرة لتكثيف المتابعة والتأكد من تطبيق كل طالب للمهارات بشكل فردي.</p>
+            <a href="https://m.me/mouniracademy" target="_blank" class="cta-btn">تواصل معنا عبر الماسنجر</a>
+            <p style="margin-top:2.5rem;color:var(--text-muted);font-size:0.92rem;">© 2026 أكاديمية منير | جميع الحقوق محفوظة</p>
         </section>
 
     </div>
@@ -587,53 +503,6 @@
         }
         tick();
         setInterval(tick, 1000);
-    })();
-
-    // Three.js Cyber Detective Background
-    (function() {
-        if (typeof THREE === 'undefined') return;
-        var canvas = document.getElementById('webgl-canvas');
-        if (!canvas) return;
-        var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(window.innerWidth, window.innerHeight);
-
-        var scene = new THREE.Scene();
-        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 6;
-
-        var particleCount = 1500;
-        var positions = new Float32Array(particleCount * 3);
-        var colors = new Float32Array(particleCount * 3);
-        for (var i = 0; i < particleCount; i++) {
-            positions[i * 3]     = (Math.random() - 0.5) * 180;
-            positions[i * 3 + 1] = (Math.random() - 0.5) * 180;
-            positions[i * 3 + 2] = (Math.random() - 0.5) * 180;
-            
-            var t = Math.random();
-            if (t < 0.5) { colors[i*3]=0.96; colors[i*3+1]=0.62; colors[i*3+2]=0.07; } // yellow/gold
-            else if (t < 0.8) { colors[i*3]=0.02; colors[i*3+1]=0.71; colors[i*3+2]=0.83; } // cyan
-            else { colors[i*3]=0.93; colors[i*3+1]=0.26; colors[i*3+2]=0.26; } // red
-        }
-        var geo = new THREE.BufferGeometry();
-        geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-        geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-        var mat = new THREE.PointsMaterial({ size: 0.35, vertexColors: true, transparent: true, opacity: 0.75 });
-        scene.add(new THREE.Points(geo, mat));
-
-        function animate() {
-            requestAnimationFrame(animate);
-            scene.rotation.y += 0.0004;
-            scene.rotation.x += 0.0002;
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        window.addEventListener('resize', function() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
     })();
     </script>
 </body>
