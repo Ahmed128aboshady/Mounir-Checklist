@@ -1563,6 +1563,16 @@
         window.addEventListener('threejs-ready', () => {
             document.body.classList.add('threejs-ready');
         });
+
+        // Safety fallback: auto-hide loading screen after 4s if module fails on proxy services
+        setTimeout(() => {
+            const loadingEl = document.getElementById('loading-screen');
+            if (loadingEl && document.body.contains(loadingEl)) {
+                loadingEl.style.transition = 'opacity 0.8s ease';
+                loadingEl.style.opacity = '0';
+                setTimeout(() => { if (loadingEl.parentNode) loadingEl.remove(); }, 800);
+            }
+        }, 4000);
     </script>
 
     <!-- ═══════════════════════════════════════════════════════════════════ -->
