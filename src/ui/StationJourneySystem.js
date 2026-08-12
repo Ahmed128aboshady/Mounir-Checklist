@@ -17,7 +17,7 @@ const STATIONS = [
     colorDark: '#92400e',
     icon: '📚',
     name: 'محطة المعرفة',
-    subtitle: 'مكتبة الأنبياء والقيم',
+    subtitle: 'مكتبة الأنبياء<br>والقيم',
     tagline: 'رحلة إيمانية تربوية',
     age: 'من 6 إلى 18 سنة',
     duration: '12 أسبوع',
@@ -479,6 +479,8 @@ export default class StationJourneySystem {
         font-size: 0.78rem;
         color: var(--station-color, #fbbf24);
         font-weight: 600;
+        line-height: 1.3;
+        white-space: nowrap;
       }
 
       .sj-sign-arrow {
