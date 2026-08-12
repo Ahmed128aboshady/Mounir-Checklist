@@ -34,9 +34,10 @@ export default class JourneyProgress {
         bottom: 24px;
         left: 50%;
         transform: translateX(-50%);
-        z-index: 1000;
+        z-index: 900;
         width: min(340px, 90vw);
         pointer-events: none;
+        transition: opacity 0.3s ease;
       }
       .jp-track {
         position: relative;

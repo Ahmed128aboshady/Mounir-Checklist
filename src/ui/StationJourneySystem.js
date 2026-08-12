@@ -275,15 +275,23 @@ export default class StationJourneySystem {
   // ── Sign Animations ──────────────────────────────────────────────────────────
 
   _showSign(stationId) {
+    // Hide all other signs so signs NEVER overlap
+    Object.keys(this._signEls).forEach(id => {
+      if (id !== stationId) {
+        this._hideSign(id, true);
+      }
+    });
+
     const sign = this._signEls[stationId];
     if (!sign) return;
     sign.classList.remove('sj-sign-hidden');
     sign.classList.add('sj-sign-visible');
   }
 
-  _hideSign(stationId) {
+  _hideSign(stationId, force = false) {
     const sign = this._signEls[stationId];
-    if (!sign || this._isPanelOpen) return;
+    if (!sign) return;
+    if (!force && this._isPanelOpen) return;
     sign.classList.remove('sj-sign-visible');
     sign.classList.add('sj-sign-hidden');
   }
@@ -338,6 +346,7 @@ export default class StationJourneySystem {
     if (ctaBtn) ctaBtn.style.background = `linear-gradient(135deg, ${station.color}, ${station.colorDark})`;
 
     // Animate in
+    document.body.classList.add('sj-panel-active');
     this._panelEl.classList.remove('sj-panel-hidden');
     this._panelEl.classList.add('sj-panel-visible');
     this._overlayEl.classList.remove('sj-overlay-hidden');
@@ -353,6 +362,7 @@ export default class StationJourneySystem {
 
   _closePanel() {
     this._isPanelOpen = false;
+    document.body.classList.remove('sj-panel-active');
 
     this._panelEl.classList.remove('sj-panel-visible');
     this._panelEl.classList.add('sj-panel-hidden');
@@ -489,13 +499,17 @@ export default class StationJourneySystem {
         opacity: 0.6;
       }
 
+      /* ── Active Panel Body State (hides signs & progress bar) ──────────────── */
+      body.sj-panel-active #station-signs-layer { opacity: 0; pointer-events: none; }
+      body.sj-panel-active #journey-progress { opacity: 0 !important; pointer-events: none !important; }
+
       /* ── Overlay ───────────────────────────────────────────────────────────── */
       .sj-overlay {
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.65);
-        z-index: 700;
-        backdrop-filter: blur(4px);
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 1500;
+        backdrop-filter: blur(6px);
         transition: opacity 0.35s ease;
       }
 
@@ -509,7 +523,7 @@ export default class StationJourneySystem {
         right: 0;
         width: min(460px, 100vw);
         height: 100vh;
-        z-index: 750;
+        z-index: 1600;
         display: flex;
         flex-direction: column;
         background: #080d1a;
@@ -743,21 +757,34 @@ export default class StationJourneySystem {
 
       /* ── Mobile ───────────────────────────────────────────────────────────── */
       @media (max-width: 768px) {
+        #station-signs-layer {
+          bottom: 95px;
+        }
+
         .sj-panel {
           width: 100vw;
           top: auto;
           bottom: 0;
-          height: 92vh;
+          height: 85vh;
           border-left: none;
-          border-top: 1px solid rgba(255,255,255,0.1);
-          border-radius: 20px 20px 0 0;
+          border-top: 1px solid rgba(255,255,255,0.15);
+          border-radius: 24px 24px 0 0;
         }
 
         .sj-panel-hidden  { transform: translateY(100%); }
         .sj-panel-visible { transform: translateY(0); }
 
-        .sj-sign-inner { padding: 0.6rem 1rem 0.6rem 0.8rem; gap: 0.6rem; }
-        .sj-sign-name  { font-size: 1rem; }
+        .sj-sign-inner {
+          padding: 0.65rem 1rem 0.65rem 0.8rem;
+          gap: 0.5rem;
+          max-width: 88vw;
+        }
+        .sj-sign-name { font-size: 0.95rem; }
+        .sj-sign-sub  { font-size: 0.72rem; }
+
+        .sj-panel-footer {
+          padding: 1rem 1.2rem 1.6rem;
+        }
       }
     `;
     document.head.appendChild(style);
