@@ -52,8 +52,8 @@ class PerformanceManager {
 
   getPixelRatio() {
     switch (this._level) {
-      case QUALITY.HIGH: return Math.min(window.devicePixelRatio, 2);
-      case QUALITY.MEDIUM: return Math.min(window.devicePixelRatio, 1.5);
+      case QUALITY.HIGH: return Math.min(window.devicePixelRatio, 1.5);
+      case QUALITY.MEDIUM: return Math.min(window.devicePixelRatio, 1.25);
       case QUALITY.LOW: return 1;
       default: return 1;
     }
@@ -61,18 +61,18 @@ class PerformanceManager {
 
   getParticleCount(baseCount) {
     switch (this._level) {
-      case QUALITY.HIGH: return baseCount;
-      case QUALITY.MEDIUM: return Math.floor(baseCount * 0.6);
-      case QUALITY.LOW: return Math.floor(baseCount * 0.3);
-      default: return Math.floor(baseCount * 0.3);
+      case QUALITY.HIGH: return Math.floor(baseCount * 0.8);
+      case QUALITY.MEDIUM: return Math.floor(baseCount * 0.5);
+      case QUALITY.LOW: return Math.floor(baseCount * 0.25);
+      default: return Math.floor(baseCount * 0.25);
     }
   }
 
   getShadowMapSize() {
     switch (this._level) {
-      case QUALITY.HIGH: return 2048;
-      case QUALITY.MEDIUM: return 1024;
-      case QUALITY.LOW: return 512;
+      case QUALITY.HIGH: return 1024;
+      case QUALITY.MEDIUM: return 512;
+      case QUALITY.LOW: return 256;
       default: return 512;
     }
   }

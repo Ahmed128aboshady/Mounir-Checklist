@@ -74,20 +74,20 @@ async function init() {
 
   // ── Lenis Smooth Scrolling ─────────────────────────────────────────────────
   const lenis = new Lenis({
-    duration: 1.4,
+    duration: 1.2,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     direction: 'vertical',
     smooth: true,
     smoothTouch: false,
-    touchMultiplier: 2,
+    touchMultiplier: 1.8,
   });
 
-  // Connect Lenis to GSAP ticker
+  // Connect Lenis to GSAP ticker smoothly
   if (gsap) {
     gsap.ticker.add((time) => {
       lenis.raf(time * 1000);
     });
-    gsap.ticker.lagSmoothing(0);
+    gsap.ticker.lagSmoothing(500, 33);
   } else {
     // Fallback RAF loop for Lenis without GSAP
     function rafLenis(time) {

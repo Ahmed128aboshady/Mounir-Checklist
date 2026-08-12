@@ -34,7 +34,7 @@ export default class StoryTimeline {
       trigger: '#scroll-content',
       start: 'top top',
       end: 'bottom bottom',
-      scrub: 1.5,
+      scrub: 0.5,
       onUpdate: (self) => {
         this._progress = self.progress;
         this._onScroll(self.progress);
