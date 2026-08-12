@@ -135,7 +135,6 @@ export default class StationJourneySystem {
       sign.innerHTML = `
         <div class="sj-sign-inner" style="--station-color: ${station.color}; --station-color-dark: ${station.colorDark}">
           <div class="sj-sign-beacon"></div>
-          <div class="sj-sign-icon">${station.icon}</div>
           <div class="sj-sign-text">
             <span class="sj-sign-name">${station.name}</span>
             <span class="sj-sign-sub">${station.subtitle}</span>
