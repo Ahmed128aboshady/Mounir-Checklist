@@ -29,18 +29,22 @@
         /* DESIGN TOKENS                                                        */
         /* ═══════════════════════════════════════════════════════════════════ */
         :root {
-            --gold-light: #fef08a;
-            --gold: #fbbf24;
-            --gold-dark: #d97706;
-            --gold-bronze: #b45309;
-            --cyan: #06b6d4;
+            --brand-blue: #3d52d5;
+            --brand-blue-dark: #2a3aa8;
+            --brand-teal: #20c997;
+            --brand-teal-light: #64edc7;
+            --gold-light: #64edc7;
+            --gold: #20c997;
+            --gold-dark: #129a72;
+            --gold-bronze: #0e7858;
+            --cyan: #20c997;
             --pink: #ec4899;
-            --blue: #3b82f6;
-            --emerald: #10b981;
+            --blue: #3d52d5;
+            --emerald: #20c997;
             --purple: #8b5cf6;
             --bg-dark: #090d16;
             --card-bg: rgba(17, 24, 39, 0.88);
-            --card-border: rgba(251, 191, 36, 0.22);
+            --card-border: rgba(32, 201, 151, 0.28);
             --text-light: #f8fafc;
             --text-muted: #94a3b8;
             --canvas-z: 0;
@@ -345,8 +349,8 @@
         }
 
         .hero-cta-btn {
-            background: linear-gradient(135deg, #fbbf24 0%, #d97706 60%, #b45309 100%);
-            color: #0c0a09;
+            background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-teal) 100%);
+            color: #ffffff;
             font-size: 1.25rem;
             font-weight: 900;
             padding: 1.1rem 2.8rem;
@@ -354,7 +358,7 @@
             border: none;
             cursor: pointer;
             text-decoration: none;
-            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.45);
+            box-shadow: 0 8px 30px rgba(32, 201, 151, 0.4);
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
@@ -365,7 +369,7 @@
 
         .hero-cta-btn:hover {
             transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 12px 40px rgba(245, 158, 11, 0.65);
+            box-shadow: 0 12px 40px rgba(32, 201, 151, 0.6);
         }
 
         .hero-cta-btn:hover svg { transform: translateX(-5px); }
@@ -1332,7 +1336,7 @@
         <section class="journey-station-section" id="journey-station-1" aria-label="محطة المعرفة">
             <div class="jss-bg-text" aria-hidden="true">محطة المعرفة</div>
             <div class="jss-chapter-pill">🚉 المحطة الأولى</div>
-            <h2 class="jss-heading">محطة <span style="color:#fbbf24">المعرفة</span></h2>
+            <h2 class="jss-heading">محطة <span style="color:#20c997">المعرفة</span></h2>
             <p class="jss-subtext">قصص الأنبياء والقيم الحياتية</p>
             <div class="jss-scroll-hint">اضغط على اللافتة لمعرفة التفاصيل ↑</div>
         </section>
@@ -1341,7 +1345,7 @@
         <section class="journey-station-section" id="journey-station-2" aria-label="محطة الشباب">
             <div class="jss-bg-text" aria-hidden="true">محطة الشباب</div>
             <div class="jss-chapter-pill">🚉 المحطة الثانية</div>
-            <h2 class="jss-heading">محطة <span style="color:#3b82f6">الشباب</span></h2>
+            <h2 class="jss-heading">محطة <span style="color:#3d52d5">الشباب</span></h2>
             <p class="jss-subtext">بناء الهوية والشخصية للبنين</p>
             <div class="jss-scroll-hint">اضغط على اللافتة لمعرفة التفاصيل ↑</div>
         </section>

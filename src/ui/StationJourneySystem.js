@@ -13,8 +13,8 @@ const STATIONS = [
   {
     id: 'station-1',
     key: 'station-library',
-    color: '#fbbf24',
-    colorDark: '#92400e',
+    color: '#20c997',
+    colorDark: '#129a72',
     icon: '📚',
     name: 'محطة المعرفة',
     subtitle: 'مكتبة الأنبياء<br>والقيم',
@@ -39,8 +39,8 @@ const STATIONS = [
   {
     id: 'station-2',
     key: 'station-boys',
-    color: '#3b82f6',
-    colorDark: '#1e3a8a',
+    color: '#3d52d5',
+    colorDark: '#202e8e',
     icon: '⚡',
     name: 'محطة الشباب',
     subtitle: 'مسار البنين',
