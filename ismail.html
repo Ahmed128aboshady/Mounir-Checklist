@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سر الحاج إسماعيل (حكايات أول البشر) | كورس الأنبياء — أكاديمية منير</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --green-dark: #022c22;
+            --olive-card: rgba(6, 78, 59, 0.85);
+            --gold-accent: #f59e0b;
+            --gold-glow: #fbbf24;
+            --mint-light: #2dd4bf;
+            --text-light: #f8fafc;
+            --text-muted: #a7f3d0;
+            --card-border: rgba(245, 158, 11, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--green-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            line-height: 1.7;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* WebGL Background Canvas */
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .content-layer {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Caution Strip Header */
+        .caution-strip {
+            background: repeating-linear-gradient(
+                -45deg,
+                #f59e0b,
+                #f59e0b 20px,
+                #064e3b 20px,
+                #064e3b 40px
+            );
+            color: #000;
+            text-align: center;
+            padding: 0.5rem 1rem;
+            font-weight: 900;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 10;
+        }
+        .caution-strip span {
+            background: #f59e0b;
+            padding: 0.2rem 0.8rem;
+            border-radius: 4px;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 4rem 1.5rem 2rem 1.5rem;
+            background: radial-gradient(circle at center, rgba(6, 78, 59, 0.5) 0%, rgba(2, 44, 34, 0.95) 100%);
+            position: relative;
+        }
+
+        .hero-badge {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid var(--gold-accent);
+            color: var(--gold-accent);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+            backdrop-filter: blur(10px);
+            animation: pulse-gold 2.5s infinite alternate;
+        }
+
+        @keyframes pulse-gold {
+            0% { box-shadow: 0 0 15px rgba(245, 158, 11, 0.3); }
+            100% { box-shadow: 0 0 35px rgba(245, 158, 11, 0.7); }
+        }
+
+        .hero-title {
+            font-family: 'Amiri', serif;
+            font-size: clamp(2.3rem, 5.5vw, 4.2rem);
+            font-weight: 700;
+            color: #ffffff;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(245, 158, 11, 0.4);
+        }
+
+        .hero-title span {
+            color: var(--gold-glow);
+            display: inline-block;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+            color: #e2e8f0;
+            max-width: 850px;
+            margin: 0 auto 2rem auto;
+            font-weight: 500;
+        }
+
+        /* Scanner Emblem */
+        .scanner-container {
+            position: relative;
+            margin: 1.5rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .scanner-orb {
+            width: 85px;
+            height: 85px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #fbbf24 0%, #022c22 70%);
+            border: 2px solid var(--gold-glow);
+            box-shadow: 0 0 30px var(--gold-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            animation: orb-pulse 2s infinite alternate;
+        }
+
+        @keyframes orb-pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 20px var(--gold-glow); }
+            100% { transform: scale(1.08); box-shadow: 0 0 45px var(--gold-glow); }
+        }
+
+        /* Action CTA Button */
+        .cta-btn {
+            background: linear-gradient(135deg, var(--gold-accent) 0%, #d97706 100%);
+            color: #000000;
+            font-size: 1.3rem;
+            font-weight: 900;
+            padding: 1.1rem 3.2rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.7);
+        }
+
+        /* Countdown Bar */
+        .countdown-bar {
+            background: rgba(6, 78, 59, 0.85);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            max-width: 700px;
+            width: 90%;
+            margin: 2.5rem auto 0 auto;
+            backdrop-filter: blur(15px);
+            text-align: center;
+        }
+
+        .countdown-title {
+            color: var(--mint-light);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .timer-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .t-box {
+            background: rgba(2, 44, 34, 0.8);
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            border-radius: 12px;
+            padding: 0.6rem 1rem;
+            min-width: 75px;
+        }
+
+        .t-num {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--gold-glow);
+            line-height: 1;
+        }
+
+        .t-lbl {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Modules Section */
+        .modules-section {
+            padding: 5rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Amiri', serif;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            color: var(--gold-glow);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: var(--mint-light);
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .module-card {
+            background: var(--olive-card);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(15px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold-accent), var(--mint-light));
+        }
+
+        .module-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(245, 158, 11, 0.25);
+            border-color: var(--gold-glow);
+        }
+
+        .module-tag {
+            background: rgba(45, 212, 191, 0.2);
+            border: 1px solid var(--mint-light);
+            color: var(--mint-light);
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .module-card h3 {
+            font-family: 'Amiri', serif;
+            font-size: 1.6rem;
+            color: #ffffff;
+            margin-bottom: 0.8rem;
+        }
+
+        .module-card p {
+            color: #e2e8f0;
+            font-size: 1.02rem;
+            line-height: 1.7;
+        }
+
+        /* Transformation Section */
+        .trans-section {
+            background: rgba(6, 78, 59, 0.6);
+            border-top: 1px solid var(--card-border);
+            border-bottom: 1px solid var(--card-border);
+            padding: 5rem 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .trans-grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .trans-box {
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .trans-box.before {
+            background: rgba(239, 68, 68, 0.08);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+
+        .trans-box.after {
+            background: rgba(45, 212, 191, 0.08);
+            border-color: rgba(45, 212, 191, 0.4);
+        }
+
+        .trans-box h4 {
+            font-size: 1.4rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .trans-box.before h4 { color: #fca5a5; }
+        .trans-box.after h4 { color: var(--mint-light); }
+
+        /* Footer CTA Section */
+        .footer-cta {
+            padding: 6rem 1.5rem;
+            text-align: center;
+            background: radial-gradient(circle at center, rgba(6, 78, 59, 0.8) 0%, rgba(2, 44, 34, 0.95) 70%);
+        }
+
+        .footer-cta h2 {
+            font-family: 'Amiri', serif;
+            font-size: clamp(2.2rem, 5vw, 3.5rem);
+            color: var(--gold-glow);
+            margin-bottom: 1rem;
+        }
+
+        .footer-cta p {
+            font-size: 1.2rem;
+            color: #e2e8f0;
+            max-width: 700px;
+            margin: 0 auto 2rem auto;
+        }
+
+        @media (max-width: 600px) {
+            .t-box { min-width: 55px; padding: 0.5rem 0.3rem; }
+            .t-num { font-size: 1.4rem; }
+            .module-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="caution-strip">
+        🌿 <span>سر الحاج إسماعيل: حكايات أول البشر</span> — انضم لأقوى مغامرة تربوية درامية تفاعلية 🌿
+    </div>
+
+    <!-- WebGL Background Canvas -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <div class="content-layer">
+
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-badge">✨ أول مغامرة درامية تفاعلية لقصص الأنبياء (6 إلى 18 سنة)</div>
+            
+            <h1 class="hero-title">
+                السر اللي بدأ من النهر... <span>مين الحاج إسماعيل؟ وكيف غير حياة أسامة؟</span>
+            </h1>
+
+            <p class="hero-subtitle">
+                مغامرة تربوية تفاعلية خفيفة الظل تزرع في ابنك شجاعة الاعتراف والتوبة، التواضع الحقيقي، هزيمة التنمر، والتفكير النقدي بعيداً عن التلقين التقليدي.
+            </p>
+
+            <div class="scanner-container">
+                <div class="scanner-orb">📜</div>
+                <div style="font-family:'Amiri',serif; font-size:1.3rem; color:var(--gold-glow); margin-top:0.8rem; font-weight:700;">
+                    أكاديمية منير تطلق: سر الحاج إسماعيل
+                </div>
+            </div>
+
+            <!-- Main CTA Button -->
+            <a href="https://m.me/mouniracademy" target="_blank" class="cta-btn">
+                ابدأ المغامرة واكتشف الأسرار الآن 🌿
+            </a>
+
+            <!-- Countdown Bar -->
+            <div class="countdown-bar">
+                <div class="countdown-title">⏳ متبقي على انطلاق الدفعة الأولى من المغامرة:</div>
+                <div class="timer-boxes">
+                    <div class="t-box"><div class="t-num" id="d">12</div><div class="t-lbl">يوم</div></div>
+                    <div class="t-box"><div class="t-num" id="h">14</div><div class="t-lbl">ساعة</div></div>
+                    <div class="t-box"><div class="t-num" id="m">20</div><div class="t-lbl">دقيقة</div></div>
+                    <div class="t-box"><div class="t-num" id="s">10</div><div class="t-lbl">ثانية</div></div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- 4 Stations Modules Section -->
+        <section class="modules-section">
+            <div class="section-header">
+                <h2>📜 المحطات والأسرار الأربعة في المغامرة</h2>
+                <p>كيف تحول حكايات أنبياء الله حياة أسامة وابنك إلى قصة نجاح وتوازن؟</p>
+            </div>
+
+            <div class="modules-grid">
+                <!-- Module 1 -->
+                <div class="module-card">
+                    <span class="module-tag">STATION #01</span>
+                    <h3>⚡ شفرة آدم عليه السلام</h3>
+                    <p>تعلم شجاعة الاعتراف بالأخطاء والتوبة، ضبط النفس، وتحمل مسؤولية الأفعال دون إلقاء اللوم على الآخرين.</p>
+                </div>
+
+                <!-- Module 2 -->
+                <div class="module-card">
+                    <span class="module-tag">STATION #02</span>
+                    <h3>🛡️ شفرة نوح عليه السلام</h3>
+                    <p>بناء درع الثبات الجرئ، رسم الحدود الشخصية، وهزيمة التنمر والسخرية بقوة وإيمان.</p>
+                </div>
+
+                <!-- Module 3 -->
+                <div class="module-card">
+                    <span class="module-tag">STATION #03</span>
+                    <h3>🌟 شفرة هود عليه السلام</h3>
+                    <p>بطل بدون غرور: الاقتداء بأخلاق القوة مع التواضع الحقيقي، والابتعاد عن التكبر بالمظاهر والمال.</p>
+                </div>
+
+                <!-- Module 4 -->
+                <div class="module-card">
+                    <span class="module-tag">STATION #04</span>
+                    <h3>🔍 شفرة إبراهيم عليه السلام</h3>
+                    <p>التفكير النقدي، التدرج المنطقي في حل المشكلات، والبحث عن الحقيقة بيقين وعقل واعي.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transformation Section -->
+        <section class="trans-section">
+            <div class="section-header">
+                <h2>🔄 تحول البطل: المهارات والأخلاق المكتسبة</h2>
+                <p>ما الذي يتغير في شخصية وسلوك ابنك بعد رحلة سر الحاج إسماعيل؟</p>
+            </div>
+
+            <div class="trans-grid">
+                <div class="trans-box before">
+                    <h4>🔴 قبل الانضمام للمغامرة:</h4>
+                    <ul style="list-style:none;">
+                        <li>❌ التسرع والهروب من المسؤولية وإلقاء اللوم</li>
+                        <li>❌ التأثر بالتنمر أو التكبر والمفاخرة بالمظاهر</li>
+                        <li>❌ النمطية في التفكير وغياب المنطق الأخلاقي</li>
+                    </ul>
+                </div>
+
+                <div class="trans-box after">
+                    <h4>🟢 بعد إتمام مغامرة سر الحاج إسماعيل:</h4>
+                    <ul style="list-style:none;">
+                        <li>✅ شاب شجاع، مفكر، ومتزن يقدر الاعتراف والتوبة</li>
+                        <li>✅ ثبات قوي ضد التنمر مع تواضع أصيل</li>
+                        <li>✅ التفكير النقدي وأخلاق أنبياء الله العظام</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer CTA -->
+        <section class="footer-cta">
+            <h2>🌿 انضم لرحلة أسامة والحاج إسماعيل الآن!</h2>
+            <p>المقاعد محدودة جداً لضمان تفاعل كل طالب ومشاركته الحية.</p>
+            <a href="https://m.me/mouniracademy" target="_blank" class="cta-btn">احجز مقعد ابنك الآن 🌿</a>
+            <p style="margin-top:2.5rem;color:var(--text-muted);font-size:0.95rem;">© 2026 أكاديمية منير | جميع الحقوق محفوظة</p>
+        </section>
+
+    </div>
+
+    <script>
+    // Live Countdown Timer Script
+    (function runTimerNow() {
+        var target = new Date().getTime() + (12 * 24 * 60 * 60 * 1000);
+        function tick() {
+            var now = new Date().getTime();
+            var diff = target - now;
+            if (diff > 0) {
+                var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                var secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+                var elD = document.getElementById('d');
+                var elH = document.getElementById('h');
+                var elM = document.getElementById('m');
+                var elS = document.getElementById('s');
+
+                if (elD) elD.innerHTML = days < 10 ? '0' + days : days;
+                if (elH) elH.innerHTML = hours < 10 ? '0' + hours : hours;
+                if (elM) elM.innerHTML = mins < 10 ? '0' + mins : mins;
+                if (elS) elS.innerHTML = secs < 10 ? '0' + secs : secs;
+            }
+        }
+        tick();
+        setInterval(tick, 1000);
+    })();
+
+    // Three.js Olive/Gold Background Particles
+    (function() {
+        if (typeof THREE === 'undefined') return;
+        var canvas = document.getElementById('webgl-canvas');
+        if (!canvas) return;
+        var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        var scene = new THREE.Scene();
+        var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 6;
+
+        var particleCount = 1600;
+        var positions = new Float32Array(particleCount * 3);
+        var colors = new Float32Array(particleCount * 3);
+        for (var i = 0; i < particleCount; i++) {
+            positions[i * 3]     = (Math.random() - 0.5) * 180;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 180;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 180;
+            
+            var t = Math.random();
+            if (t < 0.5) { colors[i*3]=0.96; colors[i*3+1]=0.62; colors[i*3+2]=0.07; } // gold
+            else if (t < 0.8) { colors[i*3]=0.17; colors[i*3+1]=0.83; colors[i*3+2]=0.75; } // mint/emerald
+            else { colors[i*3]=0.98; colors[i*3+1]=0.75; colors[i*3+2]=0.14; } // amber light
+        }
+        var geo = new THREE.BufferGeometry();
+        geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        var mat = new THREE.PointsMaterial({ size: 0.35, vertexColors: true, transparent: true, opacity: 0.75 });
+        scene.add(new THREE.Points(geo, mat));
+
+        function animate() {
+            requestAnimationFrame(animate);
+            scene.rotation.y += 0.0004;
+            scene.rotation.x += 0.0002;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', function() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    })();
+    </script>
+</body>
+</html>
