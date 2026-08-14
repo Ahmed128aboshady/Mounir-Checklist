@@ -54,12 +54,12 @@ export default class EnvironmentManager {
     this._scene = scene;
     this._perf = performanceManager;
     
-    // Ambient light
-    this._ambientLight = new THREE.AmbientLight(0x1a1a3a, 0.6);
+    // Ambient light (bright, natural outdoor illumination)
+    this._ambientLight = new THREE.AmbientLight(0x406045, 0.85);
     scene.add(this._ambientLight);
     
     // Sun directional light
-    this._sunLight = new THREE.DirectionalLight(0xffd080, 1.5);
+    this._sunLight = new THREE.DirectionalLight(0xfff0dd, 1.6);
     this._sunLight.position.set(20, 40, 10);
     this._sunLight.castShadow = true;
     this._sunLight.shadow.mapSize.setScalar(performanceManager ? performanceManager.getShadowMapSize() : 1024);
@@ -70,12 +70,12 @@ export default class EnvironmentManager {
     this._sunLight.shadow.camera.bottom = -50;
     scene.add(this._sunLight);
     
-    // Ground plane (very long)
+    // Ground plane (lush green grass field)
     const groundGeo = new THREE.PlaneGeometry(200, 500);
     const groundMat = new THREE.MeshStandardMaterial({
-      color: 0x0d1117,
-      roughness: 0.9,
-      metalness: 0.1
+      color: 0x1f4d25,
+      roughness: 0.8,
+      metalness: 0.05
     });
     this._ground = new THREE.Mesh(groundGeo, groundMat);
     this._ground.rotation.x = -Math.PI / 2;
