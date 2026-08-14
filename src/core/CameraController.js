@@ -38,7 +38,7 @@ class CameraController {
       [CAMERA_STATES.STATION_MAP]: { pos: new THREE.Vector3(0, 25, 10), look: new THREE.Vector3(0, 0, -50), fov: 70 },
       [CAMERA_STATES.ACHIEVEMENT]: { offset: new THREE.Vector3(4, 3.5, 9), lookOffset: new THREE.Vector3(0, 1, 0), fov: 55 },
       [CAMERA_STATES.PARENT]: { offset: new THREE.Vector3(-3, 3, 8), lookOffset: new THREE.Vector3(0, 1, 0), fov: 50 },
-      [CAMERA_STATES.FINAL]: { offset: new THREE.Vector3(0, 3.5, 12), lookOffset: new THREE.Vector3(0, 1.2, -5), fov: 58 }
+      [CAMERA_STATES.FINAL]: { offset: new THREE.Vector3(0, 4.5, 14), lookOffset: new THREE.Vector3(0, 3.5, -5), fov: 52 }
     };
     
     // Initialize current vectors

@@ -132,27 +132,32 @@ export default class EnvironmentManager {
     canvas.width = 512;
     canvas.height = 128;
     const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#090d16';
+    
+    // Sleek dark panel with glowing brand teal border
+    ctx.fillStyle = '#060a14';
     ctx.fillRect(0, 0, 512, 128);
     ctx.strokeStyle = '#20c997';
-    ctx.lineWidth = 8;
-    ctx.strokeRect(8, 8, 496, 112);
-    ctx.font = '900 48px Tajawal, Arial, sans-serif';
+    ctx.lineWidth = 10;
+    ctx.strokeRect(10, 10, 492, 108);
+    
+    ctx.font = '900 52px Tajawal, Arial, sans-serif';
     ctx.fillStyle = '#ffffff';
+    ctx.shadowColor = '#20c997';
+    ctx.shadowBlur = 15;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText('أكاديمية منير', 256, 64);
 
     const signTex = new THREE.CanvasTexture(canvas);
-    const signGeo = new THREE.PlaneGeometry(9, 2.25);
+    const signGeo = new THREE.PlaneGeometry(10, 2.5);
     const signMat = new THREE.MeshBasicMaterial({ map: signTex, transparent: true });
     const sign = new THREE.Mesh(signGeo, signMat);
-    sign.position.set(0, 9.5, 4.2);
+    sign.position.set(0, 5.5, 3.8);
     group.add(sign);
 
-    // Warm Ambient Light from Building
-    const light = new THREE.PointLight(0x20c997, 4, 25);
-    light.position.set(0, 7, 6);
+    // Warm Ambient Light from Building Signboard
+    const light = new THREE.PointLight(0x20c997, 5, 25);
+    light.position.set(0, 5.5, 5);
     group.add(light);
 
     // Position building right behind final station stop
