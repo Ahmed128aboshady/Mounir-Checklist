@@ -89,9 +89,8 @@ export default class EnvironmentManager {
     // Background mountains (instant fallback geometry)
     this._createMountains(scene);
 
-    // Stream 3D scenery in the background asynchronously
+    // Stream 3D Academy Building in the background
     setTimeout(() => {
-      this._createNatureEnvironment(scene, assetManager);
       this._createAcademyBuilding(scene, assetManager);
     }, 100);
 
@@ -135,45 +134,7 @@ export default class EnvironmentManager {
     }
   }
 
-  async _createNatureEnvironment(scene, assetManager) {
-    if (!assetManager) return;
 
-    try {
-      const natureAsset = await assetManager.loadGLTF(
-        'nature_scene',
-        './public/assets/models/nature_scene.glb',
-        () => null
-      );
-
-      if (natureAsset && natureAsset.object) {
-        const baseMesh = natureAsset.object.clone ? natureAsset.object.clone() : natureAsset.object;
-        baseMesh.traverse(child => {
-          if (child.isMesh) {
-            child.castShadow = true;
-            child.receiveShadow = true;
-          }
-        });
-
-        // Scatter 3D nature environments along the train journey
-        const positions = [
-          { pos: [0, -0.2, -40], scale: 1.5, rot: 0 },
-          { pos: [-25, -0.2, -90], scale: 1.8, rot: Math.PI / 3 },
-          { pos: [25, -0.2, -120], scale: 1.8, rot: -Math.PI / 4 },
-          { pos: [0, -0.2, -160], scale: 1.4, rot: Math.PI / 6 }
-        ];
-
-        positions.forEach(cfg => {
-          const m = baseMesh.clone();
-          m.scale.setScalar(cfg.scale);
-          m.position.set(...cfg.pos);
-          m.rotation.y = cfg.rot;
-          scene.add(m);
-        });
-      }
-    } catch (err) {
-      console.warn('[EnvironmentManager] Error loading nature_scene.glb:', err);
-    }
-  }
 
   async _createAcademyBuilding(scene, assetManager) {
     const group = new THREE.Group();
