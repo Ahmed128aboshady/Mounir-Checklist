@@ -108,12 +108,10 @@ export default class TrainController {
       const targetQuat = new THREE.Quaternion().setFromUnitVectors(forward, tangent.clone().normalize());
       this._group.quaternion.slerp(targetQuat, 0.25);
       
-      // Update steam emitter — chimney is at (0, 3.5, 1.8) in local space
+      // Update steam emitter — chimney is at (0, 3.5, 1.8) in local train space
       const chimneyLocal = new THREE.Vector3(0, 3.5, 1.8);
-      this._group.updateMatrixWorld(true);
-      const chimneyWorld = chimneyLocal.applyMatrix4(this._group.matrixWorld);
       if (this._steam) {
-        this._steam.setEmitPosition(chimneyWorld);
+        this._steam.setEmitPosition(chimneyLocal);
       }
       
       // Headlight PointLight — front of train at +Z local
