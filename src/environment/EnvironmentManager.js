@@ -88,8 +88,83 @@ export default class EnvironmentManager {
     
     // Background mountains
     this._createMountains(scene);
+
+    // Final Academy Terminal Building
+    this._createAcademyBuilding(scene);
     
     return this;
+  }
+
+  _createAcademyBuilding(scene) {
+    const group = new THREE.Group();
+
+    // Main station building body
+    const bodyGeo = new THREE.BoxGeometry(16, 9, 10);
+    const bodyMat = new THREE.MeshStandardMaterial({
+      color: 0x111827,
+      roughness: 0.6,
+      metalness: 0.3
+    });
+    const body = new THREE.Mesh(bodyGeo, bodyMat);
+    body.position.set(0, 4.5, 0);
+    body.castShadow = true;
+    body.receiveShadow = true;
+    group.add(body);
+
+    // Roof structure (glowing cyan accent)
+    const roofGeo = new THREE.ConeGeometry(12, 4.5, 4);
+    const roofMat = new THREE.MeshStandardMaterial({
+      color: 0x20c997,
+      roughness: 0.4,
+      metalness: 0.2
+    });
+    const roof = new THREE.Mesh(roofGeo, roofMat);
+    roof.rotation.y = Math.PI / 4;
+    roof.position.set(0, 11.25, 0);
+    group.add(roof);
+
+    // Illuminated Entrance Glass
+    const glassGeo = new THREE.PlaneGeometry(6, 5);
+    const glassMat = new THREE.MeshBasicMaterial({
+      color: 0x20c997,
+      transparent: true,
+      opacity: 0.35
+    });
+    const glass = new THREE.Mesh(glassGeo, glassMat);
+    glass.position.set(0, 2.5, 5.02);
+    group.add(glass);
+
+    // Glowing Signboard with "أكاديمية منير"
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 128;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#090d16';
+    ctx.fillRect(0, 0, 512, 128);
+    ctx.strokeStyle = '#20c997';
+    ctx.lineWidth = 8;
+    ctx.strokeRect(8, 8, 496, 112);
+    ctx.font = '900 48px Tajawal, Arial, sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('أكاديمية منير', 256, 64);
+
+    const signTex = new THREE.CanvasTexture(canvas);
+    const signGeo = new THREE.PlaneGeometry(9, 2.25);
+    const signMat = new THREE.MeshBasicMaterial({ map: signTex, transparent: true });
+    const sign = new THREE.Mesh(signGeo, signMat);
+    sign.position.set(0, 7.2, 5.08);
+    group.add(sign);
+
+    // Warm Ambient Light from Building
+    const light = new THREE.PointLight(0x20c997, 4, 25);
+    light.position.set(0, 6, 7);
+    group.add(light);
+
+    // Position building right behind final station stop
+    group.position.set(0, 0, -172);
+    scene.add(group);
   }
   
   _createStars(scene, perf) {
