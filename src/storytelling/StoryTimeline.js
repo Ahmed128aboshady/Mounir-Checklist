@@ -29,7 +29,7 @@ export default class StoryTimeline {
     
     gsap.registerPlugin(ScrollTrigger);
     
-    // Master scroll trigger — train rides the full scroll-content
+    // Master scroll trigger — train path progress strictly maps 1-to-1 from 0 to 1
     ScrollTrigger.create({
       trigger: '#scroll-content',
       start: 'top top',
@@ -40,27 +40,6 @@ export default class StoryTimeline {
         this._onScroll(self.progress);
       }
     });
-
-    // Final section: ensure train is fully at end (t=1)
-    const finalEl = document.getElementById('final-section');
-    if (finalEl) {
-      const trainProxy = { t: 0 };
-      ScrollTrigger.create({
-        trigger: finalEl,
-        start: 'top 80%',
-        onEnter: () => {
-          const tc = this._systems.trainController;
-          if (!tc) return;
-          // Tween train to end position smoothly
-          gsap.to(trainProxy, {
-            t: 1,
-            duration: 1.6,
-            ease: 'power2.out',
-            onUpdate: () => tc.setProgress(trainProxy.t),
-          });
-        },
-      });
-    }
   }
   
   _onScroll(progress) {
@@ -72,20 +51,13 @@ export default class StoryTimeline {
     if (storyState) storyState.notifyProgress(progress);
     const state = storyState ? storyState.get() : 'hero';
     
-    // Update train position along path
+    // Update train position along path directly proportional to page scroll (0.0 -> 1.0)
     if (trainController && trainPath) {
-      // Map scroll progress to train path progress
-      // (they're roughly the same but train stays at station during hero)
-      const trainT = this._scrollToTrainT(progress);
-      trainController.setProgress(trainT);
+      trainController.setProgress(progress);
       
-      // Set train speed based on state
-      const speedMap = {
-        hero: 0, departure: 1, bridge: 0.8, tunnel_approach: 0.6,
-        tunnel_inside: 0.4, world_reveal: 0.3, station_map: 0,
-        station_focus: 0, achievement: 0, parent: 0, final: 0
-      };
-      trainController.setSpeed(speedMap[state] || 0);
+      // Set train speed based on scroll movement state
+      const isMoving = progress > 0.02 && progress < 0.98;
+      trainController.setSpeed(isMoving ? 1 : 0);
     }
     
     // Update camera based on state
