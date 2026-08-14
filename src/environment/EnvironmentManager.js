@@ -89,10 +89,53 @@ export default class EnvironmentManager {
     // Background mountains
     this._createMountains(scene);
 
+    // Rich 3D Low-Poly Nature Scene (Trees, Hills, Landscape from nature_scene.glb)
+    await this._createNatureEnvironment(scene, assetManager);
+
     // Final Academy Terminal Building (Loaded from building.glb)
     await this._createAcademyBuilding(scene, assetManager);
     
     return this;
+  }
+
+  async _createNatureEnvironment(scene, assetManager) {
+    if (!assetManager) return;
+
+    try {
+      const natureAsset = await assetManager.loadGLTF(
+        'nature_scene',
+        './public/assets/models/nature_scene.glb',
+        () => null
+      );
+
+      if (natureAsset && natureAsset.object) {
+        const baseMesh = natureAsset.object.clone ? natureAsset.object.clone() : natureAsset.object;
+        baseMesh.traverse(child => {
+          if (child.isMesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
+        });
+
+        // Scatter 3D nature environments along the train journey
+        const positions = [
+          { pos: [0, -0.2, -40], scale: 1.5, rot: 0 },
+          { pos: [-25, -0.2, -90], scale: 1.8, rot: Math.PI / 3 },
+          { pos: [25, -0.2, -120], scale: 1.8, rot: -Math.PI / 4 },
+          { pos: [0, -0.2, -160], scale: 1.4, rot: Math.PI / 6 }
+        ];
+
+        positions.forEach(cfg => {
+          const m = baseMesh.clone();
+          m.scale.setScalar(cfg.scale);
+          m.position.set(...cfg.pos);
+          m.rotation.y = cfg.rot;
+          scene.add(m);
+        });
+      }
+    } catch (err) {
+      console.warn('[EnvironmentManager] Error loading nature_scene.glb:', err);
+    }
   }
 
   async _createAcademyBuilding(scene, assetManager) {
