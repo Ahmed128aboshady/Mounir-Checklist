@@ -472,9 +472,15 @@ export default class NarratorSystem {
 
       /* ─── Position Classes ───────────────────────────────────────────────── */
       .narrator-pos-center {
-        left: 50%;
         top: 50%;
+        left: 50%;
         transform: translateX(-50%) translateY(-50%);
+      }
+
+      @media (min-width: 769px) {
+        .narrator-pos-center {
+          top: 68%;
+        }
       }
       .narrator-pos-center.narrator-visible {
         transform: translateX(-50%) translateY(-50%) scale(1);
