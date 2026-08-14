@@ -17,7 +17,7 @@ const STATIONS = [
     colorDark: '#129a72',
     icon: '📚',
     name: 'محطة المعرفة',
-    subtitle: 'مكتبة الأنبياء<br>والقيم',
+    subtitle: 'مكتبة الأنبياء والقيم',
     tagline: 'رحلة إيمانية تربوية',
     age: 'من 6 إلى 18 سنة',
     duration: '12 أسبوع',
