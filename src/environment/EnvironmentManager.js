@@ -1,42 +1,24 @@
 import * as THREE from 'three';
 
 const ENVIRONMENT_PRESETS = {
-  hero: {
-    fogColor: 0x0a0a1a, fogDensity: 0.012,
-    ambientColor: 0x1a1a3a, ambientIntensity: 0.6,
-    sunColor: 0xffd080, sunIntensity: 1.5,
-    skyTop: '#0a0a1a', skyBottom: '#1a0a2e'
+  day: {
+    fogColor: 0x87ceeb, fogDensity: 0.005,
+    ambientColor: 0xffffff, ambientIntensity: 1.2,
+    sunColor: 0xfff5ea, sunIntensity: 2.0,
+    groundColor: 0x22c55e
   },
-  departure: {
-    fogColor: 0x0d0d1f, fogDensity: 0.010,
-    ambientColor: 0x1a1a3a, ambientIntensity: 0.5,
-    sunColor: 0xff8844, sunIntensity: 1.2,
-    skyTop: '#0d0d1f', skyBottom: '#2a1a00'
+  night: {
+    fogColor: 0x050814, fogDensity: 0.025,
+    ambientColor: 0x1e1b4b, ambientIntensity: 0.25,
+    sunColor: 0x38bdf8, sunIntensity: 0.2,
+    groundColor: 0x064e3b
   },
-  bridge: {
-    fogColor: 0x0a1220, fogDensity: 0.008,
-    ambientColor: 0x152030, ambientIntensity: 0.7,
-    sunColor: 0xffa060, sunIntensity: 1.8,
-    skyTop: '#0a1220', skyBottom: '#1a2a40'
-  },
-  tunnel: {
-    fogColor: 0x050508, fogDensity: 0.04,
-    ambientColor: 0x080808, ambientIntensity: 0.1,
-    sunColor: 0x442200, sunIntensity: 0.1,
-    skyTop: '#050508', skyBottom: '#080508'
-  },
-  world: {
-    fogColor: 0x0a1525, fogDensity: 0.006,
-    ambientColor: 0x1a2a3a, ambientIntensity: 0.8,
-    sunColor: 0xffe0a0, sunIntensity: 2.0,
-    skyTop: '#0a1525', skyBottom: '#1a3040'
-  },
-  achievement: {
-    fogColor: 0x0a1030, fogDensity: 0.005,
-    ambientColor: 0x2a1a0a, ambientIntensity: 1.0,
-    sunColor: 0xffd060, sunIntensity: 2.5,
-    skyTop: '#0a1030', skyBottom: '#2a1a00'
-  },
+  morning: {
+    fogColor: 0xfef08a, fogDensity: 0.004,
+    ambientColor: 0xffedd5, ambientIntensity: 1.4,
+    sunColor: 0xfba518, sunIntensity: 2.5,
+    groundColor: 0x16a34a
+  }
 };
 
 export default class EnvironmentManager {
@@ -296,15 +278,66 @@ export default class EnvironmentManager {
 
   
   setScene(presetName) {
-    const preset = ENVIRONMENT_PRESETS[presetName] || ENVIRONMENT_PRESETS.hero;
+    const preset = ENVIRONMENT_PRESETS[presetName] || ENVIRONMENT_PRESETS.day;
+    if (this._currentPreset === presetName) return;
     this._currentPreset = presetName;
     
-    if (window.gsap) {
-      window.gsap.to(this._scene.fog, { density: preset.fogDensity, duration: 2 });
-      window.gsap.to(this._ambientLight, { intensity: preset.ambientIntensity, duration: 2 });
-      window.gsap.to(this._sunLight, { intensity: preset.sunIntensity, duration: 2 });
+    const gsap = window.gsap;
+    if (gsap) {
+      if (this._scene && this._scene.fog) {
+        gsap.to(this._scene.fog.color, {
+          r: ((preset.fogColor >> 16) & 255) / 255,
+          g: ((preset.fogColor >> 8) & 255) / 255,
+          b: (preset.fogColor & 255) / 255,
+          duration: 1.8
+        });
+        gsap.to(this._scene.fog, { density: preset.fogDensity, duration: 1.8 });
+      }
+
+      if (this._ambientLight) {
+        gsap.to(this._ambientLight.color, {
+          r: ((preset.ambientColor >> 16) & 255) / 255,
+          g: ((preset.ambientColor >> 8) & 255) / 255,
+          b: (preset.ambientColor & 255) / 255,
+          duration: 1.8
+        });
+        gsap.to(this._ambientLight, { intensity: preset.ambientIntensity, duration: 1.8 });
+      }
+
+      if (this._sunLight) {
+        gsap.to(this._sunLight.color, {
+          r: ((preset.sunColor >> 16) & 255) / 255,
+          g: ((preset.sunColor >> 8) & 255) / 255,
+          b: (preset.sunColor & 255) / 255,
+          duration: 1.8
+        });
+        gsap.to(this._sunLight, { intensity: preset.sunIntensity, duration: 1.8 });
+      }
+
+      if (this._ground && this._ground.material) {
+        gsap.to(this._ground.material.color, {
+          r: ((preset.groundColor >> 16) & 255) / 255,
+          g: ((preset.groundColor >> 8) & 255) / 255,
+          b: (preset.groundColor & 255) / 255,
+          duration: 1.8
+        });
+      }
     } else {
-      this._scene.fog.density = preset.fogDensity;
+      if (this._scene && this._scene.fog) {
+        this._scene.fog.color.setHex(preset.fogColor);
+        this._scene.fog.density = preset.fogDensity;
+      }
+      if (this._ambientLight) {
+        this._ambientLight.color.setHex(preset.ambientColor);
+        this._ambientLight.intensity = preset.ambientIntensity;
+      }
+      if (this._sunLight) {
+        this._sunLight.color.setHex(preset.sunColor);
+        this._sunLight.intensity = preset.sunIntensity;
+      }
+      if (this._ground && this._ground.material) {
+        this._ground.material.color.setHex(preset.groundColor);
+      }
     }
   }
   

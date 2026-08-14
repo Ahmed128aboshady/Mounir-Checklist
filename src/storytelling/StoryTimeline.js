@@ -65,16 +65,16 @@ export default class StoryTimeline {
       this._updateCamera(cameraController, state, progress);
     }
     
-    // Update environment
+    // Update environment preset (Day -> Night -> Morning Sunrise)
     if (environmentManager) {
       const envMap = {
-        hero: 'hero', departure: 'departure', bridge: 'bridge',
-        tunnel_approach: 'tunnel', tunnel_inside: 'tunnel',
-        world_reveal: 'world', station_map: 'world',
-        station_focus: 'world', achievement: 'achievement',
-        parent: 'achievement', final: 'achievement'
+        hero: 'day', departure: 'day', bridge: 'day',
+        tunnel_approach: 'night', tunnel_inside: 'night',
+        world_reveal: 'morning', station_map: 'morning',
+        station_focus: 'morning', achievement: 'morning',
+        parent: 'morning', final: 'morning'
       };
-      environmentManager.setScene(envMap[state] || 'hero');
+      environmentManager.setScene(envMap[state] || 'day');
     }
     
 
