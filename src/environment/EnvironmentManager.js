@@ -7,17 +7,11 @@ const ENVIRONMENT_PRESETS = {
     sunColor: 0xffedd5, sunIntensity: 1.3,
     groundColor: 0x0f2b1d
   },
-  night: {
-    fogColor: 0x06140d, fogDensity: 0.008,
-    ambientColor: 0xffffff, ambientIntensity: 0.8,
-    sunColor: 0xffedd5, sunIntensity: 1.3,
-    groundColor: 0x0f2b1d
-  },
-  morning: {
-    fogColor: 0x06140d, fogDensity: 0.008,
-    ambientColor: 0xffffff, ambientIntensity: 0.8,
-    sunColor: 0xffedd5, sunIntensity: 1.3,
-    groundColor: 0x0f2b1d
+  tunnel: {
+    fogColor: 0x030712, fogDensity: 0.045,
+    ambientColor: 0x0f172a, ambientIntensity: 0.10,
+    sunColor: 0x38bdf8, sunIntensity: 0.05,
+    groundColor: 0x030712
   }
 };
 
