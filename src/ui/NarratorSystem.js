@@ -381,13 +381,13 @@ export default class NarratorSystem {
       .narrator-text {
         font-family: 'Tajawal', sans-serif;
         font-size: clamp(1rem, 2.2vw, 1.25rem);
-        font-weight: 800;
-        color: #ffffff;
+        font-weight: 700;
+        color: #f0f4ff;
         line-height: 1.6;
         direction: rtl;
         text-align: center;
         min-height: 1.6em;
-        text-shadow: 0 2px 10px rgba(0,0,0,0.95);
+        text-shadow: 0 2px 8px rgba(0,0,0,0.5);
         letter-spacing: 0.02em;
       }
 
