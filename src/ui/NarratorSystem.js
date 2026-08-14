@@ -494,26 +494,20 @@ export default class NarratorSystem {
       }
 
       .narrator-pos-center {
-        top: 50%;
+        top: 75px;
         left: 50%;
-        transform: translateX(-50%) translateY(-50%);
-      }
-
-      @media (min-width: 769px) {
-        .narrator-pos-center {
-          top: 68%;
-        }
+        transform: translateX(-50%);
       }
       .narrator-pos-center.narrator-visible {
-        transform: translateX(-50%) translateY(-50%) scale(1);
+        transform: translateX(-50%) translateY(0) scale(1);
         opacity: 1;
       }
       .narrator-pos-center.narrator-hidden {
-        transform: translateX(-50%) translateY(calc(-50% + 14px)) scale(0.95);
+        transform: translateX(-50%) translateY(-14px) scale(0.95);
         opacity: 0;
       }
       .narrator-pos-center.narrator-fadeout {
-        transform: translateX(-50%) translateY(calc(-50% - 10px)) scale(0.97);
+        transform: translateX(-50%) translateY(-10px) scale(0.97);
         opacity: 0;
       }
 
@@ -537,7 +531,7 @@ export default class NarratorSystem {
       }
 
       .narrator-pos-top-center {
-        top: 15%;
+        top: 75px;
         left: 50%;
         transform: translateX(-50%);
       }
