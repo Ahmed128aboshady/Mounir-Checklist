@@ -50,7 +50,7 @@ export default class EnvironmentManager {
     this._currentPreset = 'hero';
   }
   
-  init(scene, performanceManager) {
+  async init(scene, performanceManager, assetManager) {
     this._scene = scene;
     this._perf = performanceManager;
     
@@ -89,15 +89,78 @@ export default class EnvironmentManager {
     // Background mountains
     this._createMountains(scene);
 
-    // Final Academy Terminal Building
-    this._createAcademyBuilding(scene);
+    // Final Academy Terminal Building (Loaded from building.glb)
+    await this._createAcademyBuilding(scene, assetManager);
     
     return this;
   }
 
-  _createAcademyBuilding(scene) {
+  async _createAcademyBuilding(scene, assetManager) {
     const group = new THREE.Group();
 
+    if (assetManager) {
+      try {
+        const bldgAsset = await assetManager.loadGLTF(
+          'building',
+          './public/assets/models/building.glb',
+          () => null
+        );
+        if (bldgAsset && bldgAsset.object) {
+          const bldgMesh = bldgAsset.object.clone ? bldgAsset.object.clone() : bldgAsset.object;
+          bldgMesh.scale.setScalar(2.2);
+          bldgMesh.position.set(0, 0, 0);
+          bldgMesh.traverse(child => {
+            if (child.isMesh) {
+              child.castShadow = true;
+              child.receiveShadow = true;
+            }
+          });
+          group.add(bldgMesh);
+        } else {
+          this._createFallbackBuildingMesh(group);
+        }
+      } catch (err) {
+        console.warn('[EnvironmentManager] Fallback building due to load error:', err);
+        this._createFallbackBuildingMesh(group);
+      }
+    } else {
+      this._createFallbackBuildingMesh(group);
+    }
+
+    // Glowing Signboard with "أكاديمية منير"
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 128;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#090d16';
+    ctx.fillRect(0, 0, 512, 128);
+    ctx.strokeStyle = '#20c997';
+    ctx.lineWidth = 8;
+    ctx.strokeRect(8, 8, 496, 112);
+    ctx.font = '900 48px Tajawal, Arial, sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('أكاديمية منير', 256, 64);
+
+    const signTex = new THREE.CanvasTexture(canvas);
+    const signGeo = new THREE.PlaneGeometry(9, 2.25);
+    const signMat = new THREE.MeshBasicMaterial({ map: signTex, transparent: true });
+    const sign = new THREE.Mesh(signGeo, signMat);
+    sign.position.set(0, 9.5, 4.2);
+    group.add(sign);
+
+    // Warm Ambient Light from Building
+    const light = new THREE.PointLight(0x20c997, 4, 25);
+    light.position.set(0, 7, 6);
+    group.add(light);
+
+    // Position building right behind final station stop
+    group.position.set(0, 0, -172);
+    scene.add(group);
+  }
+
+  _createFallbackBuildingMesh(group) {
     // Main station building body
     const bodyGeo = new THREE.BoxGeometry(16, 9, 10);
     const bodyMat = new THREE.MeshStandardMaterial({
@@ -122,49 +185,6 @@ export default class EnvironmentManager {
     roof.rotation.y = Math.PI / 4;
     roof.position.set(0, 11.25, 0);
     group.add(roof);
-
-    // Illuminated Entrance Glass
-    const glassGeo = new THREE.PlaneGeometry(6, 5);
-    const glassMat = new THREE.MeshBasicMaterial({
-      color: 0x20c997,
-      transparent: true,
-      opacity: 0.35
-    });
-    const glass = new THREE.Mesh(glassGeo, glassMat);
-    glass.position.set(0, 2.5, 5.02);
-    group.add(glass);
-
-    // Glowing Signboard with "أكاديمية منير"
-    const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 128;
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#090d16';
-    ctx.fillRect(0, 0, 512, 128);
-    ctx.strokeStyle = '#20c997';
-    ctx.lineWidth = 8;
-    ctx.strokeRect(8, 8, 496, 112);
-    ctx.font = '900 48px Tajawal, Arial, sans-serif';
-    ctx.fillStyle = '#ffffff';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText('أكاديمية منير', 256, 64);
-
-    const signTex = new THREE.CanvasTexture(canvas);
-    const signGeo = new THREE.PlaneGeometry(9, 2.25);
-    const signMat = new THREE.MeshBasicMaterial({ map: signTex, transparent: true });
-    const sign = new THREE.Mesh(signGeo, signMat);
-    sign.position.set(0, 7.2, 5.08);
-    group.add(sign);
-
-    // Warm Ambient Light from Building
-    const light = new THREE.PointLight(0x20c997, 4, 25);
-    light.position.set(0, 6, 7);
-    group.add(light);
-
-    // Position building right behind final station stop
-    group.position.set(0, 0, -172);
-    scene.add(group);
   }
   
   _createStars(scene, perf) {

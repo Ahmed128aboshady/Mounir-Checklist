@@ -99,7 +99,7 @@ async function init() {
 
   // ── Environment Setup ──────────────────────────────────────────────────────
   const environmentManager = new EnvironmentManager();
-  environmentManager.init(scene, performanceManager);
+  await environmentManager.init(scene, performanceManager, assetManager);
 
   const parallaxEnv = new ParallaxEnvironment();
   parallaxEnv.init(scene);
