@@ -1,6 +1,5 @@
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { OBJLoader } from 'three/addons/loaders/OBJLoader.js';
+import { MTLLoader } from 'three/addons/loaders/MTLLoader.js';
 
 class AssetManager {
   constructor() {
@@ -17,6 +16,86 @@ class AssetManager {
     const dracoLoader = new DRACOLoader();
     dracoLoader.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.167.1/examples/jsm/libs/draco/');
     this._gltfLoader.setDRACOLoader(dracoLoader);
+  }
+
+  /**
+   * Load an OBJ model with optional MTL materials
+   */
+  async loadOBJ(key, objUrl, mtlUrl = null, fallbackFn = null) {
+    if (this._cache.has(key)) return this._cache.get(key);
+    if (this._loading.has(key)) return this._loading.get(key);
+
+    const loadPromise = new Promise((resolve) => {
+      const objLoader = new OBJLoader();
+
+      if (mtlUrl) {
+        const mtlLoader = new MTLLoader();
+        mtlLoader.load(
+          mtlUrl,
+          (materials) => {
+            materials.preload();
+            objLoader.setMaterials(materials);
+            objLoader.load(
+              objUrl,
+              (obj) => {
+                this._loadedAssets++;
+                const result = { type: 'obj', object: obj };
+                this._cache.set(key, result);
+                resolve(result);
+              },
+              undefined,
+              (error) => {
+                console.error(`[AssetManager] Error loading OBJ ${key}:`, error);
+                const fallbackObj = fallbackFn ? fallbackFn() : this._createDefaultFallback(key);
+                const result = { type: 'obj', object: fallbackObj };
+                this._cache.set(key, result);
+                resolve(result);
+              }
+            );
+          },
+          undefined,
+          (error) => {
+            console.warn(`[AssetManager] Could not load MTL for ${key}, loading raw OBJ:`, error);
+            objLoader.load(
+              objUrl,
+              (obj) => {
+                this._loadedAssets++;
+                const result = { type: 'obj', object: obj };
+                this._cache.set(key, result);
+                resolve(result);
+              },
+              undefined,
+              () => {
+                const fallbackObj = fallbackFn ? fallbackFn() : this._createDefaultFallback(key);
+                const result = { type: 'obj', object: fallbackObj };
+                this._cache.set(key, result);
+                resolve(result);
+              }
+            );
+          }
+        );
+      } else {
+        objLoader.load(
+          objUrl,
+          (obj) => {
+            this._loadedAssets++;
+            const result = { type: 'obj', object: obj };
+            this._cache.set(key, result);
+            resolve(result);
+          },
+          undefined,
+          () => {
+            const fallbackObj = fallbackFn ? fallbackFn() : this._createDefaultFallback(key);
+            const result = { type: 'obj', object: fallbackObj };
+            this._cache.set(key, result);
+            resolve(result);
+          }
+        );
+      }
+    });
+
+    this._loading.set(key, loadPromise);
+    return loadPromise;
   }
 
   /**
