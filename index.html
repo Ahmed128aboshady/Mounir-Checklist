@@ -1575,20 +1575,26 @@
             }
         });
 
-        // Announce when Three.js is ready
+        // Announce when Three.js is ready and dismiss loading screen instantly
         window.addEventListener('threejs-ready', () => {
             document.body.classList.add('threejs-ready');
+            const loadingEl = document.getElementById('loading-screen');
+            if (loadingEl) {
+                loadingEl.style.transition = 'opacity 0.5s ease';
+                loadingEl.style.opacity = '0';
+                setTimeout(() => { if (loadingEl.parentNode) loadingEl.remove(); }, 500);
+            }
         });
 
-        // Safety fallback: auto-hide loading screen after 4s if module fails on proxy services
+        // Safety fallback: auto-hide loading screen after 3s
         setTimeout(() => {
             const loadingEl = document.getElementById('loading-screen');
             if (loadingEl && document.body.contains(loadingEl)) {
-                loadingEl.style.transition = 'opacity 0.8s ease';
+                loadingEl.style.transition = 'opacity 0.5s ease';
                 loadingEl.style.opacity = '0';
-                setTimeout(() => { if (loadingEl.parentNode) loadingEl.remove(); }, 800);
+                setTimeout(() => { if (loadingEl.parentNode) loadingEl.remove(); }, 500);
             }
-        }, 4000);
+        }, 3000);
     </script>
 
     <!-- ═══════════════════════════════════════════════════════════════════ -->

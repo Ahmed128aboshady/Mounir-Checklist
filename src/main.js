@@ -181,6 +181,7 @@ async function init() {
 
   // ── Initial Hero Reveal ────────────────────────────────────────────────────
   _playHeroReveal(gsap, cameraController);
+  window.dispatchEvent(new Event('threejs-ready'));
 
   // ── Window Resize ──────────────────────────────────────────────────────────
   sceneManager.onResize(() => {

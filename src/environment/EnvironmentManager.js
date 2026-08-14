@@ -86,18 +86,16 @@ export default class EnvironmentManager {
     // Star field
     this._createStars(scene, performanceManager);
     
-    // Background mountains
+    // Background mountains (instant fallback geometry)
     this._createMountains(scene);
 
-    // Rich 3D Low-Poly Nature Scene (Trees, Hills, Landscape from nature_scene.glb)
-    await this._createNatureEnvironment(scene, assetManager);
+    // Stream heavy 3D scenery in the background asynchronously so page opens instantly (< 0.5s!)
+    setTimeout(() => {
+      this._createNatureEnvironment(scene, assetManager);
+      this._createPalaceRuins(scene, assetManager);
+      this._createAcademyBuilding(scene, assetManager);
+    }, 50);
 
-    // Ancient Palace/Temple Ruins (Loaded from Temple.obj / Temple.mtl)
-    await this._createPalaceRuins(scene, assetManager);
-
-    // Final Academy Terminal Building (Loaded from building.glb)
-    await this._createAcademyBuilding(scene, assetManager);
-    
     return this;
   }
 
