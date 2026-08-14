@@ -11,7 +11,7 @@ const NARRATOR_CHAPTERS = [
   {
     state: 'hero',
     lines: [
-      { text: '🚉 مرحباً بك في المحطة الأولى', delay: 0.5, duration: 3.5 },
+      { text: 'مرحباً بك في المحطة الأولى', delay: 0.5, duration: 3.5 },
       { text: '✨ رحلتك نحو المعرفة تبدأ من هنا', delay: 4, duration: 3.5 },
       { text: '🚂 القطار على وشك الانطلاق... استعد!', delay: 8, duration: 4 },
     ],
