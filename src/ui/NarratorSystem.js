@@ -158,8 +158,9 @@ export default class NarratorSystem {
 
     // Schedule each line
     chapter.lines.forEach((line, index) => {
+      const isLast = index === chapter.lines.length - 1;
       const showTimer = setTimeout(() => {
-        this._showLine(line.text, line.duration, chapter.style);
+        this._showLine(line.text, line.duration, chapter.style, isLast);
       }, line.delay * 1000);
 
       this._timers.push(showTimer);
@@ -168,7 +169,7 @@ export default class NarratorSystem {
 
   // ── Private ─────────────────────────────────────────────────────────────────
 
-  _showLine(text, duration, style) {
+  _showLine(text, duration, style, isLast = false) {
     // Stop any running typewriter
     if (this._typewriterInterval) {
       clearInterval(this._typewriterInterval);
@@ -176,19 +177,21 @@ export default class NarratorSystem {
     }
 
     // Make visible with scale-in animation
-    this._el.classList.remove('narrator-hidden');
+    this._el.classList.remove('narrator-hidden', 'narrator-fadeout');
     this._el.classList.add('narrator-visible', `narrator-style-${style}`);
     this._isVisible = true;
 
     // Typewriter effect
     this._typeWriter(text);
 
-    // Auto-hide after duration
-    const hideTimer = setTimeout(() => {
-      this._fadeOutLine(style);
-    }, duration * 1000);
+    // Only auto-hide if NOT the last line (the last line stays visible for the user as the train moves)
+    if (!isLast) {
+      const hideTimer = setTimeout(() => {
+        this._fadeOutLine(style);
+      }, duration * 1000);
 
-    this._timers.push(hideTimer);
+      this._timers.push(hideTimer);
+    }
   }
 
   _typeWriter(text) {
