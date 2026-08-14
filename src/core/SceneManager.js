@@ -21,8 +21,7 @@ class SceneManager {
   init(canvas) {
     // 1. Scene Setup
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x0a0a1a);
-    this.scene.fog = new THREE.FogExp2(0x0a0a1a, 0.015);
+    this.scene.fog = new THREE.FogExp2(0x0a0a1a, 0.012);
 
     // 2. Camera Setup
     const aspect = window.innerWidth / window.innerHeight;
@@ -34,9 +33,10 @@ class SceneManager {
     this.renderer = new THREE.WebGLRenderer({
       canvas,
       antialias: window.devicePixelRatio < 2,
-      alpha: false,
+      alpha: true,
       powerPreference: 'high-performance'
     });
+    this.renderer.setClearColor(0x0a0a1a, 0);
     
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     this.renderer.setSize(window.innerWidth, window.innerHeight);

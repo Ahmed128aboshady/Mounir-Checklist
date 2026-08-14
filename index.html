@@ -203,6 +203,18 @@
             pointer-events: none;
         }
 
+        .hero-bg-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .hero-bg-desktop { display: block; }
+        .hero-bg-mobile { display: none; }
+
         .hero-body-content {
             position: relative;
             z-index: 5;
@@ -1044,6 +1056,9 @@
                     rgba(9, 13, 22, 0.8) 100%);
             }
 
+            .hero-bg-desktop { display: none !important; }
+            .hero-bg-mobile { display: block !important; }
+
             .hero-body-content {
                 align-items: center;
                 text-align: center;
@@ -1166,6 +1181,10 @@
         <!-- HERO SECTION                                                     -->
         <!-- ═══════════════════════════════════════════════════════════════ -->
         <section id="hero-section" aria-label="القسم الرئيسي">
+
+            <!-- Hero Artwork Background Images -->
+            <img src="./hero_desktop.png" alt="خلفية المحطة الأولى" class="hero-bg-img hero-bg-desktop">
+            <img src="./hero_mobile.png" alt="خلفية المحطة الأولى للموبايل" class="hero-bg-img hero-bg-mobile">
 
             <div class="hero-body-content">
 
