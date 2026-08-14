@@ -195,17 +195,12 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(to left,
-                rgba(9, 13, 22, 0.92) 0%,
-                rgba(9, 13, 22, 0.72) 45%,
-                rgba(9, 13, 22, 0.20) 75%,
-                transparent 100%);
+            background: linear-gradient(to bottom,
+                rgba(9, 13, 22, 0.35) 0%,
+                rgba(9, 13, 22, 0.10) 45%,
+                rgba(9, 13, 22, 0.75) 100%);
             z-index: 1;
-        }
-
-        /* Once Three.js loads, fade out the background image */
-        body.threejs-ready #hero-section {
-            background-image: none;
+            pointer-events: none;
         }
 
         .hero-body-content {
@@ -1044,9 +1039,9 @@
 
             #hero-section::before {
                 background: linear-gradient(180deg,
-                    rgba(9, 13, 22, 0.94) 0%,
-                    rgba(9, 13, 22, 0.8) 55%,
-                    rgba(9, 13, 22, 0.95) 100%);
+                    rgba(9, 13, 22, 0.35) 0%,
+                    rgba(9, 13, 22, 0.15) 50%,
+                    rgba(9, 13, 22, 0.8) 100%);
             }
 
             .hero-body-content {
