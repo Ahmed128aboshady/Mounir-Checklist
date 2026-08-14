@@ -33,8 +33,8 @@ const STATIONS = [
       'أكثر من 15 نبي بأسلوب تفاعلي',
     ],
     outcomes: ['ارتباط إيماني حقيقي', 'قيم راسخة للحياة', 'مهارة التفكير السليم'],
-    ctaUrl: 'prophets.html',
-    ctaText: 'احجز مكانك في رحلة الأنبياء',
+    ctaUrl: 'https://m.me/mouniracademy?ref=prophets_track',
+    ctaText: 'احجز مكانك في رحلة الأنبياء والقيم',
   },
   {
     id: 'station-2',
@@ -59,8 +59,8 @@ const STATIONS = [
       'شهادة إتمام معتمدة',
     ],
     outcomes: ['هوية شخصية قوية', 'علاقات أسرية أفضل', 'مناعة ضد الانحراف'],
-    ctaUrl: 'katalog.html',
-    ctaText: 'احجز مكانك في مسار البنين',
+    ctaUrl: 'https://m.me/mouniracademy?ref=boys_track',
+    ctaText: 'احجز مكانك في مسار البنين (الأولاد)',
   },
   {
     id: 'station-3',
@@ -85,8 +85,8 @@ const STATIONS = [
       'دليل الدعم النفسي للأهل',
     ],
     outcomes: ['ثقة بالنفس حقيقية', 'أمان نفسي راسخ', 'علاقة أم وابنة أعمق'],
-    ctaUrl: 'wa3y.html',
-    ctaText: 'احجز مكانك في مسار البنات',
+    ctaUrl: 'https://m.me/mouniracademy?ref=girls_track',
+    ctaText: 'احجز مكانك في مسار البنات (الفتيات)',
   },
 ];
 
