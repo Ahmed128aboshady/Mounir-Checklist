@@ -89,49 +89,10 @@ export default class EnvironmentManager {
     // Background mountains (instant fallback geometry)
     this._createMountains(scene);
 
-    // Stream 3D Academy Building in the background
-    setTimeout(() => {
-      this._createAcademyBuilding(scene, assetManager);
-    }, 100);
+    // 3D Academy Terminal Building ("أكاديمية منير")
+    this._createAcademyBuilding(scene, assetManager);
 
     return this;
-  }
-
-  async _createPalaceRuins(scene, assetManager) {
-    if (!assetManager || !assetManager.loadOBJ) return;
-
-    try {
-      const palaceAsset = await assetManager.loadOBJ(
-        'palace_temple',
-        './public/assets/models/temple/Temple.obj',
-        './public/assets/models/temple/Temple.mtl',
-        () => null
-      );
-
-      if (palaceAsset && palaceAsset.object) {
-        const baseMesh = palaceAsset.object.clone ? palaceAsset.object.clone() : palaceAsset.object;
-        baseMesh.scale.setScalar(0.08);
-        baseMesh.traverse(child => {
-          if (child.isMesh) {
-            child.castShadow = true;
-            child.receiveShadow = true;
-          }
-        });
-
-        // Place palace ruins along sides of the track
-        const palace1 = baseMesh.clone();
-        palace1.position.set(35, 0, -65);
-        palace1.rotation.y = -Math.PI / 4;
-        scene.add(palace1);
-
-        const palace2 = baseMesh.clone();
-        palace2.position.set(-38, 0, -115);
-        palace2.rotation.y = Math.PI / 3;
-        scene.add(palace2);
-      }
-    } catch (err) {
-      console.warn('[EnvironmentManager] Error loading palace OBJ:', err);
-    }
   }
 
 
