@@ -101,24 +101,24 @@ export default class TrainController {
       
       this._group.position.copy(pos);
       
-      // ─── Orient train so its FRONT (-Z) faces the travel direction ───
+      // ─── Orient train so its FRONT (+Z) faces the travel direction ───
       // The path tangent points in the direction of travel.
-      // Train front is at -Z, so we align -Z with the tangent.
-      const forward = new THREE.Vector3(0, 0, -1); // train front
+      // Train front is at +Z, so we align +Z with the tangent.
+      const forward = new THREE.Vector3(0, 0, 1); // train front (+Z)
       const targetQuat = new THREE.Quaternion().setFromUnitVectors(forward, tangent.clone().normalize());
       this._group.quaternion.slerp(targetQuat, 0.25);
       
-      // Update steam emitter — chimney is at (0, 3.25, -1.8) in local space
-      const chimneyLocal = new THREE.Vector3(0, 3.5, -1.8);
+      // Update steam emitter — chimney is at (0, 3.5, 1.8) in local space
+      const chimneyLocal = new THREE.Vector3(0, 3.5, 1.8);
       this._group.updateMatrixWorld(true);
       const chimneyWorld = chimneyLocal.applyMatrix4(this._group.matrixWorld);
       if (this._steam) {
         this._steam.setEmitPosition(chimneyWorld);
       }
       
-      // Headlight PointLight — front of train at -Z local
+      // Headlight PointLight — front of train at +Z local
       if (this._headlightSrc) {
-        this._headlightSrc.position.set(0, 1.6, -3.5);
+        this._headlightSrc.position.set(0, 1.6, 3.5);
       }
     } catch (err) {
       console.warn('[TrainController] setProgress error:', err);
