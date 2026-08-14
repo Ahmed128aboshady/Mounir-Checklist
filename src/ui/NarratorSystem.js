@@ -265,6 +265,7 @@ export default class NarratorSystem {
 
     // Position
     const posClass = {
+      'hero':          'narrator-pos-hero',
       'center':        'narrator-pos-center',
       'bottom-right':  'narrator-pos-bottom-right',
       'bottom-center': 'narrator-pos-bottom-center',
