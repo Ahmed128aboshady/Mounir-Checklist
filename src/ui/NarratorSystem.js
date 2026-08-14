@@ -197,14 +197,13 @@ export default class NarratorSystem {
   _typeWriter(text) {
     if (!this._textEl) return;
 
-    // Extract emoji (first char if it is emoji)
-    const emojiMatch = text.match(/^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)/u);
+    // Extract emoji (first symbol if present)
     let emoji = '';
     let content = text;
-
-    if (emojiMatch) {
-      emoji = emojiMatch[0];
-      content = text.slice(emoji.length).trim();
+    const match = text.match(/^([\u{1F300}-\u{1F9FF}]|[\u{2600}-\u{26FF}]|[\u{2700}-\u{27BF}]|\p{Emoji_Presentation})\s*/u);
+    if (match) {
+      emoji = match[1];
+      content = text.substring(match[0].length);
     }
 
     // Show emoji immediately
