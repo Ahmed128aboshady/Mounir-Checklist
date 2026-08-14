@@ -85,9 +85,6 @@ export default class EnvironmentManager {
     
     // Star field
     this._createStars(scene, performanceManager);
-    
-    // Background mountains (instant fallback geometry)
-    this._createMountains(scene);
 
     // 3D Stylized Nature (Trees, Pines, Flower Bushes & Rocks from MegaKit)
     this._createStylizedNature(scene, assetManager);
@@ -296,29 +293,7 @@ export default class EnvironmentManager {
     scene.add(this._stars);
   }
   
-  _createMountains(scene) {
-    // Create several mountain silhouettes using ConeGeometry
-    const mountainConfigs = [
-      {pos: [-50, 0, -80], scale: [15, 25, 12]},
-      {pos: [-35, 0, -100], scale: [12, 20, 10]},
-      {pos: [50, 0, -80], scale: [18, 22, 14]},
-      {pos: [40, 0, -110], scale: [10, 18, 10]},
-      {pos: [-10, 0, -170], scale: [20, 35, 16]},
-      {pos: [10, 0, -170], scale: [15, 28, 12]},
-    ];
-    
-    const mat = new THREE.MeshStandardMaterial({ color: 0x1a1a2e, roughness: 1 });
-    
-    mountainConfigs.forEach(cfg => {
-      const geo = new THREE.ConeGeometry(1, 1, 7);
-      const mesh = new THREE.Mesh(geo, mat);
-      mesh.position.set(...cfg.pos);
-      mesh.scale.set(...cfg.scale);
-      mesh.castShadow = false;
-      scene.add(mesh);
-      this._mountains.push(mesh);
-    });
-  }
+
   
   setScene(presetName) {
     const preset = ENVIRONMENT_PRESETS[presetName] || ENVIRONMENT_PRESETS.hero;
