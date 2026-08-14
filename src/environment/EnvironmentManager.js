@@ -2,22 +2,22 @@ import * as THREE from 'three';
 
 const ENVIRONMENT_PRESETS = {
   day: {
-    fogColor: 0x87ceeb, fogDensity: 0.005,
-    ambientColor: 0xffffff, ambientIntensity: 1.2,
-    sunColor: 0xfff5ea, sunIntensity: 2.0,
-    groundColor: 0x22c55e
+    fogColor: 0x0f172a, fogDensity: 0.008,
+    ambientColor: 0xffffff, ambientIntensity: 0.7,
+    sunColor: 0xffedd5, sunIntensity: 1.3,
+    groundColor: 0x2d6a4f
   },
   night: {
-    fogColor: 0x87ceeb, fogDensity: 0.005,
-    ambientColor: 0xffffff, ambientIntensity: 1.2,
-    sunColor: 0xfff5ea, sunIntensity: 2.0,
-    groundColor: 0x22c55e
+    fogColor: 0x0f172a, fogDensity: 0.008,
+    ambientColor: 0xffffff, ambientIntensity: 0.7,
+    sunColor: 0xffedd5, sunIntensity: 1.3,
+    groundColor: 0x2d6a4f
   },
   morning: {
-    fogColor: 0x87ceeb, fogDensity: 0.005,
-    ambientColor: 0xffffff, ambientIntensity: 1.2,
-    sunColor: 0xfff5ea, sunIntensity: 2.0,
-    groundColor: 0x22c55e
+    fogColor: 0x0f172a, fogDensity: 0.008,
+    ambientColor: 0xffffff, ambientIntensity: 0.7,
+    sunColor: 0xffedd5, sunIntensity: 1.3,
+    groundColor: 0x2d6a4f
   }
 };
 
@@ -36,12 +36,12 @@ export default class EnvironmentManager {
     this._scene = scene;
     this._perf = performanceManager;
     
-    // Ambient light (bright, natural outdoor illumination)
-    this._ambientLight = new THREE.AmbientLight(0x406045, 0.85);
+    // Ambient light (natural outdoor illumination)
+    this._ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
     scene.add(this._ambientLight);
     
     // Sun directional light
-    this._sunLight = new THREE.DirectionalLight(0xfff0dd, 1.6);
+    this._sunLight = new THREE.DirectionalLight(0xffedd5, 1.3);
     this._sunLight.position.set(20, 40, 10);
     this._sunLight.castShadow = true;
     this._sunLight.shadow.mapSize.setScalar(performanceManager ? performanceManager.getShadowMapSize() : 1024);
@@ -52,12 +52,12 @@ export default class EnvironmentManager {
     this._sunLight.shadow.camera.bottom = -50;
     scene.add(this._sunLight);
     
-    // Ground plane (lush green grass field)
+    // Ground plane (rich natural forest grass green)
     const groundGeo = new THREE.PlaneGeometry(200, 500);
     const groundMat = new THREE.MeshStandardMaterial({
-      color: 0x1f4d25,
-      roughness: 0.8,
-      metalness: 0.05
+      color: 0x2d6a4f,
+      roughness: 0.95,
+      metalness: 0.0
     });
     this._ground = new THREE.Mesh(groundGeo, groundMat);
     this._ground.rotation.x = -Math.PI / 2;
