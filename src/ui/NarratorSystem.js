@@ -15,7 +15,7 @@ const NARRATOR_CHAPTERS = [
       { text: '✨ رحلتك نحو المعرفة تبدأ من هنا', delay: 4, duration: 3.5 },
       { text: '🚂 القطار على وشك الانطلاق... استعد!', delay: 8, duration: 4 },
     ],
-    position: 'center',
+    position: 'hero',
     style: 'hero',
   },
 
@@ -471,6 +471,24 @@ export default class NarratorSystem {
       .narrator-style-bridge .narrator-text { color: #cffafe; }
 
       /* ─── Position Classes ───────────────────────────────────────────────── */
+      /* ─── Hero Custom Position (Left Sky) ─────────────────────────────── */
+      .narrator-pos-hero {
+        top: 35%;
+        left: 4rem;
+      }
+      .narrator-pos-hero.narrator-visible {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      .narrator-pos-hero.narrator-hidden {
+        transform: translateY(14px) scale(0.95);
+        opacity: 0;
+      }
+      .narrator-pos-hero.narrator-fadeout {
+        transform: translateY(-10px) scale(0.97);
+        opacity: 0;
+      }
+
       .narrator-pos-center {
         top: 50%;
         left: 50%;
@@ -539,9 +557,12 @@ export default class NarratorSystem {
           max-width: calc(100vw - 2rem);
         }
         .narrator-pos-bottom-right,
-        .narrator-pos-top-right {
+        .narrator-pos-top-right,
+        .narrator-pos-hero {
           right: 1rem;
           left: 1rem;
+          top: auto;
+          bottom: 120px;
           max-width: calc(100vw - 2rem);
         }
         .narrator-text {
