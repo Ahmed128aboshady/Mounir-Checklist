@@ -89,12 +89,11 @@ export default class EnvironmentManager {
     // Background mountains (instant fallback geometry)
     this._createMountains(scene);
 
-    // Stream heavy 3D scenery in the background asynchronously so page opens instantly (< 0.5s!)
+    // Stream 3D scenery in the background asynchronously
     setTimeout(() => {
       this._createNatureEnvironment(scene, assetManager);
-      this._createPalaceRuins(scene, assetManager);
       this._createAcademyBuilding(scene, assetManager);
-    }, 50);
+    }, 100);
 
     return this;
   }
