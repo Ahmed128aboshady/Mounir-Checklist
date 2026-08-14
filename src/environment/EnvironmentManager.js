@@ -89,10 +89,83 @@ export default class EnvironmentManager {
     // Background mountains (instant fallback geometry)
     this._createMountains(scene);
 
+    // 3D Stylized Nature (Trees, Pines, Flower Bushes & Rocks from MegaKit)
+    this._createStylizedNature(scene, assetManager);
+
     // 3D Academy Terminal Building ("أكاديمية منير")
     this._createAcademyBuilding(scene, assetManager);
 
     return this;
+  }
+
+  async _createStylizedNature(scene, assetManager) {
+    if (!assetManager) return;
+
+    try {
+      // Load modular stylized nature assets
+      const [treeRes, pineRes, bushRes, rockRes] = await Promise.all([
+        assetManager.loadGLTF('nature_tree', './public/assets/models/nature/tree.glb', () => null),
+        assetManager.loadGLTF('nature_pine', './public/assets/models/nature/pine.glb', () => null),
+        assetManager.loadGLTF('nature_bush', './public/assets/models/nature/bush.glb', () => null),
+        assetManager.loadGLTF('nature_rock', './public/assets/models/nature/rock.glb', () => null)
+      ]);
+
+      const treeMesh = treeRes && treeRes.object;
+      const pineMesh = pineRes && pineRes.object;
+      const bushMesh = bushRes && bushRes.object;
+      const rockMesh = rockRes && rockRes.object;
+
+      const group = new THREE.Group();
+
+      // Enable shadows for meshes
+      [treeMesh, pineMesh, bushMesh, rockMesh].forEach(mesh => {
+        if (mesh) {
+          mesh.traverse(child => {
+            if (child.isMesh) {
+              child.castShadow = true;
+              child.receiveShadow = true;
+            }
+          });
+        }
+      });
+
+      // Scatter tree, pine, bush, and rock props alongside the train track
+      const propsList = [
+        // Left side trees and bushes
+        { mesh: treeMesh, pos: [-18, 0, -20], scale: 1.2, rot: 0.5 },
+        { mesh: bushMesh, pos: [-12, 0, -32], scale: 1.5, rot: 1.2 },
+        { mesh: pineMesh, pos: [-22, 0, -50], scale: 1.1, rot: 0.2 },
+        { mesh: rockMesh, pos: [-14, 0, -68], scale: 1.4, rot: 0.8 },
+        { mesh: treeMesh, pos: [-20, 0, -85], scale: 1.3, rot: 1.5 },
+        { mesh: bushMesh, pos: [-16, 0, -105], scale: 1.6, rot: 0.3 },
+        { mesh: pineMesh, pos: [-24, 0, -125], scale: 1.2, rot: 2.1 },
+        { mesh: treeMesh, pos: [-18, 0, -145], scale: 1.4, rot: 0.7 },
+
+        // Right side trees and bushes
+        { mesh: pineMesh, pos: [20, 0, -15], scale: 1.2, rot: 1.1 },
+        { mesh: rockMesh, pos: [14, 0, -30], scale: 1.3, rot: 0.4 },
+        { mesh: treeMesh, pos: [22, 0, -45], scale: 1.3, rot: 2.0 },
+        { mesh: bushMesh, pos: [15, 0, -62], scale: 1.5, rot: 0.9 },
+        { mesh: pineMesh, pos: [25, 0, -80], scale: 1.1, rot: 1.7 },
+        { mesh: treeMesh, pos: [18, 0, -100], scale: 1.2, rot: 0.6 },
+        { mesh: rockMesh, pos: [22, 0, -120], scale: 1.4, rot: 1.3 },
+        { mesh: bushMesh, pos: [16, 0, -140], scale: 1.6, rot: 2.4 },
+      ];
+
+      propsList.forEach(item => {
+        if (item.mesh) {
+          const clone = item.mesh.clone();
+          clone.scale.setScalar(item.scale);
+          clone.position.set(...item.pos);
+          clone.rotation.y = item.rot;
+          group.add(clone);
+        }
+      });
+
+      scene.add(group);
+    } catch (err) {
+      console.warn('[EnvironmentManager] Error loading stylized nature assets:', err);
+    }
   }
 
 
