@@ -2,22 +2,22 @@ import * as THREE from 'three';
 
 const ENVIRONMENT_PRESETS = {
   day: {
-    fogColor: 0x0f172a, fogDensity: 0.008,
-    ambientColor: 0xffffff, ambientIntensity: 0.7,
+    fogColor: 0x06140d, fogDensity: 0.008,
+    ambientColor: 0xffffff, ambientIntensity: 0.8,
     sunColor: 0xffedd5, sunIntensity: 1.3,
-    groundColor: 0x2d6a4f
+    groundColor: 0x0f2b1d
   },
   night: {
-    fogColor: 0x0f172a, fogDensity: 0.008,
-    ambientColor: 0xffffff, ambientIntensity: 0.7,
+    fogColor: 0x06140d, fogDensity: 0.008,
+    ambientColor: 0xffffff, ambientIntensity: 0.8,
     sunColor: 0xffedd5, sunIntensity: 1.3,
-    groundColor: 0x2d6a4f
+    groundColor: 0x0f2b1d
   },
   morning: {
-    fogColor: 0x0f172a, fogDensity: 0.008,
-    ambientColor: 0xffffff, ambientIntensity: 0.7,
+    fogColor: 0x06140d, fogDensity: 0.008,
+    ambientColor: 0xffffff, ambientIntensity: 0.8,
     sunColor: 0xffedd5, sunIntensity: 1.3,
-    groundColor: 0x2d6a4f
+    groundColor: 0x0f2b1d
   }
 };
 
@@ -37,7 +37,7 @@ export default class EnvironmentManager {
     this._perf = performanceManager;
     
     // Ambient light (natural outdoor illumination)
-    this._ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    this._ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(this._ambientLight);
     
     // Sun directional light
@@ -52,11 +52,11 @@ export default class EnvironmentManager {
     this._sunLight.shadow.camera.bottom = -50;
     scene.add(this._sunLight);
     
-    // Ground plane (rich natural forest grass green)
+    // Ground plane (deep dark tree green)
     const groundGeo = new THREE.PlaneGeometry(200, 500);
     const groundMat = new THREE.MeshStandardMaterial({
-      color: 0x2d6a4f,
-      roughness: 0.95,
+      color: 0x0f2b1d,
+      roughness: 1.0,
       metalness: 0.0
     });
     this._ground = new THREE.Mesh(groundGeo, groundMat);
