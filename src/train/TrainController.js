@@ -97,16 +97,17 @@ export default class TrainController {
     
     try {
       const pos = this._path.getPointAt(this._progress);
-      const tangent = this._path.getTangentAt(this._progress);
+      const tangent = this._path.getTangentAt(this._progress).normalize();
       
       this._group.position.copy(pos);
       
-      // ─── Orient train so its FRONT (+Z) faces the travel direction ───
-      // The path tangent points in the direction of travel.
-      // Train front is at +Z, so we align +Z with the tangent.
-      const forward = new THREE.Vector3(0, 0, 1); // train front (+Z)
-      const targetQuat = new THREE.Quaternion().setFromUnitVectors(forward, tangent.clone().normalize());
-      this._group.quaternion.copy(targetQuat);
+      // ─── Orient train upright with UP vector locked to (0, 1, 0) ───
+      // Train front is at +Z. lookAt(target) points local -Z at target.
+      // Pointing -Z at (pos - tangent) aligns local +Z (train front) with +tangent (travel direction).
+      // Locking up vector (0, 1, 0) guarantees the train NEVER flips upside down or rolls on curves.
+      this._group.up.set(0, 1, 0);
+      const targetPos = pos.clone().sub(tangent);
+      this._group.lookAt(targetPos);
       
       // Update steam emitter — chimney is at (0, 3.5, 1.8) in local train space
       const chimneyLocal = new THREE.Vector3(0, 3.5, 1.8);
