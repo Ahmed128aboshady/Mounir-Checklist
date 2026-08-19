@@ -10,9 +10,9 @@ class TrainPath {
       new THREE.Vector3(3, 0, -18),     // Departure curve
       new THREE.Vector3(8, 0, -28),     // Open countryside
       new THREE.Vector3(12, 0, -40),    // Towards bridge
-      new THREE.Vector3(12, 4, -52),    // Bridge (elevated)
-      new THREE.Vector3(12, 4, -62),    // Bridge midpoint
-      new THREE.Vector3(10, 1, -74),    // Bridge end
+      new THREE.Vector3(12, 0, -52),    // Bridge
+      new THREE.Vector3(12, 0, -62),    // Bridge midpoint
+      new THREE.Vector3(10, 0, -74),    // Bridge end
       new THREE.Vector3(8, 0, -84),     // Tunnel approach
       new THREE.Vector3(5, 0, -92),     // Entering tunnel
       new THREE.Vector3(2, 0, -102),    // Tunnel inside

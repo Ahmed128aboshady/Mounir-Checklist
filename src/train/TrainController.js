@@ -97,17 +97,15 @@ export default class TrainController {
     
     try {
       const pos = this._path.getPointAt(this._progress);
-      const tangent = this._path.getTangentAt(this._progress).normalize();
+      const tangent = this._path.getTangentAt(this._progress);
       
       this._group.position.copy(pos);
       
-      // ─── Orient train upright with UP vector locked to (0, 1, 0) ───
-      // Train front is at +Z. lookAt(target) points local -Z at target.
-      // Pointing -Z at (pos - tangent) aligns local +Z (train front) with +tangent (travel direction).
-      // Locking up vector (0, 1, 0) guarantees the train NEVER flips upside down or rolls on curves.
-      this._group.up.set(0, 1, 0);
-      const targetPos = pos.clone().sub(tangent);
-      this._group.lookAt(targetPos);
+      // ─── Pure horizontal Y-axis rotation (100% upright & flat on tracks) ───
+      // Calculates horizontal heading angle along path curve.
+      // rotation.x = 0, rotation.z = 0 -> Train NEVER rolls sideways or turns upside down.
+      const angle = Math.atan2(tangent.x, tangent.z);
+      this._group.rotation.set(0, angle, 0);
       
       // Update steam emitter — chimney is at (0, 3.5, 1.8) in local train space
       const chimneyLocal = new THREE.Vector3(0, 3.5, 1.8);
