@@ -106,7 +106,7 @@ export default class TrainController {
       // Train front is at +Z, so we align +Z with the tangent.
       const forward = new THREE.Vector3(0, 0, 1); // train front (+Z)
       const targetQuat = new THREE.Quaternion().setFromUnitVectors(forward, tangent.clone().normalize());
-      this._group.quaternion.slerp(targetQuat, 0.25);
+      this._group.quaternion.copy(targetQuat);
       
       // Update steam emitter — chimney is at (0, 3.5, 1.8) in local train space
       const chimneyLocal = new THREE.Vector3(0, 3.5, 1.8);

@@ -217,6 +217,10 @@ export default class StationJourneySystem {
     document.body.appendChild(panel);
     this._panelEl = panel;
 
+    // Prevent wheel and touchmove inside panel from scrolling main page / moving train
+    panel.addEventListener('wheel', (e) => e.stopPropagation(), { passive: true });
+    panel.addEventListener('touchmove', (e) => e.stopPropagation(), { passive: true });
+
     panel.querySelector('#sj-close-btn').addEventListener('click', () => this._closePanel());
     panel.querySelector('#sj-continue-btn').addEventListener('click', () => this._closePanel());
   }
@@ -524,6 +528,7 @@ export default class StationJourneySystem {
         right: 0;
         width: min(460px, 100vw);
         height: 100vh;
+        height: 100dvh;
         z-index: 1600;
         display: flex;
         flex-direction: column;
@@ -532,6 +537,7 @@ export default class StationJourneySystem {
         box-shadow: -20px 0 80px rgba(0,0,0,0.7);
         transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
         overflow: hidden;
+        touch-action: pan-y;
       }
 
       .sj-panel-hidden  { transform: translateX(100%); }
@@ -626,17 +632,21 @@ export default class StationJourneySystem {
 
       /* Panel Body */
       .sj-panel-body {
-        flex: 1;
+        flex: 1 1 auto;
+        min-height: 0;
         overflow-y: auto;
         padding: 1.6rem 1.8rem;
         direction: rtl;
         scrollbar-width: thin;
-        scrollbar-color: rgba(255,255,255,0.1) transparent;
+        scrollbar-color: rgba(32, 201, 151, 0.6) rgba(255,255,255,0.05);
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-y;
+        overscroll-behavior: contain;
       }
 
-      .sj-panel-body::-webkit-scrollbar { width: 4px; }
-      .sj-panel-body::-webkit-scrollbar-track { background: transparent; }
-      .sj-panel-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+      .sj-panel-body::-webkit-scrollbar { width: 6px; }
+      .sj-panel-body::-webkit-scrollbar-track { background: rgba(255,255,255,0.04); }
+      .sj-panel-body::-webkit-scrollbar-thumb { background: rgba(32, 201, 151, 0.6); border-radius: 4px; }
 
       .sj-panel-desc {
         font-size: 0.98rem;
