@@ -102,20 +102,21 @@ export default class TrainController {
       this._group.position.copy(pos);
       
       // ─── Pure horizontal Y-axis rotation (100% upright & flat on tracks) ───
-      // Calculates horizontal heading angle along path curve.
+      // Train front is at -Z (chimney & headlight face -Z).
+      // Math.atan2(-tangent.x, -tangent.z) aligns local -Z with direction of travel.
       // rotation.x = 0, rotation.z = 0 -> Train NEVER rolls sideways or turns upside down.
-      const angle = Math.atan2(tangent.x, tangent.z);
+      const angle = Math.atan2(-tangent.x, -tangent.z);
       this._group.rotation.set(0, angle, 0);
       
-      // Update steam emitter — chimney is at (0, 3.5, 1.8) in local train space
-      const chimneyLocal = new THREE.Vector3(0, 3.5, 1.8);
+      // Update steam emitter — chimney is at (0, 3.25, -1.8) in local train space
+      const chimneyLocal = new THREE.Vector3(0, 3.25, -1.8);
       if (this._steam) {
         this._steam.setEmitPosition(chimneyLocal);
       }
       
-      // Headlight PointLight — front of train at +Z local
+      // Headlight PointLight — front of train at -Z local
       if (this._headlightSrc) {
-        this._headlightSrc.position.set(0, 1.6, 3.5);
+        this._headlightSrc.position.set(0, 1.6, -3.2);
       }
     } catch (err) {
       console.warn('[TrainController] setProgress error:', err);
