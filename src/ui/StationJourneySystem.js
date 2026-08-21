@@ -769,7 +769,10 @@ export default class StationJourneySystem {
       /* ── Mobile ───────────────────────────────────────────────────────────── */
       @media (max-width: 768px) {
         #station-signs-layer {
-          bottom: 95px;
+          bottom: 80px;
+          padding: 0 0.5rem;
+          max-width: 100vw;
+          box-sizing: border-box;
         }
 
         .sj-panel {
@@ -777,6 +780,7 @@ export default class StationJourneySystem {
           top: auto;
           bottom: 0;
           height: 85vh;
+          height: 85dvh;
           border-left: none;
           border-top: 1px solid rgba(255,255,255,0.15);
           border-radius: 24px 24px 0 0;
@@ -786,12 +790,14 @@ export default class StationJourneySystem {
         .sj-panel-visible { transform: translateY(0); }
 
         .sj-sign-inner {
-          padding: 0.65rem 1rem 0.65rem 0.8rem;
-          gap: 0.5rem;
-          max-width: 88vw;
+          padding: 0.5rem 0.8rem;
+          gap: 0.4rem;
+          max-width: 82vw;
+          box-sizing: border-box;
         }
-        .sj-sign-name { font-size: 0.95rem; }
-        .sj-sign-sub  { font-size: 0.72rem; }
+        .sj-sign-name { font-size: 0.9rem; }
+        .sj-sign-sub  { font-size: 0.68rem; }
+        .sj-sign-icon { font-size: 1.3rem; }
 
         .sj-panel-footer {
           padding: 1rem 1.2rem 1.6rem;
