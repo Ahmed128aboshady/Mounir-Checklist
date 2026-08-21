@@ -23,6 +23,7 @@ const STATIONS = [
     duration: '6 أسابيع',
     sessions: '12 جلسة',
     courseTitle: 'الأنبياء بيننا',
+    presetMessage: 'أنا جاي من كورس الأنبياء بيننا وعاوز اعرف التفاصيل لابني / بنتي',
     description: 'سلسلة تربوية إيمانية تربط مواقف الأنبياء عليهم السلام بحياة أبناءك اليومية، لتزرع في قلوبهم الشجاعة والتواضع والرضا ومهارات التفكير السليم.',
     features: [
       'قصة آدم: شجاعة الاعتراف بالخطأ وتداركه',
@@ -49,6 +50,7 @@ const STATIONS = [
     duration: '6 أسابيع',
     sessions: '12 جلسة',
     courseTitle: 'برنامج كتالوج الشباب',
+    presetMessage: 'أنا جاي من كورس كتالوج الشباب (مسار البنين) وعاوز اعرف التفاصيل لابني',
     description: 'برنامج تربوي عميق يُصاحب الشاب في فهم التغيرات النفسية والسلوكية ويمنحه أدوات عملية للتعامل مع الشاشات وضغوط الأصدقاء وتعزيز علاقته بوالديه ودينه.',
     features: [
       'فهم تغيرات المراهقة بثقة واستقلالية',
@@ -75,6 +77,7 @@ const STATIONS = [
     duration: '6 أسابيع',
     sessions: '12 جلسة',
     courseTitle: 'برنامج وعي وأمان',
+    presetMessage: 'أنا جاي من كورس وعي وأمان (مسار الفتيات) وعاوز اعرف التفاصيل لبنتي',
     description: 'مساحة آمنة تمنح الفتاة وعياً بنفسها ومشاعرها وتحميها من مقارنات التواصل الاجتماعي المؤذية وتوطد جسور الحوار الدافئ والصادق بينها وبين أمّها.',
     features: [
       'حماية الفتاة من الفلاتر والمقارنات السلبية',
@@ -346,7 +349,14 @@ export default class StationJourneySystem {
     if (badge) badge.style.background = station.color + '22';
 
     const ctaBtn = document.getElementById('sj-cta-btn');
-    if (ctaBtn) ctaBtn.style.background = `linear-gradient(135deg, ${station.color}, ${station.colorDark})`;
+    if (ctaBtn) {
+      ctaBtn.style.background = `linear-gradient(135deg, ${station.color}, ${station.colorDark})`;
+      ctaBtn.onclick = () => {
+        if (station.presetMessage && navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(station.presetMessage).catch(() => {});
+        }
+      };
+    }
 
     // Animate in
     document.body.classList.add('sj-panel-active');

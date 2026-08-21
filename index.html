@@ -1591,12 +1591,24 @@
             bar.style.width = pct + '%';
         }, { passive: true });
 
-        // Station card hover effects + station focus via Three.js
-        document.querySelectorAll('.station-card-mini').forEach(card => {
-            card.addEventListener('click', () => {
-                const key = card.dataset.station;
-                window.dispatchEvent(new CustomEvent('station-card-click', { detail: { key } }));
-            });
+        // Messenger pre-filled text copy handlers
+        document.addEventListener('DOMContentLoaded', () => {
+            const heroCta = document.getElementById('hero-cta');
+            if (heroCta) {
+                heroCta.addEventListener('click', () => {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText('أنا جاي من الموقع وعاوز اعرف تفاصيل البرامج التربوية لابني / بنتي').catch(() => {});
+                    }
+                });
+            }
+            const finalCta = document.getElementById('final-cta');
+            if (finalCta) {
+                finalCta.addEventListener('click', () => {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText('أنا جاي من التصفح وعاوز اتواصل معاكم لمعرفة تفاصيل التسجيل لابني / بنتي').catch(() => {});
+                    }
+                });
+            }
         });
 
         // Story state change: toggle canvas pointer events for station interactivity
